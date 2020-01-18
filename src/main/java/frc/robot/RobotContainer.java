@@ -1,10 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -14,21 +7,27 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class RobotContainer {
 
+  Joystick leftJoystick;
+  Joystick rightJoystick;
+
+  JoystickButton left1, left2, left3, left4;
+  JoystickButton right1, right2, right3, right4;
+
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
 
-    Joystick leftJoystick = new Joystick(0);
-    Joystick rightJoystick = new Joystick(1);
+    leftJoystick = new Joystick(0);
+    rightJoystick = new Joystick(1);
 
-    JoystickButton left1 = new JoystickButton(leftJoystick, 1),
-      left2 = new JoystickButton(leftJoystick, 2),
-      left3 = new JoystickButton(leftJoystick, 3),
+    left1 = new JoystickButton(leftJoystick, 1);
+      left2 = new JoystickButton(leftJoystick, 2);
+      left3 = new JoystickButton(leftJoystick, 3);
       left4 = new JoystickButton(leftJoystick, 4);
 
-    JoystickButton right1 = new JoystickButton(rightJoystick, 1),
-      right2 = new JoystickButton(rightJoystick, 2),
-      right3 = new JoystickButton(rightJoystick, 3),
+    right1 = new JoystickButton(rightJoystick, 1);
+      right2 = new JoystickButton(rightJoystick, 2);
+      right3 = new JoystickButton(rightJoystick, 3);
       right4 = new JoystickButton(rightJoystick, 4);
     
   }
@@ -42,6 +41,13 @@ public class RobotContainer {
   private void configureButtonBindings() {
   }
 
+  public double getSpeed() {
+    return leftJoystick.getRawAxis(0);
+  }
+
+  public double getTurn() {
+    return rightJoystick.getRawAxis(1);
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
