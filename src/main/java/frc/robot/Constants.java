@@ -10,12 +10,21 @@ package frc.robot;
  */
 public final class Constants {
 
-    //Motors
+    //Motors - organized as drive, then hopper, then flywheel, and intake
     public static final int LEFT_MASTER = 1;
-    public static final int LEFT_FOLLOWER_1 = 2;
-    public static final int LEFT_FOLLOWER_2 = 3;
-    public static final int RIGHT_MASTER = 4;
-    public static final int RIGHT_FOLLOWER_1 = 5;
-    public static final int RIGHT_FOLLOWER_2 = 6;
+    public static final int LEFT_FOLLOWER = 2;
+    public static final int RIGHT_MASTER = 3;
+    public static final int RIGHT_FOLLOWER = 4;
+
+    public static final int HOPPER_LEFT = 5;
+    public static final int HOPPER_RIGHT = 6; //possibly will use if engineers do a hopper w/2 motors???
+
+    public static final int FLYWHEEL_1 = 7;
+    public static final int FLYWHEEL_2 = 8;
+
+    public static final int INTAKE_MOTOR = 9;
+
+    //Solenoids
+    public static final int SOLENOID_INTAKE = 1;
 
 }
