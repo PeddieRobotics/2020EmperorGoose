@@ -10,24 +10,33 @@ import frc.robot.Constants;
 public class Intake extends SubsystemBase {
 
   private static enum Intake_Mode_Type {
-    DOWN, UP
+    INTAKING, DISABLED
   }
-
   private Intake_Mode_Type mode;
 
-  private Solenoid intakeSolenoid;
+  private Solenoid leftSolenoid, rightSolenoid;
   private boolean isDown;
 
-  private TalonSRX intakeMotor;
-
-  private 
+  private TalonSRX leftIntakeMotor, rightIntakeMotor;
 
   public Intake() {
 
-    intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
+    leftSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_1);
+    rightSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_2);
     isDown = false;
 
-    intakeMotor = new TalonSRX(Constants.INTAKE_MOTOR);
+    leftIntakeMotor = new TalonSRX(Constants.INTAKE_MOTOR_1);
+    rightIntakeMotor = new TalonSRX(Constants.INTAKE_MOTOR_2);
+
+  }
+
+  public void intake(boolean isIntaking) {
+
+    if( isIntaking ) {
+      mode = Intake_Mode_Type.INTAKING;
+    } else {
+      mode = Intake_Mode_Type.DISABLED;
+    }
 
   }
 
@@ -38,22 +47,25 @@ public class Intake extends SubsystemBase {
     switch( mode ) 
     {
 
-      case DOWN:
+      case INTAKING:
 
         isDown = true;
-        intakeMotor.set(ControlMode.PercentOutput, 1);
+        leftIntakeMotor.set(ControlMode.PercentOutput, .5);
+        rightIntakeMotor.set(ControlMode.PercentOutput, .5);
 
       break;
 
-      case UP:
+      case DISABLED:
 
         isDown = false;
-        intakeMotor.set(ControlMode.PercentOutput, 0);
+        leftIntakeMotor.set(ControlMode.PercentOutput, 0);
+        rightIntakeMotor.set(ControlMode.PercentOutput, 0);
 
       break;
 
     }
 
-    intakeSolenoid.set(isDown);
+    leftSolenoid.set(isDown);
+    rightSolenoid.set(isDown);
   }
 }
