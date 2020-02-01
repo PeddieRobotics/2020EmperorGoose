@@ -18,7 +18,7 @@ public class Intaking extends CommandBase {
   // Called when the command is initially scheduled.
   public void initialize() {
 
-    intake.intake( true );
+    intake.intake(true);
 
   }
 

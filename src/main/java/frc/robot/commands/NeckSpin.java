@@ -6,13 +6,13 @@ import frc.robot.subsystems.Neck;
 
 public class NeckSpin extends CommandBase {
 
-  private Neck neck;
+  private Neck m_neck;
   private final AnalogInput analogT, analogB;
 
   public NeckSpin() {
     
-    neck = new Neck();
-    addRequirements(neck);
+    m_neck = new Neck();
+    addRequirements(m_neck);
 
     analogT = new AnalogInput(0);
     analogB = new AnalogInput(1);

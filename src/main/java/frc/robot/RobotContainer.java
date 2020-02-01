@@ -21,7 +21,7 @@ public class RobotContainer {
     rightJoystick = new Joystick(1);
 
     left1 = new JoystickButton(leftJoystick, 1);
-      left2 = new JoystickButton(leftJoystick, 2);
+    left2 = new JoystickButton(leftJoystick, 2);
       left3 = new JoystickButton(leftJoystick, 3);
       left4 = new JoystickButton(leftJoystick, 4);
 
