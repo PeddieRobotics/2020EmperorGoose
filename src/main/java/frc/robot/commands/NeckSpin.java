@@ -40,15 +40,15 @@ public class NeckSpin extends CommandBase {
   @Override
   public void execute() {
     if (!senses_ball(analogT) && !senses_ball(analogB)) {
-      m_neck.runMotors(15.0);
+     // m_neck.runMotors(15.0);
     }
 
     if (analogT.getVoltage() < 3 && analogB.getVoltage() > 3) {
-      m_neck.runMotors(15.0);
+    //  m_neck.runMotors(15.0);
     }
 
     if (analogT.getVoltage() > 3 && analogB.getVoltage() < 3) {
-      m_neck.runBottomMotor(15.0);
+      //m_neck.runBottomMotor(15.0);
     }
   }
   // Called once the command ends or is interrupted.
