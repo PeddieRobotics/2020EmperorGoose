@@ -45,7 +45,7 @@ public class Drive extends CommandBase {
     if( normalizedDrive ){
       NormalizedDrive( speedInput, turnInput );
     } else {
-      drive.periodic( speedInput, turnInput );
+      drive.arcadeDrive( speedInput, turnInput );
     }
 
   }
@@ -71,7 +71,7 @@ public class Drive extends CommandBase {
     	speed = speed / saturatedInput;
 		  turn = turn / saturatedInput;
 
-    drive.periodic( speed, turn );
+    drive.arcadeDrive( speed, turn );
 
 
   }

@@ -9,7 +9,11 @@ sourceCompatibility = JavaVersion.VERSION_11
 targetCompatibility = JavaVersion.VERSION_11
 
 def ROBOT_MAIN_CLASS = "frc.robot.Main"
-//adds 
+//adds
+ repositories {
+      jcenter()
+      maven { url "https://jitpack.io" }
+   } 
 repositories{
     mavenCentral()
 
@@ -53,11 +57,11 @@ dependencies {
     implementation wpi.deps.wpilib()
     nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
-   
+     compile 'com.github.Team319:BobTrajectory:v2.1.0'
     implementation wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
-
+    
     testImplementation 'junit:junit:4.12'
 
     // Enable simulation gui support. Must check the box in vscode to enable support
