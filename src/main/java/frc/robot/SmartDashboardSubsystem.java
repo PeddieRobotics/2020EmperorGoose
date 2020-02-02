@@ -149,32 +149,41 @@ public abstract class SmartDashboardSubsystem implements Subsystem, Sendable {
     }
     return null;
   }
-  public void periodic(){
-      if(SmartDashboard.getBoolean("Get subsystem data " + subsystemName,false)){
-          if(!wasPutSD){
-              for(int i =0; i < variableStringList.size();i++){
-                switch(variableListTypes.get(i)){
-                    case "Integer":
-                        SmartDashboard.putNumber(variableStringList.get(i),defaultInt);
-                        break;
-                    case "Float":
-                        SmartDashboard.putNumber(variableStringList.get(i),defaultFloat);
-                        break;
-                    case "Double":
-                        SmartDashboard.putNumber(variableStringList.get(i),defaultDouble);
-                    case "Boolean":
-                        SmartDashboard.putBoolean(variableStringList.get(i),defaultBoolean);
-                        break;
-                    case "String":
-                        SmartDashboard.putString(variableStringList.get(i),defaultString);
-                        break;
-                }
-              
+  public Double getDouble(String s){
+    return (double)get(s);
+  }
+  public Integer getInteger(String s){
+    return (int)get(s);
+  }
+  public void manageVariables(){
+    if(SmartDashboard.getBoolean("Get subsystem data " + subsystemName,false)){
+        if(!wasPutSD){
+            for(int i =0; i < variableStringList.size();i++){
+              switch(variableListTypes.get(i)){
+                  case "Integer":
+                      SmartDashboard.putNumber(variableStringList.get(i),defaultInt);
+                      break;
+                  case "Float":
+                      SmartDashboard.putNumber(variableStringList.get(i),defaultFloat);
+                      break;
+                  case "Double":
+                      SmartDashboard.putNumber(variableStringList.get(i),defaultDouble);
+                  case "Boolean":
+                      SmartDashboard.putBoolean(variableStringList.get(i),defaultBoolean);
+                      break;
+                  case "String":
+                      SmartDashboard.putString(variableStringList.get(i),defaultString);
+                      break;
               }
-              wasPutSD = true;
-          }
-        updateVariables();
-      }
+            
+            }
+            wasPutSD = true;
+        }
+      updateVariables();
+    }
+  }
+  public void periodic(){
+     manageVariables();//do this so that if we want overide makes overiding easier 
     }
   
 }

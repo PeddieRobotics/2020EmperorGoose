@@ -103,10 +103,12 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected());
-    follow2.initialize();
-    runPathFaster = new Notifier(follow2::executeAndRun);
-    runPathFaster.startPeriodic(0.005);
+    follow2.initialize();//use the command incorectly
+    runPathFaster = new Notifier(follow2::executeAndRun);//run with ending method
+    runPathFaster.startPeriodic(0.005);//CRITICAL THAT THIS NUMBER AND ROBOT DT IN BOBTRAJECTORY ARE THE SAME!!!!!!!!!
+    
     return follow2;
+
   }
   public void setBrakeMode(){
     m_driveTrain.setBrake();
