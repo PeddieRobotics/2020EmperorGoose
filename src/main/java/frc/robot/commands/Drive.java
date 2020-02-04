@@ -10,18 +10,16 @@ public class Drive extends CommandBase {
    * Creates a new ArcadeDrive.
    */
   private Drivetrain drive;
+
   private RobotContainer rContainer;
 
   private boolean normalizedDrive;
 
-  public Drive() {
+  public Drive(Drivetrain driveTrain, RobotContainer robotContainer) {
 
-    drive = new Drivetrain();
-    rContainer = new RobotContainer();
-
-    addRequirements( drive );
-
-    normalizedDrive = true; //WE ARE DRIVING NORMALIZED
+    drive = driveTrain;
+    rContainer = robotContainer;
+    normalizedDrive = false; //WE ARE DRIVING NORMALIZED
 
   }
 

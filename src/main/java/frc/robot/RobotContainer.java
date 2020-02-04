@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.Drive;
 import frc.robot.commands.PathFollower;
 import frc.robot.subsystems.Drivetrain;
 
@@ -50,7 +51,7 @@ public class RobotContainer {
 
   public RobotContainer() {
     // Configure the button bindings
-    configureButtonBindings();
+   
 
     leftJoystick = new Joystick(0);
     rightJoystick = new Joystick(1);
@@ -76,8 +77,8 @@ public class RobotContainer {
     path2.addOption("real 20s","real20");
     
    // path2.addOption("real 30s",realThirtys);
-    left = new Joystick(0);
-    leftTrigger = new JoystickButton(left,1);
+    //left = new Joystick(0);
+    //leftTrigger = new JoystickButton(leftJoystick,1);
     //Configure the button bindings
     configureButtonBindings();
   }
@@ -89,6 +90,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    left1.whenPressed(new Drive(m_driveTrain,this));
 
   }
 
@@ -117,11 +119,11 @@ public class RobotContainer {
     m_driveTrain.setCoast();
   }
   public double getSpeed() {
-    return leftJoystick.getRawAxis(0);
+    return leftJoystick.getRawAxis(1);
   }
 
   public double getTurn() {
-    return rightJoystick.getRawAxis(1);
+    return rightJoystick.getRawAxis(0);
   }
   
 }

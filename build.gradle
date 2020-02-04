@@ -61,7 +61,13 @@ dependencies {
     implementation wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
-    
+    implementation("org.openjfx:javafx-fxml:11:win")//smooth fx graphics impl(use defaults for every library)
+	implementation("org.openjfx:javafx-web:11:win")
+    implementation("org.openjfx:javafx-media:11:win")
+    implementation("org.openjfx:javafx-swing:11:win")
+	implementation("org.openjfx:javafx-base:11:win")
+    implementation("org.openjfx:javafx-graphics:11:win")
+    implementation("org.openjfx:javafx-controls:11:win")
     testImplementation 'junit:junit:4.12'
 
     // Enable simulation gui support. Must check the box in vscode to enable support

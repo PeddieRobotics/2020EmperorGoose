@@ -10,18 +10,14 @@ package frc.robot.commands;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.team319.io.TrajectoryExporter;
 import com.team319.trajectory.Path;
 
-import org.opencv.videoio.VideoCapture;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.paths.GenPathSetup;
 //import frc.paths.straight10ft;
 import frc.robot.CSVServer;
-import frc.robot.LoadCSV;
 import frc.robot.LoadPath;
 import frc.robot.subsystems.Drivetrain;
 
@@ -38,11 +34,11 @@ public class PathFollower extends CommandBase {
   ArrayList<String[]> right;
   ArrayList<String[]> center;
   ArrayList<String[]> points;
-  
+  boolean resetGyro = false;
   /**
    * Creates a new PathFollower.
    */
-  public PathFollower(Drivetrain train, String fname) {
+  public PathFollower(Drivetrain train, String fname, boolean resetGyroOnInit) {
     LoadPath loader = new LoadPath();
     left = loader.loadCSV("/home/lvuser/deploy/paths/"+fname+".left"+".csv");
     
@@ -56,6 +52,7 @@ public class PathFollower extends CommandBase {
     addRequirements(train);
     String[] header = { "right vel", "real right vel", "left vel", "real left vel", "real heading","path heading" };
     points.add(header);
+    resetGyro = resetGyroOnInit;
   }
 
   // Called when the command is initially scheduled.
@@ -63,9 +60,11 @@ public class PathFollower extends CommandBase {
   public void initialize() {
     trains.setCoast();
     pathinst = new GenPathSetup();
-    
-    trains.resetNavX();
+    if(resetGyro){
+      trains.resetADIS();//sets yaw offset to 0
+    }
     startTime = System.currentTimeMillis();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -12,7 +12,6 @@
 */
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.spline.QuinticHermiteSpline;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
 import com.revrobotics.CANEncoder;
@@ -46,7 +45,7 @@ public class Drivetrain extends SubsystemBase {
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
   public double kP2, kI2, kD2, kIz2, kFF2, kMaxOutput2, kMinOutput2, maxRPM2, maxVel2, minVel2, maxAcc2, allowedErr2;
 
-  ADIS16470_IMU imu = new ADIS16470_IMU();
+  private static final ADIS16470_IMU imu = new ADIS16470_IMU();
   public Drivetrain() {
     //leftDriveMaster.setControlFramePeriodMs(2); test this later when have time 
     DriverStation.reportError("this is Insert my name here code",false);
@@ -54,7 +53,7 @@ public class Drivetrain extends SubsystemBase {
     leftDriveFollower1 = new CANSparkMax(Constants.LEFT_FOLLOWER, MotorType.kBrushless);
     rightDriveMaster = new CANSparkMax(Constants.RIGHT_MASTER, MotorType.kBrushless);
     rightDriveFollower1 = new CANSparkMax(Constants.RIGHT_FOLLOWER, MotorType.kBrushless);
-    leftDriveMaster.restoreFactoryDefaults();
+    leftDriveMaster.restoreFactoryDefaults();//TO-DO write overlayer class that does this for us(make code cleaner)
     rightDriveMaster.restoreFactoryDefaults();
     leftDriveFollower1.restoreFactoryDefaults();
     rightDriveFollower1.restoreFactoryDefaults();
@@ -119,8 +118,11 @@ public class Drivetrain extends SubsystemBase {
     m_pidController.setFF(kFF);
     m_pidController.setOutputRange(kMinOutput, kMaxOutput);
 
-    //leftDriveMaster.setControlFramePeriodMs(periodMs);
-    //m_pidController.
+    leftDriveMaster.setControlFramePeriodMs(1);
+    rightDriveMaster.setControlFramePeriodMs(1);
+    leftDriveFollower1.setControlFramePeriodMs(1);
+    rightDriveFollower1.setControlFramePeriodMs(1);
+   
     leftDriveMaster.getOutputCurrent();
     leftDriveMaster.setPeriodicFramePeriod(PeriodicFrame.kStatus1, 5);
     rightDriveMaster.setPeriodicFramePeriod(PeriodicFrame.kStatus1,5);
@@ -156,9 +158,7 @@ public class Drivetrain extends SubsystemBase {
     m_pidController2.setSmartMotionAllowedClosedLoopError(allowedErr2, smartMotionSlot);
     m_pidController.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, smartMotionSlot);
     m_pidController2.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, smartMotionSlot);
-    //leftDriveMaster.setClosedLoopRampRate(.5);
-
-    // gyro/pigeon/navx
+    
 
   }
   public double returnAngle(){
@@ -169,12 +169,24 @@ public class Drivetrain extends SubsystemBase {
     m_pidController.setReference(-left_velocity+heading,ControlType.kVelocity);
     m_pidController2.setReference(right_velocity+heading,ControlType.kVelocity);
   }
+  /**
+   * 
+   * @return Velocity of the left Drive master
+   */
   public double returnLeftVelocity(){
     return leftEncoder.getVelocity();
   }
+  /**
+   * 
+   * @return Velocity of the right drive master
+   */
   public double returnRightVelocity(){
     return rightEncoder.getVelocity();
   }
+  /**
+   * 
+   * @return report pid vars as a string that can be added to csv
+   */
   public String[] getPIDVariables(){
     String[] variables = new String[5];
     variables[0] = "variables";
@@ -210,12 +222,30 @@ public class Drivetrain extends SubsystemBase {
   public void periodic() {
     
   }
-  public void resetNavX() {
+  /**
+   * Resets yaw to zero
+   */
+  public void resetADIS() {
     imu.reset();
   }
-  public double reportEncoder(){
+  /**
+   * 
+   * @return the position of the left encoder 
+   */
+  public double reportLeftEncoder(){
     return leftEncoder.getPosition();
   }
+  /**
+   * 
+   * @return the position of the right encoder
+   */
+  public double reportRightEncoder(){
+    return rightEncoder.getPosition();
+  }
+  /**
+   * Calibrates imu, only call if imu hasn't move, movement will show up as drift in so don't calibrate if moved! 
+   * If moved then just restart robot code
+   */
   public void calibrateIMU(){
     imu.calibrate();
   }

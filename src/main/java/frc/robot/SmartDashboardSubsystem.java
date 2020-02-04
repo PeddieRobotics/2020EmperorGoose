@@ -18,8 +18,9 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 /**
  * A base for subsystems that handles registration in the constructor, and provides a more intuitive
- * method for setting the default command.
+ * method for setting the default command. This class follows the same subsytem code 
  */
+
 public abstract class SmartDashboardSubsystem implements Subsystem, Sendable {
     //HashMap<String,Object> variableMap = new HashMap<String,Object>();
     ArrayList<String> variableStringList = new ArrayList<String>();
@@ -40,7 +41,7 @@ public abstract class SmartDashboardSubsystem implements Subsystem, Sendable {
         String name = this.getClass().getSimpleName();
         name = name.substring(name.lastIndexOf('.') + 1);
         SendableRegistry.addLW(this, name, name);
-        CommandScheduler.getInstance().registerSubsystem(this);
+        CommandScheduler.getInstance().registerSubsystem(this);//register w/ command scheduler so our subsytem is ran
         SmartDashboard.putBoolean("Get subsystem data " + subsystemName, false);
         this.subsystemName = subsystemName;
     }
