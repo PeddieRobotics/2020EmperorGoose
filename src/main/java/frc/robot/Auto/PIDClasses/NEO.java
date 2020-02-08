@@ -81,20 +81,40 @@ public class NEO extends CANSparkMax{
     }
     /**
      * 
-     * @param p
-     * @param d
-     * @param i
-     * @param ff
-     * @param smartMotionSlot
+     * @param p proportional gain, native units
+     * @param d derivative gain, native units(multiplies encoder ticks-> velocity by this)
+     * @param i integral gain, native units
+     * @param ff feed forward, multiplies setpoint by this number and adds to output
+     * @param smartMotionSlot the slot on the controller(between 0 and 3(there are four))
      */
     public void addPIDController( double p, double d, double i, double ff, int smartMotionSlot){
         addPIDController(p, d, i, ff, defaultArbFF, defaultMaxVel, defaultMinVel, defaultMaxAcc, defaultMinOutput, defaultMaxOutput,defaultAccelStrategy , defaultControlType, defaultFFUnits, smartMotionSlot);
    
     }
+    /**
+     * 
+     * @param p proportional gain native units(multiplies encoder ticsks -> velocity by this)
+     * @param d derivative gain, native units
+     * @param i integeral gain, native units
+     * @param ff feed forward mulitplies setpoint by this nubmer and adds to the output
+     * @param arbFF an arbitrary number added outside of pidf, we would use this to account for stuff such as gravity or acceleration
+     * and we often use this for drive pids
+     * @param smartMotionSlot slot on the controller( between 0 and 3, there are four)
+     */
     public void addPIDController( double p, double d, double i, double ff, double arbFF ,int smartMotionSlot){
         addPIDController(p, d, i, ff, arbFF, defaultMaxVel, defaultMinVel, defaultMaxAcc, defaultMinOutput, defaultMaxOutput,defaultAccelStrategy , defaultControlType, defaultFFUnits, smartMotionSlot);
    
     }
+    /**
+     * 
+     * @param p
+     * @param d
+     * @param i
+     * @param ff
+     * @param arbFF
+     * @param maxVel
+     * @param smartMotionSlot
+     */
     public void addPIDController( double p, double d, double i, double ff, double arbFF ,double maxVel,  int smartMotionSlot){
         addPIDController(p, d,i , ff, arbFF, maxVel, defaultMinVel, defaultMaxAcc, defaultMinOutput, defaultMaxOutput,defaultAccelStrategy , defaultControlType, defaultFFUnits, smartMotionSlot);
    
