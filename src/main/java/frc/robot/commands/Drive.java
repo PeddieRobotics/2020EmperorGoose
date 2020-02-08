@@ -19,8 +19,8 @@ public class Drive extends CommandBase {
 
     drive = driveTrain;
     rContainer = robotContainer;
-    normalizedDrive = false; //WE ARE DRIVING NORMALIZED
-
+    normalizedDrive = true; //WE ARE DRIVING NORMALIZED
+    
   }
 
   // Called when the command is initially scheduled.

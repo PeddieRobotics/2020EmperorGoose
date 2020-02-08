@@ -5,7 +5,7 @@
  * and open the template in the editor.
  */
 
-package frc.robot;
+package frc.robot.Framework.Logging;
 /**
  *
  * @author vshah-21
@@ -88,7 +88,7 @@ public class CSVClient{
         FileWriter defaultWriter = null;
                  
         try {
-            fileWriter = new FileWriter(fileName);
+            fileWriter = new FileWriter("D:\\MyProfile\\Documents\\NetBeansProjects\\GraphsForCSV\\"+fileName);
             filename = fileName;
              defaultWriter = new FileWriter("DefaultGraph.csv");//create a default and a logged graph 
              defaultWriter.append("\n");

@@ -5,11 +5,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends TimedRobot {
 
-  RobotContainer container;
+  RobotContainer m_RobotContainer;
 
   public void robotInit() {
 
-    container = new RobotContainer();
+    m_RobotContainer = new RobotContainer();
 
   }
 
@@ -21,18 +21,21 @@ public class Robot extends TimedRobot {
 
   
   public void disabledInit() {
+    m_RobotContainer.setBrakeMode();
   }
  
   public void disabledPeriodic() {
   }
   
   public void autonomousInit() {
+    m_RobotContainer.getAutonomousCommand();
   }
 
   public void autonomousPeriodic() {
   }
 
   public void teleopInit() {
+    m_RobotContainer.setCoastMode();
   }
 
   public void teleopPeriodic() {

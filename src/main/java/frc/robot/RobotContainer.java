@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.Drive;
+import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.PathFollower;
 import frc.robot.subsystems.Drivetrain;
 
@@ -50,9 +50,8 @@ public class RobotContainer {
   JoystickButton right1, right2, right3, right4;
 
   public RobotContainer() {
-    // Configure the button bindings
-   
 
+    CommandLooper.getInstance().startAndSetPeriodic(5);
     leftJoystick = new Joystick(0);
     rightJoystick = new Joystick(1);
 
@@ -70,15 +69,12 @@ public class RobotContainer {
    // chooser.addOption("real 30", realThirty);
     SmartDashboard.putData("path 1",chooser);
     SmartDashboard.putData("path 2",path2);
-    path2.addOption("turn 12 move 12s","straight10ft");
+    path2.addOption("turn 12 move 12s","testPath");
     
     path2.addOption("real 10s","real10");
     
     path2.addOption("real 20s","real20");
     
-   // path2.addOption("real 30s",realThirtys);
-    //left = new Joystick(0);
-    //leftTrigger = new JoystickButton(leftJoystick,1);
     //Configure the button bindings
     configureButtonBindings();
   }
@@ -90,13 +86,10 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    left1.whenPressed(new Drive(m_driveTrain,this));
 
   }
 
-  public double reportEncoder(){
-    return m_driveTrain.reportEncoder();
-  }
+  
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -104,11 +97,8 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected());
-    follow2.initialize();//use the command incorectly
-    runPathFaster = new Notifier(follow2::executeAndRun);//run with ending method
-    runPathFaster.startPeriodic(0.005);//CRITICAL THAT THIS NUMBER AND ROBOT DT IN BOBTRAJECTORY ARE THE SAME!!!!!!!!!
-    
+    PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
+    CommandLooper.getInstance().addCommand(follow2);
     return follow2;
 
   }
@@ -119,11 +109,11 @@ public class RobotContainer {
     m_driveTrain.setCoast();
   }
   public double getSpeed() {
-    return leftJoystick.getRawAxis(1);
+    return leftJoystick.getRawAxis(0);
   }
 
   public double getTurn() {
-    return rightJoystick.getRawAxis(0);
+    return rightJoystick.getRawAxis(1);
   }
   
 }

@@ -1,26 +1,33 @@
-package frc.robot;
+package frc.robot.Framework;
 
 import java.util.Vector;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.PathFollower;
 
 public class CommandLooper{
     static CommandLooper mainLooper; 
     Notifier runner;//this will run all the commands
     Vector<Command> listOfCommands;//vector is just thread safe arrayList
+    
     public CommandLooper(){
         runner = new Notifier(this::run);//run our run method
-
+        listOfCommands = new Vector<Command>();//initialize stuff
     }
     /**
-     * We want to use a static runner to make life easier
-     * @return
+     * Everything should be run through this!(to make life easier)
+     * @return the static commandLooper
      */
-    public CommandLooper getInstance(){
+    public static synchronized CommandLooper getInstance(){
         if(mainLooper==null){
+            DriverStation.reportError("successfully initialized", false);
             mainLooper = new CommandLooper();
+        }else{
+            DriverStation.reportError("sucessfuly used",false);
         }
+        
         return mainLooper;
     }
     public void addCommand(Command c){
@@ -32,13 +39,14 @@ public class CommandLooper{
      * @param periodMs the period of the notifier in milliseconds
      */
     public void startAndSetPeriodic(int periodMs){
-        runner.startPeriodic(periodMs/1000);//convert from ms-> seconds
+        runner.startPeriodic((double)periodMs/(double)1000);//convert from ms-> seconds
+        //use doubles to make sure we get accurate decimal 
     }
     /**
-     * Run all the methods
-     * No need to be thread safe because we are using vectors(this is why not synchonized void like old looper)
+     * Run all the methods in our array. Check is finished, and if not true run execute method
+     * If it is finished end command and remove from list
      */
-    public void run(){
+    public synchronized void run(){
         for(int i =0; i < listOfCommands.size();i++){
             
             if(!listOfCommands.get(i).isFinished()){
@@ -46,9 +54,10 @@ public class CommandLooper{
                 listOfCommands.get(i).execute();
             }
             else{
-                listOfCommands.get(i).end(false);//we don't handle interupted case
-                listOfCommands.remove(i);//remove the command once it is over
+                listOfCommands.get(i).end(false);//we don't handle interupted case(TO-DO: Handle this case :) )
+                listOfCommands.remove(i);
             }
         }
     }
+	
 }

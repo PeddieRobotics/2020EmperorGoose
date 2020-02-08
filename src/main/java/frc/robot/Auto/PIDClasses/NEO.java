@@ -1,0 +1,191 @@
+package frc.robot.Auto.PIDClasses;
+
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANPIDController;
+import com.revrobotics.CANSparkMax;
+
+import com.revrobotics.ControlType;
+import com.revrobotics.CANPIDController.AccelStrategy;
+import com.revrobotics.CANPIDController.ArbFFUnits;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+public class NEO extends CANSparkMax{
+    NEOPIDController m_pidController; 
+    private final double defaultPIDSlot =0;//for ease a neo will create a PID on zero slot 
+    private final double defaultP = 0;
+    private final double defaultD = 0; 
+    private final double defaultI =0; 
+    private final double defaultFF = 0;
+    private final double defaultMaxAcc = 3000; 
+    private final double defaultMaxVel = 5700; 
+    private final double defaultMinVel = 10; 
+    private final double defaultMinAcc =0;
+    private final double defaultArbFF = 0;
+    private final double defaultMinOutput=-1;
+    private final double defaultMaxOutput=1;
+    private final AccelStrategy defaultAccelStrategy = AccelStrategy.kSCurve;
+    private final ArbFFUnits defaultFFUnits = ArbFFUnits.kVoltage;
+    private final ControlType defaultControlType = ControlType.kSmartVelocity;
+    CANEncoder motorEncoder;
+    public NEO(int deviceID) {
+        
+        super(deviceID, MotorType.kBrushless);
+        restoreFactoryDefaults();
+        setIdleMode(IdleMode.kCoast);
+        m_pidController = new NEOPIDController(this);//get us la pid controler 
+        motorEncoder = getEncoder();
+        
+        // TODO Auto-generated constructor stub
+    }
+    /**
+     * Changes the motors to break mode, this means if one tries to move them when they are not recieving a 
+     * command they wont move 
+     */
+    public void setBrake(){
+        setIdleMode(IdleMode.kBrake);
+    }
+    /**
+     * Changes the motors to coast mode, this means that the motors move freely when giving them a command 
+     */
+    public void setCoast(){
+        setIdleMode(IdleMode.kCoast);
+    }
+    /**
+     * 
+     * @return Returns the velocity that the encoder runs
+     */
+    public double velocity(){
+        return motorEncoder.getVelocity();
+    }
+    /**
+     * Adds a pid Controller,
+     * @param p the position 
+     * @param smartMotionSlot the 
+     */
+    public void addPIDController( double p,int smartMotionSlot){
+        addPIDController(p, defaultD, defaultI, defaultFF, defaultArbFF, defaultMaxVel, defaultMinVel, defaultMaxAcc, defaultMinOutput, defaultMaxOutput,defaultAccelStrategy , defaultControlType, defaultFFUnits, smartMotionSlot);
+    }
+    /**
+     * 
+     * @param p
+     * @param d
+     * @param smartMotionSlot
+     */
+    public void addPIDController( double p, double d, int smartMotionSlot){
+        addPIDController(p, d, defaultI, defaultFF, defaultArbFF, defaultMaxVel, defaultMinVel, defaultMaxAcc, defaultMinOutput, defaultMaxOutput,defaultAccelStrategy , defaultControlType, defaultFFUnits, smartMotionSlot);
+   
+    }
+    public void addPIDController( double p, double d, double i, int smartMotionSlot){
+        addPIDController(p, d, i, defaultFF, defaultArbFF, defaultMaxVel, defaultMinVel, defaultMaxAcc, defaultMinOutput, defaultMaxOutput,defaultAccelStrategy , defaultControlType, defaultFFUnits, smartMotionSlot);
+   
+    }
+    /**
+     * 
+     * @param p
+     * @param d
+     * @param i
+     * @param ff
+     * @param smartMotionSlot
+     */
+    public void addPIDController( double p, double d, double i, double ff, int smartMotionSlot){
+        addPIDController(p, d, i, ff, defaultArbFF, defaultMaxVel, defaultMinVel, defaultMaxAcc, defaultMinOutput, defaultMaxOutput,defaultAccelStrategy , defaultControlType, defaultFFUnits, smartMotionSlot);
+   
+    }
+    public void addPIDController( double p, double d, double i, double ff, double arbFF ,int smartMotionSlot){
+        addPIDController(p, d, i, ff, arbFF, defaultMaxVel, defaultMinVel, defaultMaxAcc, defaultMinOutput, defaultMaxOutput,defaultAccelStrategy , defaultControlType, defaultFFUnits, smartMotionSlot);
+   
+    }
+    public void addPIDController( double p, double d, double i, double ff, double arbFF ,double maxVel,  int smartMotionSlot){
+        addPIDController(p, d,i , ff, arbFF, maxVel, defaultMinVel, defaultMaxAcc, defaultMinOutput, defaultMaxOutput,defaultAccelStrategy , defaultControlType, defaultFFUnits, smartMotionSlot);
+   
+    }
+    public void addPIDController( double p, double d, double i, double ff, double arbFF ,double maxVel, double minVel,  int smartMotionSlot){
+        addPIDController(p, d, i, ff, arbFF, maxVel, minVel, defaultMaxAcc, defaultMinOutput, defaultMaxOutput,defaultAccelStrategy , defaultControlType, defaultFFUnits, smartMotionSlot);
+   
+    }
+    public void addPIDController( double p, double d, double i, double ff, double arbFF ,double maxVel, double minVel, double maxAccel,  int smartMotionSlot){
+        addPIDController(p, d, i, ff, arbFF, maxVel, minVel, maxAccel, defaultMinOutput, defaultMaxOutput,defaultAccelStrategy , defaultControlType, defaultFFUnits, smartMotionSlot);
+   
+    }
+    public void addPIDController( double p, double d, double i, double ff, double arbFF ,double maxVel, double minVel, double maxAccel, double minOutput,  int smartMotionSlot){
+        addPIDController(p, d, i, ff, arbFF, maxVel, minVel, maxAccel, minOutput, defaultMaxOutput,defaultAccelStrategy , defaultControlType, defaultFFUnits, smartMotionSlot);
+   
+    }
+    public void addPIDController( double p, double d, double i, double ff, double arbFF ,double maxVel, double minVel, double maxAccel, double minOutput, double maxOutput, int smartMotionSlot){
+        addPIDController(p, d, i, ff, arbFF, maxVel, minVel, maxAccel, minOutput, maxOutput,defaultAccelStrategy , defaultControlType, defaultFFUnits, smartMotionSlot);
+   
+    }
+    public void addPIDController( double p, double d, double i, double ff, double arbFF ,double maxVel, double minVel, double maxAccel, double minOutput, double maxOutput, AccelStrategy accelStrategy,int smartMotionSlot){
+        addPIDController(p, d, i, ff, arbFF, maxVel, minVel, maxAccel, minOutput, maxOutput,accelStrategy , defaultControlType, defaultFFUnits, smartMotionSlot);
+   
+    }
+
+    public void addPIDController( double p, double d, double i, double ff, double arbFF ,double maxVel, double minVel, double maxAccel, double minOutput, double maxOutput, AccelStrategy accelStrategy, ControlType controlType, int smartMotionSlot){
+        addPIDController(p, d, i, ff, arbFF, maxVel, minVel, maxAccel, minOutput, maxOutput,accelStrategy ,controlType, defaultFFUnits, smartMotionSlot);
+   
+    }
+    public void addPIDController( double p, double d, double i, double ff, double arbFF ,double maxVel, double minVel, double maxAccel, double minOutput, double maxOutput, AccelStrategy accelStrategy, ControlType controlType, ArbFFUnits ffUnits, int smartMotionSlot){
+        m_pidController.addPID(p, d, i, ff, arbFF, maxVel, minVel, maxAccel, minOutput, maxOutput,accelStrategy , controlType, ffUnits, smartMotionSlot);
+    }
+    public void changePIDController(int slot){
+        m_pidController.changeCurrentPID(slot);
+    }
+    public double getVelocity(){
+       return motorEncoder.getVelocity();
+    }
+    /**
+     * 
+     * @param rpm the speed, in rpm, to set the pid to
+     */
+    public void setVelocity(double rpm){
+        m_pidController.setVelocity(rpm);
+    }
+    /**
+     * 
+     * @param position the position, in encoder ticks, that the motor should move to
+     */
+    public void setPosition(double position){
+        m_pidController.setPosition(position);
+    }
+
+   /**
+    * @param  voltage The voltage we want to send to the motors 
+    
+    */
+    public void setVoltage(double voltage){
+        m_pidController.setVoltage(voltage);
+    }
+    /**
+     * 
+     * @param arbFF changes the arbitrary feed forward value, this is what we add arbitrarily to our pid output, so say we are at error
+     * of 0 then we will still add whatever the arbFF is, having an FF removes some of this need as we multiply setpoint by this
+     * but this is just another, better, way to do this 
+     */
+    public void setArbFF(double arbFF){
+        m_pidController.setArbFF(arbFF);
+    }
+    /**
+     * 
+     * @param percent the percentage 
+     */
+    public void setPercent(double percent){
+        m_pidController.setPercent(percent);
+    }
+
+    /**
+     * 
+     * @param velocity the velocity to set the pid to 
+     */
+    public void setSmartVelocity(double velocity){
+        m_pidController.setSmartVelocity(velocity);
+    }
+    /**
+     * Changes the period at which the motors run, we usually want to run at 1ms but if you want to slow down followers go ahead
+     * @param ms
+     */
+    public void changeControlFramePeriod(int ms){
+        setControlFramePeriodMs(ms);
+    }
+
+
+}

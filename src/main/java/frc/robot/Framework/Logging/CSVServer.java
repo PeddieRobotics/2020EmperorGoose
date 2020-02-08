@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 //package halloffame;
-package frc.robot;
+package frc.robot.Framework.Logging;
 /**
  *
  * @author vshah-21
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 A classs that is designed to take an array last and send it across 
 the network to be interpreted as a csv
 */
+//TO-DO: Make this into a full logger that can auto update variable's value
 public class CSVServer {
      /*
      @param s This is the array of strings which will be transformed into a single string with commas seperating elements so it can 
@@ -36,7 +37,7 @@ public class CSVServer {
     }
     /**
      * 
-     * @param ones An arraylist of data to be sent accross the network, will be reformated with addComas
+     * @param ones An arraylist of data to be sent accross the network, will be reformated with addComas(RENAME TO SOMETHING(SITLL THINKING))
      * @throws IOException makes sure our socket 
      * doesnt create any errors
      */
