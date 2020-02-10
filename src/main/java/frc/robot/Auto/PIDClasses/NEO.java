@@ -34,8 +34,16 @@ public class NEO extends CANSparkMax{
         setIdleMode(IdleMode.kCoast);
         m_pidController = new NEOPIDController(this);//get us la pid controler 
         motorEncoder = getEncoder();
-        
+        changeControlFramePeriod(1);
         // TODO Auto-generated constructor stub
+    }
+    public NEO(int deviceID, NEO master){
+        super(deviceID, MotorType.kBrushless);
+        restoreFactoryDefaults();
+        setIdleMode(IdleMode.kCoast);
+        m_pidController= new NEOPIDController(this);
+        motorEncoder = getEncoder();
+        changeControlFramePeriod(100);
     }
     /**
      * Changes the motors to break mode, this means if one tries to move them when they are not recieving a 

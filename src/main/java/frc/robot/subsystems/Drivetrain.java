@@ -49,21 +49,13 @@ public class Drivetrain extends SubsystemBase {
 
   public Drivetrain() {
     imu = new ADIS16470_IMU();
-    // PID coefficients
-    double p = 0.0003;//0.00040
-    double i = 0.00000;//0.00000295
-    double d  = 0.0009;//0.000162
-    double f = 0.00018;
+    
     leftDriveMaster = new NEO(1);
     rightDriveMaster = new NEO(3);
-    leftDriveFollower1=new NEO(2);
-    rightDriveFollower1 = new NEO(4);
-    leftDriveFollower1.follow(leftDriveMaster);
-    rightDriveFollower1.follow(rightDriveMaster);
-    leftDriveFollower1.changeControlFramePeriod(100);
-    rightDriveFollower1.changeControlFramePeriod(100);
-    rightDriveMaster.addPIDController(p,d,i,0.000199,0,0);
-    leftDriveMaster.addPIDController(p,d,i,0.00014,0,0);
+    leftDriveFollower1=new NEO(2,leftDriveMaster);
+    rightDriveFollower1 = new NEO(4,rightDriveMaster);
+    rightDriveMaster.addPIDController(Constants.p,Constants.d,Constants.i,Constants.ff,0);
+    leftDriveMaster.addPIDController(Constants.p,Constants.d,Constants.i,Constants.ff,0);
     
   }
   /**
@@ -84,8 +76,8 @@ public class Drivetrain extends SubsystemBase {
    */
 
   public void setVelocity(double left_velocity,double right_velocity, double heading, double leftAccel, double rightAccel){
-    leftDriveMaster.setArbFF(0.05+(-leftAccel*0.19));
-    rightDriveMaster.setArbFF(0.05+(-rightAccel*0.19));
+    leftDriveMaster.setArbFF(-0.05+(-leftAccel*Constants.accMultiplier));//0.05 is the deadband
+    rightDriveMaster.setArbFF(0.05+(-rightAccel*Constants.accMultiplier));
     leftDriveMaster.setVelocity(-left_velocity+heading);
     rightDriveMaster.setVelocity(right_velocity+heading);
   }
@@ -102,7 +94,7 @@ public class Drivetrain extends SubsystemBase {
    * @return Velocity of the right drive master
    */
   public double returnRightVelocity(){
-    return leftDriveMaster.getVelocity();
+    return -rightDriveMaster.getVelocity();
   }
   /**
    * 
@@ -111,13 +103,13 @@ public class Drivetrain extends SubsystemBase {
   public String[] getPIDVariables(){
     String[] variables = new String[5];
     variables[0] = "variables";
-    variables[0] = "p" + leftDriveMaster.getPIDController().getP();
+    variables[1] = "p" + Constants.p;
     
-    variables[1] = "i" + leftDriveMaster.getPIDController().getI();
+    variables[2] = "i" + Constants.i;
     
-    variables[2] = "d" + leftDriveMaster.getPIDController().getD();
+    variables[3] = "d" + Constants.d;
     
-    variables[3] = "f" + leftDriveMaster.getPIDController().getFF();
+    variables[4] = "f" + Constants.ff;
     return variables;
   }
   

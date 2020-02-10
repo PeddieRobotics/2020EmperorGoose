@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "CodeLens (Launch) - GraphsForCSV",
+      "request": "launch",
+      "mainClass": "frc.robot.Framework.Logging.GraphsForCSV",
+      "projectName": "2020Emu"
+    },
+    {
+      "type": "java",
       "name": "CodeLens (Launch) - BobTrajectory",
       "request": "launch",
       "mainClass": "frc.robot.Auto.BobTrajectory",

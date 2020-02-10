@@ -75,6 +75,7 @@ public class GraphsForCSV extends Application {
     // ArrayList<Boolean> graphBooleans = new ArrayList<Boolean>();
     boolean wasRan = false;
     double setpoint = 0;
+    double timeSetpoint=1;
     /**
      * Our startup screen
      */
@@ -156,7 +157,7 @@ public class GraphsForCSV extends Application {
         pointArrays = load.loadCSV(filename);
         headings = load.getHeading();
         String[] variables;
-        variables = load.getHeading();
+        variables = load.getVariables();
         primaryStage.setTitle("CSV Graphyer");
         Group root = new Group();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
@@ -179,7 +180,7 @@ public class GraphsForCSV extends Application {
                 gc.setFill(Color.BLACK);
                 gc.setStroke(Color.BLUE);
 
-                calcAndDrawAxes(pointArrays, HEIGHT, (HEIGHT/2), gc);
+                calcAndDrawAxes(pointArrays, HEIGHT, HEIGHT/2, gc);
                 drawGraph(gc, pointArrays);
 
             } catch (Exception e) {
@@ -191,8 +192,9 @@ public class GraphsForCSV extends Application {
             if(dragged.getSceneX()%2==0){
             gc.clearRect(0, 0, WIDTH, HEIGHT);
             calcIntersections(gc,pointArrays,dragged.getSceneX());
-            calcAndDrawAxes(pointArrays,HEIGHT,(HEIGHT/2),gc);
+            calcAndDrawAxes(pointArrays,HEIGHT,HEIGHT/2,gc);
             drawGraph(gc,pointArrays);
+            printVars(gc, variables);
             }
         };
        
@@ -213,7 +215,7 @@ public class GraphsForCSV extends Application {
                 CheckBox checky = new CheckBox(headings[i]);
                 
                 boxes.add(checky);
-                boxes.get(i).relocate(20,50+ ((double)HEIGHT/2)*((double)i/pointArrays[0].length));
+                boxes.get(i).relocate(20,50+ (HEIGHT/2)*((double)i/pointArrays[0].length));
                 //boxes.get(i).addEventHandler(ActionEvent.ACTION, eventHandlerTextFields);
                 layout.getChildren().add(boxes.get(i));
                 }catch(Exception e){
@@ -237,8 +239,18 @@ public class GraphsForCSV extends Application {
      * @param s Variable values to be printed out
      */
     public void printVars(GraphicsContext gc, String[] s){
+        double totalLength = 0;
         for(int i =0; i < s.length;i++){
-            gc.fillText(s[i], 200+i*s.length*10, 200);
+
+            totalLength += s[i].length();
+          
+            
+        }
+        for(int i =0; i < s.length;i++){
+            
+            gc.setFont(new Font((int)((double)1800/(30+totalLength))));//add 30 to normalize font size 
+            double fontSize = (int)((double)1800/(30+totalLength));
+            gc.fillText(" " + s[i], 200+i*(s.length+4)*(fontSize-10), 200);
         }
     }
     /**
@@ -272,7 +284,7 @@ public class GraphsForCSV extends Application {
         }
         gc.setStroke(Color.GREEN);
         gc.strokeLine(5,0,5,WIDTH);
-        gc.strokeLine(0,(double)HEIGHT/2,WIDTH,(double)HEIGHT/2);
+        gc.strokeLine(0,HEIGHT/2,WIDTH,HEIGHT/2);
         Line lines;
         
         for(int i =0; i < min.length;i++){
@@ -289,8 +301,8 @@ public class GraphsForCSV extends Application {
     public void drawAxes(GraphicsContext gc,double factor){
         for(int i =0; i < 20; i++){
             gc.setFont(new Font(10));
-           String formated = String.format("%.2f",(((double)1/factor)*(-(HEIGHT/2)+HEIGHT*((double)i/20))));//formats axis into smaller string to prevent annoying long string covering graphs
-            gc.strokeText(""+ formated,20,WIDTH-(WIDTH*((double)i/20)));
+           String formated = String.format("%.2f",(((double)1/factor)*(-HEIGHT/2+HEIGHT*((double)i/20))));//formats axis into smaller string to prevent annoying long string covering graphs
+            gc.strokeText(""+ formated,20,HEIGHT-(HEIGHT*((double)i/20)));
             
              //System.out.println("Scale factor" + scaleFactor[5]);
         }
@@ -337,15 +349,15 @@ public class GraphsForCSV extends Application {
         for(int i =0; i < pointList.length; i++){
             for(int j = 0; j < pointList[i].length;j++){
                 if(boxes.get(j).isSelected()){
-                    if(mouseX==2*i||mouseX==2*i + 1){
-                        double pY = (HEIGHT/2)+(pointList[i-1][j]*currentScale);
+                    if(mouseX==i*timeSetpoint){
+                        double pY = HEIGHT/2+(pointList[i-1][j]*currentScale);
                         
                         gc.setStroke(Color.BLUE);
                         gc.strokeLine(mouseX, 0,mouseX, WIDTH);
                         gc.setFont(new Font(20));
                         String formattedPList = String.format("%.2f",pointList[i][j]);
-                         gc.strokeText(headings[j]+ " Intersect At", mouseX, (HEIGHT/2)+offset);
-                         gc.strokeText( "MOUSE X: " + mouseX + " Y LOC: " + formattedPList,mouseX, (HEIGHT/2)+40+offset);
+                         gc.strokeText(headings[j]+ " Intersect At", mouseX, HEIGHT/2+offset);
+                         gc.strokeText( "MOUSE X: " + mouseX + " Y LOC: " + formattedPList,mouseX, HEIGHT/2+40+offset);
                          offset+=80;
                     }
                 }
@@ -371,9 +383,10 @@ public class GraphsForCSV extends Application {
             }
         }
         for(int i =1; i <pointList.length;i++){
+            // System.out.println("point output " +(900-(pointList[i-1][1]*scaleFactor[1])));
             for(int j =0; j < pointList[i].length;j++){
                 if(boxes.get(j).isSelected()){
-                    gc.strokeLine(2*i - 1,(HEIGHT/2)+(pointList[i-1][j]*currentScale),i*2,(HEIGHT/2)+(pointList[i][j]*currentScale));                          
+                    gc.strokeLine(timeSetpoint*i - 1,HEIGHT/2+(pointList[i-1][j]*currentScale),i*timeSetpoint,HEIGHT/2+(pointList[i][j]*currentScale));                          
                 }
             }
         }

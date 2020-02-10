@@ -36,16 +36,19 @@ public class LoadCSV {
                     dataFromCSV = line.split(cvsSplitBy);
                     Double.parseDouble(dataFromCSV[1]);
                     points.add(dataFromCSV);
+                    lines++;
                 }catch(Exception e){
+                   
                     if(dataFromCSV!=null){
-                    if(dataFromCSV[0].contains("variables")){
+                    if(dataFromCSV[0].contains("variables")||lines>200){//use the lines > 200 until variables fully implemented
                         System.out.println("hi variables are found ");
                         ArrayList<String> dummyString = new ArrayList<String>();
                         for(int i =0; i < dataFromCSV.length;i++){
                             if(dataFromCSV[i].length()>1){
-                           
+                              
                                 variables.add(dataFromCSV[i]);
-                                System.out.println("additor adding");
+                                System.out.println(" variable additor adding");
+                                
                             }else{
                                 System.out.println("additor sad");
                             }
@@ -56,7 +59,7 @@ public class LoadCSV {
                         for(int i =0; i < dataFromCSV.length;i++){
                             if(dataFromCSV[i].length()>1){
                                 headings.add(dataFromCSV[i]);
-                                System.out.println("additor adding");
+                                System.out.println("heading additor adding");
                             }else{
                                 System.out.println("additor sad");
                             }
@@ -86,8 +89,21 @@ public class LoadCSV {
     }
     public String[] getVariables(){
         String[] headingss = new String[variables.size()];
+        
          for(int i =0; i < headingss.length;i++){
-            headingss[i] = headings.get(i);
+             headingss[i] = "";
+             int digitCount = 0; 
+            for(int j = 0; j < variables.get(i).length();j++){
+               
+                if(variables.get(i).charAt(j)>=48&&variables.get(i).charAt(j)<=57){
+                    digitCount++;
+                    if(digitCount<=4||j==variables.get(i).length()-1){//get four digits and the power at the end(e-4 is at end)
+                        headingss[i]+=variables.get(i).charAt(j);
+                    }
+                }else{
+                    headingss[i]+=variables.get(i).charAt(j);
+                }
+            }
             System.out.println("heading " + i + " equals " + headingss[i]);
         }
           
