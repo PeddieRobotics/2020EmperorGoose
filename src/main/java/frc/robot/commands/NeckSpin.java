@@ -7,15 +7,14 @@ import frc.robot.subsystems.Neck;
 public class NeckSpin extends CommandBase {
 
   private Neck m_neck;
-  private final AnalogInput analogT, analogB;
+  private final AnalogInput m_topSensor, m_bottomSensor;
 
-  public NeckSpin() {
-    
-    m_neck = new Neck();
+  public NeckSpin(Neck neck) {
+    m_neck = neck;
     addRequirements(m_neck);
 
-    analogT = new AnalogInput(0);
-    analogB = new AnalogInput(1);
+    m_topSensor = new AnalogInput(0);
+    m_bottomSensor = new AnalogInput(1);
 
   }
 
@@ -23,33 +22,28 @@ public class NeckSpin extends CommandBase {
   @Override
   public void initialize() {
   }
-  // tells whether sensor sees bol
-  private boolean senses_ball(AnalogInput sensor)
-  {
-    if (sensor.getVoltage() > 3) 
-    {
-      return true;
-    }
-    else 
-    {
-      return false;
-    }
-  }
+  // tells whether sensor sees a ball
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (!senses_ball(analogT) && !senses_ball(analogB)) {
-     // m_neck.runMotors(15.0);
+
+    // if the top doesn't sense a ball, everything runs
+    if (!m_neck.senses_ball(m_topSensor)) {
+      m_neck.runMotors(15.0);
     }
 
-    if (analogT.getVoltage() < 3 && analogB.getVoltage() > 3) {
-    //  m_neck.runMotors(15.0);
+    // if there's a ball on the top and no ball on the bottom, 
+    // then run only the bottom motors and stop the top motors
+    if (m_neck.senses_ball(m_topSensor) && !m_neck.senses_ball(m_bottomSensor)) {
+      m_neck.runBottomMotor(15.0);
     }
 
-    if (analogT.getVoltage() > 3 && analogB.getVoltage() < 3) {
-      //m_neck.runBottomMotor(15.0);
+    // if there's a ball on top and bottom, stop everything
+    if (senses_ball(m_topSensor) && senses_ball(m_bottomSensor)) {
+      m_neck.runMotors(0);
     }
+
   }
   // Called once the command ends or is interrupted.
   @Override
@@ -60,6 +54,6 @@ public class NeckSpin extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (analogT.getVoltage() > 4 && analogB.getVoltage() > 4);
+    return false;
   }
 }
