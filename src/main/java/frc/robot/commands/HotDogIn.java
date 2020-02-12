@@ -1,11 +1,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.HotDog;
 
 public class HotDogIn extends CommandBase {
   
-  private Hopper hotDogIn;
+  private HotDog hotDogIn;
 
   public HotDogIn() {
 
