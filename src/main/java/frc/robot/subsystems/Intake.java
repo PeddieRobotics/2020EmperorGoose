@@ -26,7 +26,6 @@ public class Intake extends SubsystemBase {
     isDown = false;
 
     leftIntakeMotor = new TalonSRX(Constants.INTAKE_MOTOR_1);
-    rightIntakeMotor = new TalonSRX(Constants.INTAKE_MOTOR_2);
 
   }
 
