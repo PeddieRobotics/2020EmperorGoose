@@ -23,7 +23,6 @@ public final class Constants {
     public static final int FLYWHEEL_2 = 8;
 
     public static final int INTAKE_MOTOR_1 = 9;
-    public static final int INTAKE_MOTOR_2 = 10;
 
     //Solenoids
     public static final int SOLENOID_INTAKE_1 = 1;
