@@ -7,16 +7,17 @@ public class HotDogOut extends CommandBase {
   
   private HotDog hotDogOut;
   
+  //this command tells the hopper belts to run "out" (away from the tower)
   public HotDogOut() {
    
     hotDogOut = new HotDog();
     addRequirements(hotDogOut);
 
   }
-
+  
+  //called when the command is initially scheduled
   @Override
   public void initialize() {
-    
     hotDogOut.rollingB(true);
 
   }
@@ -26,6 +27,7 @@ public class HotDogOut extends CommandBase {
 
   }
 
+  //called when the command ends/interrupted 
   @Override
   public void end(boolean interrupted) {
 
@@ -33,6 +35,7 @@ public class HotDogOut extends CommandBase {
 
   }
 
+  //returns true when the command should end
   @Override
   public boolean isFinished() {
     

@@ -17,17 +17,20 @@ public class HotDog extends SubsystemBase {
   private HotDog_Mode_Type mode;
 
   public HotDog() {
+    //left and right motors for the HotDog belts
     leftM = new TalonSRX(Constants.HOTDOG_LEFT);
     rightM = new TalonSRX(Constants.HOTDOG_RIGHT);
   }
 
   public void rollingF(boolean isRollingF) {
+    //if the belt is rolling "in", the HotDog intakes
     if (isRollingF) {
       mode = HotDog_Mode_Type.INTAKING;
     } else mode = HotDog_Mode_Type.DISABLED;
   }
 
   public void rollingB(boolean isRollingB) {
+    //if the belt is rolling "out", the belt is moving away from the tower (opposite direction)
     if (isRollingB) {
       mode = HotDog_Mode_Type.REVERSE;
     } else mode = HotDog_Mode_Type.DISABLED;
@@ -40,6 +43,7 @@ public class HotDog extends SubsystemBase {
     switch( mode )
     {
 
+      //when the HotDog is intaking, speed is set to 15 m/s
       case INTAKING:
         leftM.set(ControlMode.PercentOutput, 15);
         rightM.set(ControlMode.PercentOutput, 15);
@@ -50,6 +54,7 @@ public class HotDog extends SubsystemBase {
         rightM.set(ControlMode.PercentOutput, 0);
       break;
 
+      //when the HotDog belts spin away from the tower, change sign to change direction
       case REVERSE:
         leftM.set(ControlMode.PercentOutput, -15);
         rightM.set(ControlMode.PercentOutput, -15);

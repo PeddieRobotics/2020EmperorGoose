@@ -6,13 +6,15 @@ import frc.robot.subsystems.HotDog;
 public class HotDogIn extends CommandBase {
   
   private HotDog hotDogIn;
-
+  
+  //this command tells the hopper belts to run "in" (towards the tower)
   public HotDogIn() {
 
     hotDogIn = new HotDog();
     addRequirements(hotDogIn);
   }
 
+  //called when the command is initally scheduled
   @Override
   public void initialize() {
 
@@ -24,6 +26,7 @@ public class HotDogIn extends CommandBase {
   public void execute() {
   }
 
+  //called when the command ends/interrupted
   @Override
   public void end(boolean interrupted) {
 
@@ -31,6 +34,7 @@ public class HotDogIn extends CommandBase {
     
   }
 
+  //called when the command should end
   @Override
   public boolean isFinished() {
     return false;
