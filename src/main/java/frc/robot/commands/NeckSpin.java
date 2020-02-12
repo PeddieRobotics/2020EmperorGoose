@@ -40,7 +40,7 @@ public class NeckSpin extends CommandBase {
     }
 
     // if there's a ball on top and bottom, stop everything
-    if (senses_ball(m_topSensor) && senses_ball(m_bottomSensor)) {
+    if (m_neck.senses_ball(m_topSensor) && m_neck.senses_ball(m_bottomSensor)) {
       m_neck.runMotors(0);
     }
 
