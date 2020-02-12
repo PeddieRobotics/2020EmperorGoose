@@ -16,14 +16,13 @@ public final class Constants {
     public static final int RIGHT_MASTER = 3;
     public static final int RIGHT_FOLLOWER = 4;
 
-    public static final int HOPPER_LEFT = 5;
-    public static final int HOPPER_RIGHT = 6; //possibly will use if engineers do a hopper w/2 motors???
+    public static final int HOTDOG_LEFT = 5;
+    public static final int HOTDOG_RIGHT = 6; //possibly will use if engineers do a hopper w/2 motors???
 
     public static final int FLYWHEEL_1 = 7;
     public static final int FLYWHEEL_2 = 8;
 
     public static final int INTAKE_MOTOR_1 = 9;
-    public static final int INTAKE_MOTOR_2 = 10;
 
     //Solenoids
     public static final int SOLENOID_INTAKE_1 = 1;
