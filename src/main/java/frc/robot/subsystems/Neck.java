@@ -27,6 +27,7 @@ public class Neck extends SubsystemBase {
   }
 
   public void runBottomMotor(double speed) {
+    topMotor.set(0);
     bottomMotor.set(speed);
   }
 
@@ -34,4 +35,16 @@ public class Neck extends SubsystemBase {
     topMotor.set(speed);
     bottomMotor.set(speed);
   }
+  public boolean senses_ball(AnalogInput sensor)
+  {
+    if (sensor.getVoltage() > 3) 
+    {
+      return true;
+    }
+    else 
+    {
+      return false;
+    }
+  }
+
 }
