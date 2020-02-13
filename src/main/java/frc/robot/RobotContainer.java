@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.PathFollower;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.HotDog;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -42,6 +43,7 @@ public class RobotContainer {
   JoystickButton leftTrigger; 
   SendableChooser<Path> chooser = new SendableChooser<Path>(); 
   SendableChooser<String> path2  = new SendableChooser<String>();
+  private HotDog hd;
   
   Joystick leftJoystick;
   Joystick rightJoystick;

@@ -5,20 +5,20 @@ import frc.robot.subsystems.HotDog;
 
 public class HotDogOut extends CommandBase {
   
-  private HotDog hotDogOut;
+  private HotDog hotDog;
   
   //this command tells the hopper belts to run "out" (away from the tower)
-  public HotDogOut() {
+  public HotDogOut(HotDog hd) {
    
-    hotDogOut = new HotDog();
-    addRequirements(hotDogOut);
+    hotDog = hd;
+    addRequirements(hotDog);
 
   }
   
   //called when the command is initially scheduled
   @Override
   public void initialize() {
-    hotDogOut.rollingB(true);
+    hotDog.rollingB(true);
 
   }
 
@@ -31,7 +31,7 @@ public class HotDogOut extends CommandBase {
   @Override
   public void end(boolean interrupted) {
 
-    hotDogOut.rollingB(false);
+    hotDog.rollingB(false);
 
   }
 
