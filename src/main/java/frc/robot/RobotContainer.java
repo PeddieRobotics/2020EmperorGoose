@@ -64,8 +64,7 @@ public class RobotContainer {
       right2 = new JoystickButton(rightJoystick, 2);
       right3 = new JoystickButton(rightJoystick, 3);
       right4 = new JoystickButton(rightJoystick, 4);
-    
-    
+   
    // chooser.addOption("real 30", realThirty);
     SmartDashboard.putData("path 1",chooser);
     SmartDashboard.putData("path 2",path2);
@@ -86,7 +85,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
+    
   }
 
   
@@ -99,6 +98,7 @@ public class RobotContainer {
     // An ExampleCommand will run in autonomous
     PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
     CommandLooper.getInstance().addCommand(follow2);
+
     return follow2;
 
   }

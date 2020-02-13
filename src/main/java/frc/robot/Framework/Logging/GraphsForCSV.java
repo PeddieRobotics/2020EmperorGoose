@@ -140,12 +140,14 @@ public class GraphsForCSV extends Application {
     }
 
     public void videoScene(Stage primaryStage) {
-
         Group root = new Group();
+        
         Canvas mainCanvas = new Canvas(WIDTH, HEIGHT);//canvas is thing u can draw on
         root.getChildren().add(mainCanvas);
 
         primaryStage.setScene(new Scene(root));
+        
+        addBackButton(primaryStage, root);
         primaryStage.show();
     }
 
@@ -227,6 +229,8 @@ public class GraphsForCSV extends Application {
         root.getChildren().add(canvas);
         
         root.getChildren().add(layout);
+        
+        addBackButton(primaryStage, root);
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
         
@@ -390,6 +394,15 @@ public class GraphsForCSV extends Application {
                 }
             }
         }
+    }
+    public void addBackButton(Stage primaryStage, Group currentGroup){
+        Button toHome = new Button("Home");
+        currentGroup.getChildren().add(toHome);
+        toHome.relocate(WIDTH-100, HEIGHT-100);
+        EventHandler<ActionEvent> homeButtonPressed = (ActionEvent homeButtonEvent)->{
+            start(primaryStage);
+        };
+        toHome.addEventHandler(ActionEvent.ANY,homeButtonPressed);
     }
 
     /**

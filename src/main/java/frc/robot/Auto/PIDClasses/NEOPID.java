@@ -10,16 +10,16 @@ public class NEOPID {
     NEO currentMotor;
     
     
-    private final ArbFFUnits defaultFFUnits = ArbFFUnits.kVoltage;
-    private final ControlType defaultControlType = ControlType.kSmartVelocity;
-    private final AccelStrategy defaulAccelStrategy = AccelStrategy.kSCurve;
+    final ArbFFUnits defaultFFUnits = ArbFFUnits.kVoltage;
+    final ControlType defaultControlType = ControlType.kSmartVelocity;
+    final AccelStrategy defaulAccelStrategy = AccelStrategy.kSCurve;
 
-    private double currentP, currentD, currentI, currentFF, currentMaxAcc, currentMaxVel, currentMinVel, currentMinOutput, currentMaxOutput, currentArbFF; 
+    double currentP, currentD, currentI, currentFF, currentMaxAcc, currentMaxVel, currentMinVel, currentMinOutput, currentMaxOutput, currentArbFF; 
     int pidSlot;
     
-    private ArbFFUnits m_FFUnits;
-    private ControlType m_controlType;
-    private AccelStrategy m_accelStrategy;
+    ArbFFUnits m_FFUnits;
+    ControlType m_controlType;
+    AccelStrategy m_accelStrategy;
     
     ArbFFUnits type;
     
@@ -96,6 +96,8 @@ public class NEOPID {
     public void setPercent(CANPIDController controller, double percent){
         
         controller.setReference(percent, m_controlType, pidSlot,currentArbFF, m_FFUnits);
+        
     }
+    
 
 }
