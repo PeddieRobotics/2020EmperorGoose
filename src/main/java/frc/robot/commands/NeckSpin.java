@@ -27,20 +27,22 @@ public class NeckSpin extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    System.out.println("working");
     // if the top doesn't sense a ball, everything runs
     if (!m_neck.senses_ball(m_topSensor)) {
-      m_neck.runMotors(15.0);
+      m_neck.runMotors(1.0);
+      System.out.println("running both");
     }
 
     // if there's a ball on the top and no ball on the bottom, 
     // then run only the bottom motors and stop the top motors
-    if (m_neck.senses_ball(m_topSensor) && !m_neck.senses_ball(m_bottomSensor)) {
-      m_neck.runBottomMotor(15.0);
+    else if (m_neck.senses_ball(m_topSensor) && !m_neck.senses_ball(m_bottomSensor)) {
+      m_neck.runBottomMotor(1.0);
+      System.out.println("running bottom");
     }
 
     // if there's a ball on top and bottom, stop everything
-    if (m_neck.senses_ball(m_topSensor) && m_neck.senses_ball(m_bottomSensor)) {
+    else if (m_neck.senses_ball(m_topSensor) && m_neck.senses_ball(m_bottomSensor)) {
       m_neck.runMotors(0);
     }
 

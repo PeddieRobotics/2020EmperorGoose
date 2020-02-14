@@ -17,8 +17,8 @@ public class Neck extends SubsystemBase {
   private final CANSparkMax topMotor, bottomMotor;
   
   public Neck() {
-    topMotor = new CANSparkMax(0, MotorType.kBrushless);
-    bottomMotor = new CANSparkMax(1, MotorType.kBrushless);
+    topMotor = new CANSparkMax(12, MotorType.kBrushless);
+    bottomMotor = new CANSparkMax(11, MotorType.kBrushless);
   }
 
   @Override
@@ -28,16 +28,16 @@ public class Neck extends SubsystemBase {
 
   public void runBottomMotor(double speed) {
     topMotor.set(0);
-    bottomMotor.set(speed);
+    bottomMotor.set(-speed);
   }
 
   public void runMotors(double speed) {
     topMotor.set(speed);
-    bottomMotor.set(speed);
+    bottomMotor.set(-speed);
   }
   public boolean senses_ball(AnalogInput sensor)
   {
-    if (sensor.getVoltage() > 3) 
+    if (sensor.getVoltage() < 3) 
     {
       return true;
     }
