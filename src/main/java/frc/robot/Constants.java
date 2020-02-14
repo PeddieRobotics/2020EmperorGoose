@@ -18,6 +18,7 @@ public final class Constants {
 
     public static final int HOTDOG_LEFT = 5;
     public static final int HOTDOG_RIGHT = 6; //possibly will use if engineers do a hopper w/2 motors???
+    public static final int HOTDOG_ROLLER = 10;
 
     public static final int FLYWHEEL_1 = 7;
     public static final int FLYWHEEL_2 = 8;
