@@ -1,5 +1,8 @@
 package frc.robot.Auto;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /**
  * An easy way to use the csv values spit out by bob
  * Each method returns the column that the given value is located at in a path csv

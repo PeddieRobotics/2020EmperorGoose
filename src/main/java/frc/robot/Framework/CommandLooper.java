@@ -5,6 +5,7 @@ import java.util.Vector;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.commands.PathFollower;
 
 public class CommandLooper{
@@ -34,9 +35,10 @@ public class CommandLooper{
         listOfCommands.add(c);
         c.initialize();
     }
+    ParallelCommandGroup c;
     /**
      * 
-     * @param periodMs the period of the notifier in milliseconds
+     * @param periodMs the period of the notifier in milliseconds, so it will run once every this amount
      */
     public void startAndSetPeriodic(int periodMs){
         runner.startPeriodic((double)periodMs/(double)1000);//convert from ms-> seconds

@@ -2,6 +2,9 @@ package frc.robot.Auto.PIDClasses;
 
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
+
+import java.util.ResourceBundle.Control;
+
 import com.revrobotics.*;
 public class NEOPIDController extends CANPIDController {
     NEO neo; 
@@ -31,7 +34,7 @@ public class NEOPIDController extends CANPIDController {
         currentPID().setSmartVelocity(this,velocity);
     }
     public void setArbFF(double arbFF){
-        currentPID().setArbFF(arbFF);
+        //currentPID().setArbFF(arbFF);
     }
     public void setVelocity(double velocity){
         currentPID().setVelocity(this, velocity);
@@ -48,6 +51,28 @@ public class NEOPIDController extends CANPIDController {
     public void setVoltage(double voltage) {
         currentPID().setVoltage(this, voltage);
     }
+    public ControlType getType(){
+        return currentPID().m_controlType;
+    }
+    public void setRef(double setpoint){
+        switch(getType()){
+            case kSmartVelocity:
+                setSmartVelocity(setpoint);
+                break;
+            case kVelocity:
+                setVelocity(setpoint);
+                break;
+            case kPosition:
+                setPosition(setpoint);
+                break;
+            case kDutyCycle:
+                setPercent(setpoint);
+                break;
+            case kVoltage:
+                setVoltage(setpoint);
+                break;
 
+        }
+    }
 
 }

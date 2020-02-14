@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Auto.PIDClasses.NEO;
+import frc.robot.Auto.PIDClasses.NEOPIDWithSmartDashboard;
 
 
 public class Drivetrain extends SubsystemBase {
@@ -50,13 +51,19 @@ public class Drivetrain extends SubsystemBase {
   public Drivetrain() {
     imu = new ADIS16470_IMU();
     
-    leftDriveMaster = new NEO(1);
-    rightDriveMaster = new NEO(3);
-    leftDriveFollower1=new NEO(2,leftDriveMaster);
-    rightDriveFollower1 = new NEO(4,rightDriveMaster);
-    rightDriveMaster.addPIDController(Constants.p,Constants.d,Constants.i,Constants.ff,0);
-    leftDriveMaster.addPIDController(Constants.p,Constants.d,Constants.i,Constants.ff,0);
+    //leftDriveMaster = new NEO(1);
+    //rightDriveMaster = new NEO(3);
+    //leftDriveFollower1=new NEO(2,leftDriveMaster);
+    //rightDriveFollower1 = new NEO(4,rightDriveMaster);
+    //rightDriveMaster.addPIDController(Constants.p,Constants.d,Constants.i,Constants.ff+Constants.ffOffset,0);
+    //leftDriveMaster.addPIDController(Constants.p,Constants.d,Constants.i,Constants.ff,0);
+    NEOPIDWithSmartDashboard leftDriveMaster = new NEOPIDWithSmartDashboard(1);
     
+    NEOPIDWithSmartDashboard rightDriveMaster = new NEOPIDWithSmartDashboard(2);
+    
+    NEOPIDWithSmartDashboard leftDriveFollower1 = new NEOPIDWithSmartDashboard(3);
+    
+    NEOPIDWithSmartDashboard rightDriveFollower2 = new NEOPIDWithSmartDashboard(4);
   }
   /**
    * 
@@ -77,7 +84,7 @@ public class Drivetrain extends SubsystemBase {
 
   public void setVelocity(double left_velocity,double right_velocity, double heading, double leftAccel, double rightAccel){
     leftDriveMaster.setArbFF(-0.05+(-leftAccel*Constants.accMultiplier));//0.05 is the deadband
-    rightDriveMaster.setArbFF(0.05+(-rightAccel*Constants.accMultiplier));
+    rightDriveMaster.setArbFF(0.05+(rightAccel*Constants.accMultiplier));
     leftDriveMaster.setVelocity(-left_velocity+heading);
     rightDriveMaster.setVelocity(right_velocity+heading);
   }
@@ -101,7 +108,7 @@ public class Drivetrain extends SubsystemBase {
    * @return report pid vars as a string that can be added to csv
    */
   public String[] getPIDVariables(){
-    String[] variables = new String[5];
+    String[] variables = new String[6];
     variables[0] = "variables";
     variables[1] = "p" + Constants.p;
     
@@ -110,22 +117,24 @@ public class Drivetrain extends SubsystemBase {
     variables[3] = "d" + Constants.d;
     
     variables[4] = "f" + Constants.ff;
+
+    variables[5] = "accl" + Constants.accMultiplier;
     return variables;
   }
   
   public void setBrake(){
-    leftDriveMaster.setIdleMode(IdleMode.kBrake);
-    rightDriveMaster.setIdleMode(IdleMode.kBrake);
-    leftDriveFollower1.setIdleMode(IdleMode.kBrake);
-    rightDriveFollower1.setIdleMode(IdleMode.kBrake);
+    //leftDriveMaster.setIdleMode(IdleMode.kBrake);
+    //rightDriveMaster.setIdleMode(IdleMode.kBrake);
+    //leftDriveFollower1.setIdleMode(IdleMode.kBrake);
+    //rightDriveFollower1.setIdleMode(IdleMode.kBrake);
 
   }
   public void setCoast(){
-    leftDriveMaster.setIdleMode(IdleMode.kCoast);
-    rightDriveMaster.setIdleMode(IdleMode.kCoast);
-    leftDriveFollower1.setIdleMode(IdleMode.kCoast);
+    //leftDriveMaster.setIdleMode(IdleMode.kCoast);
+    //rightDriveMaster.setIdleMode(IdleMode.kCoast);
+    //leftDriveFollower1.setIdleMode(IdleMode.kCoast);
    
-    rightDriveFollower1.setIdleMode(IdleMode.kCoast);
+    //rightDriveFollower1.setIdleMode(IdleMode.kCoast);
   }
   public void arcadeDrive(double speed ,double turn){
     leftDriveMaster.set(speed - turn);

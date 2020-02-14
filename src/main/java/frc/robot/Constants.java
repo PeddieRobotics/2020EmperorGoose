@@ -28,11 +28,12 @@ public final class Constants {
     public static final int SOLENOID_INTAKE_1 = 1;
     public static final int SOLENOID_INTAKE_2 = 2;
     
-    public static final double p = 0.000 ; 
-    public static final double i = 0.0000 ;
+    public static final double p = 0.0004; 
+    public static final double i = 0.0000;
     public static final double d = 0.0000; 
-    public static final double ff = 0.00014 ;
-    public static final double ffOffset = 0.0000;
+    public static final double ff = 0.000176 ;
+    public static final double ffOffset = 0.000002;
 
-    public static final double accMultiplier = 0.00;
+    public static final double accMultiplier = 0.23;
+    public static final double accOffset = 0.00;
 }

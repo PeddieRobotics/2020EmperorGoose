@@ -103,7 +103,7 @@ public abstract class SmartDashboardSubsystem implements Subsystem, Sendable {
   public void initSendable(SendableBuilder builder) {
     builder.setSmartDashboardType("Subsystem");
 
-    builder.addBooleanProperty(".hasDefault", () -> getDefaultCommand() != null, null);
+    builder.addBooleanProperty(".hasDefault", () -> getDefaultCommand() != null, null);// condition ? what to do if true : what do if false
     builder.addStringProperty(".default",
         () -> getDefaultCommand() != null ? getDefaultCommand().getName() : "none", null);
     builder.addBooleanProperty(".hasCommand", () -> getCurrentCommand() != null, null);
@@ -142,6 +142,7 @@ public abstract class SmartDashboardSubsystem implements Subsystem, Sendable {
     }
 
   }
+  
   public Object get(String s){
     for(int i =0; i < variableStringList.size();i++){
       if(s.equals(variableStringList.get(i))){

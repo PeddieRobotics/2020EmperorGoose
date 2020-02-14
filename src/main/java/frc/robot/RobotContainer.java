@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.PathFollower;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.HotDog;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -42,6 +43,7 @@ public class RobotContainer {
   JoystickButton leftTrigger; 
   SendableChooser<Path> chooser = new SendableChooser<Path>(); 
   SendableChooser<String> path2  = new SendableChooser<String>();
+  private HotDog hd;
   
   Joystick leftJoystick;
   Joystick rightJoystick;
@@ -64,8 +66,7 @@ public class RobotContainer {
       right2 = new JoystickButton(rightJoystick, 2);
       right3 = new JoystickButton(rightJoystick, 3);
       right4 = new JoystickButton(rightJoystick, 4);
-    
-    
+   
    // chooser.addOption("real 30", realThirty);
     SmartDashboard.putData("path 1",chooser);
     SmartDashboard.putData("path 2",path2);
@@ -86,7 +87,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
+    
   }
 
   
@@ -99,6 +100,7 @@ public class RobotContainer {
     // An ExampleCommand will run in autonomous
     PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
     CommandLooper.getInstance().addCommand(follow2);
+
     return follow2;
 
   }

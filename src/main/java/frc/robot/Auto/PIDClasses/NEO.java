@@ -11,21 +11,21 @@ import com.revrobotics.CANPIDController.ArbFFUnits;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class NEO extends CANSparkMax{
     NEOPIDController m_pidController; 
-    private final double defaultPIDSlot =0;//for ease a neo will create a PID on zero slot 
-    private final double defaultP = 0;
-    private final double defaultD = 0; 
-    private final double defaultI =0; 
-    private final double defaultFF = 0;
-    private final double defaultMaxAcc = 3000; 
-    private final double defaultMaxVel = 5700; 
-    private final double defaultMinVel = 10; 
-    private final double defaultMinAcc =0;
-    private final double defaultArbFF = 0;
-    private final double defaultMinOutput=-1;
-    private final double defaultMaxOutput=1;
-    private final AccelStrategy defaultAccelStrategy = AccelStrategy.kSCurve;
-    private final ArbFFUnits defaultFFUnits = ArbFFUnits.kVoltage;
-    private final ControlType defaultControlType = ControlType.kSmartVelocity;
+    public final double defaultPIDSlot =0;//for ease a neo will create a PID on zero slot 
+    public final double defaultP = 0;
+    public final double defaultD = 0; 
+    public final double defaultI =0; 
+    public final double defaultFF = 0;
+    public final double defaultMaxAcc = 3000; 
+    public final double defaultMaxVel = 5700; 
+    public final double defaultMinVel = 10; 
+    public final double defaultMinAcc =0;
+    public final double defaultArbFF = 0;
+    public final double defaultMinOutput=-1;
+    public final double defaultMaxOutput=1;
+    public final AccelStrategy defaultAccelStrategy = AccelStrategy.kSCurve;
+    public final ArbFFUnits defaultFFUnits = ArbFFUnits.kVoltage;
+    public final ControlType defaultControlType = ControlType.kSmartVelocity;
     CANEncoder motorEncoder;
     public NEO(int deviceID) {
         
@@ -161,6 +161,21 @@ public class NEO extends CANSparkMax{
     public double getVelocity(){
        return motorEncoder.getVelocity();
     }
+    public void setP(double p){
+        m_pidController.setP(p,m_pidController.currentPIDSlot);
+    }
+    public void setI(double i){
+        m_pidController.setI(i,m_pidController.currentPIDSlot);
+    }
+    public void setD(double d){
+        m_pidController.setD(d,m_pidController.currentPIDSlot);
+    }
+    public void setFF(double ff){
+        m_pidController.setFF(ff,m_pidController.currentPIDSlot);
+    }
+    public void setAccelStrategy(AccelStrategy accelStrat){
+        m_pidController.setSmartMotionAccelStrategy(accelStrat, m_pidController.currentPIDSlot);
+    }
     /**
      * 
      * @param rpm the speed, in rpm, to set the pid to
@@ -199,7 +214,11 @@ public class NEO extends CANSparkMax{
     public void setPercent(double percent){
         m_pidController.setPercent(percent);
     }
-
+    public void setRef(double setpoint){
+        switch(m_pidController.getType()){
+            
+        }
+    }
     /**
      * 
      * @param velocity the velocity to set the pid to 
