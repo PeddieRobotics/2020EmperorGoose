@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Auto.PIDClasses.NEOPIDWithSmartDashboard;
 
 public class HotDog extends SubsystemBase {
 
@@ -17,6 +18,7 @@ public class HotDog extends SubsystemBase {
   private HotDog_Mode_Type mode;
 
   public HotDog() {
+  //  NEOPIDWithSmartDashboard motor = new NEOPIDWithSmartDashboard(1);
     //left and right motors for the HotDog belts
     leftM = new TalonSRX(Constants.HOTDOG_LEFT);
     rightM = new TalonSRX(Constants.HOTDOG_RIGHT);
@@ -46,9 +48,9 @@ public class HotDog extends SubsystemBase {
 
       //when the HotDog is intaking, speed is set to 15 m/s
       case INTAKING:
-        leftM.set(ControlMode.PercentOutput, 15);
-        rightM.set(ControlMode.PercentOutput, 15);
-        hotDog.set(ControlMode.PercentOutput, 15);
+        leftM.set(ControlMode.PercentOutput, 5);
+        rightM.set(ControlMode.PercentOutput, 10);
+        hotDog.set(ControlMode.PercentOutput, 5);
       break;
 
       case DISABLED:
@@ -59,11 +61,12 @@ public class HotDog extends SubsystemBase {
 
       //when the HotDog belts spin away from the tower, change sign to change direction
       case REVERSE:
-        leftM.set(ControlMode.PercentOutput, -15);
-        rightM.set(ControlMode.PercentOutput, -15);
-        hotDog.set(ControlMode.PercentOutput, -15);
+        leftM.set(ControlMode.PercentOutput, -5);
+        rightM.set(ControlMode.PercentOutput, -10);
+        hotDog.set(ControlMode.PercentOutput, -5);
       break;
 
     }
+    
   }
 }
