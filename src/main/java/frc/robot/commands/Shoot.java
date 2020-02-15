@@ -10,18 +10,18 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Neck;
+import frc.robot.subsystems.Tower;
 
 public class Shoot extends CommandBase {
   /**
    * Creates a new Shoot.
    */
   private Flywheel m_fly;
-  private Neck m_neck;
+  private Tower m_tower;
   private double setpoint = 0.0;
-  public Shoot(Flywheel f, Neck n) {
+  public Shoot(Flywheel f, Tower n) {
     m_fly = f;
-    m_neck = n;
+    m_tower = n;
     addRequirements(f);
     addRequirements(n);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -37,8 +37,8 @@ public class Shoot extends CommandBase {
   @Override
   public void execute() {
    // setpoint = SmartDashboard.getNumber("setpoint", 0.0);
-   setpoint = 1000;
-    m_neck.runMotors(0.1);
+    setpoint = 1000;
+    m_tower.runMotors(0.1);
     m_fly.setSpeed(setpoint);
   }
 

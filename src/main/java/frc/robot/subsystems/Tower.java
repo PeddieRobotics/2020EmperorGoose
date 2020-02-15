@@ -13,10 +13,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Neck extends SubsystemBase {
+public class Tower extends SubsystemBase {
   private final CANSparkMax topMotor, bottomMotor;
   
-  public Neck() {
+  public Tower() {
     topMotor = new CANSparkMax(12, MotorType.kBrushless);
     bottomMotor = new CANSparkMax(11, MotorType.kBrushless);
   }
