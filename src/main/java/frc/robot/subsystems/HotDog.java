@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -13,16 +14,19 @@ public class HotDog extends SubsystemBase {
     INTAKING, DISABLED, REVERSE
   }
 
-  private final TalonSRX leftM, rightM, hotDog;
-
+//  private final TalonSRX leftM, rightM, hotDog;
+private final VictorSPX leftM, rightM, hotDog;
   private HotDog_Mode_Type mode;
 
   public HotDog() {
   //  NEOPIDWithSmartDashboard motor = new NEOPIDWithSmartDashboard(1);
     //left and right motors for the HotDog belts
-    leftM = new TalonSRX(Constants.HOTDOG_LEFT);
+  /*  leftM = new TalonSRX(Constants.HOTDOG_LEFT);
     rightM = new TalonSRX(Constants.HOTDOG_RIGHT);
-    hotDog = new TalonSRX(Constants.HOTDOG_ROLLER);
+    hotDog = new TalonSRX(Constants.HOTDOG_ROLLER);*/ 
+    leftM = new VictorSPX(Constants.HOTDOG_LEFT);
+    rightM = new VictorSPX(Constants.HOTDOG_RIGHT);
+    hotDog = new VictorSPX(Constants.HOTDOG_ROLLER);
   }
 
   public void rollingF(boolean isRollingF) {
@@ -43,7 +47,7 @@ public class HotDog extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    switch( mode )
+ /*   switch( mode )
     {
 
       //when the HotDog is intaking, speed is set to 15 m/s
@@ -65,8 +69,24 @@ public class HotDog extends SubsystemBase {
         rightM.set(ControlMode.PercentOutput, -10);
         hotDog.set(ControlMode.PercentOutput, -5);
       break;
+*/
+    }
+  
+    public void HDIntaking() {
+      leftM.set(ControlMode.PercentOutput, 1);
+      rightM.set(ControlMode.PercentOutput, -2);
+      hotDog.set(ControlMode.PercentOutput, -1);
+    }
 
+    public void HDDisabled() {
+      leftM.set(ControlMode.PercentOutput, 0);
+      rightM.set(ControlMode.PercentOutput, 0);
+      hotDog.set(ControlMode.PercentOutput, 0);
     }
     
-  }
+    public void HDReverse() {
+      leftM.set(ControlMode.PercentOutput, -1);
+      rightM.set(ControlMode.PercentOutput, 2);
+      hotDog.set(ControlMode.PercentOutput, 1);
+    }
 }

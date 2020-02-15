@@ -6,24 +6,33 @@ import frc.robot.subsystems.HotDog;
 public class HotDogIn extends CommandBase {
   
   private HotDog hotDog;
+  private boolean Run;
+  private boolean Rrun;
   
-  //this command tells the hopper belts to run "in" (towards the tower)
-  public HotDogIn(HotDog hd) {
-
+  public HotDogIn(HotDog hd, Boolean TF, Boolean TFR) {
     hotDog = hd;
     addRequirements(hotDog);
+    Run = TF;
+    Rrun = TFR;
   }
 
   //called when the command is initally scheduled
   @Override
   public void initialize() {
 
-    hotDog.rollingF(true);
-
   }
 
   @Override
   public void execute() {
+    if (Run && Rrun) {
+      hotDog.HDReverse();
+    }
+    else if (Run && !Rrun) {
+      hotDog.HDIntaking();
+    }
+    else if (!Run && !Rrun) {
+      hotDog.HDDisabled();
+    }
   }
 
   //called when the command ends/interrupted
