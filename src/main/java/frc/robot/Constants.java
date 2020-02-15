@@ -37,4 +37,11 @@ public final class Constants {
 
     public static final double accMultiplier = 0.23;
     public static final double accOffset = 0.00;
+
+    //PID for Flywheel
+
+    public static final double flywheelP = 0.0004; 
+    public static final double flywheelI = 0.0000;
+    public static final double flywheelD = 0.0000; 
+    public static final double flywheelFF = 0.000176 ;
 }
