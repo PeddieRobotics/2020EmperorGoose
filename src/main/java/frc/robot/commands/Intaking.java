@@ -6,11 +6,13 @@ import frc.robot.subsystems.Intake;
 public class Intaking extends CommandBase {
 
   private Intake intake;
-
-  public Intaking() {
+  private boolean reverse1;
+  private boolean moving;
+  public Intaking(Intake intake1, boolean move, boolean reverse) {
     // Use addRequirements() here to declare subsystem dependencies.
-
-    intake = new Intake();
+    reverse1 = reverse;
+    intake = intake1;
+    moving = move;
 
     addRequirements(intake);
   }
@@ -18,19 +20,23 @@ public class Intaking extends CommandBase {
   // Called when the command is initially scheduled.
   public void initialize() {
 
-    intake.intake(true);
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   public void execute() {
+    if (moving && reverse1) {
+      intake.reverse();
+    }
+    else if (!moving) {
+      intake.disable();
+    }
+    else if (moving && !reverse1) {
+      intake.intaking();
+    }
   }
 
   // Called once the command ends or is interrupted.
   public void end(boolean interrupted) {
-
-    intake.intake( false );
-
   }
 
   // Returns true when the command should end.
