@@ -29,47 +29,9 @@ private final VictorSPX leftM, rightM, hotDog;
     hotDog = new VictorSPX(Constants.HOTDOG_ROLLER);
   }
 
-  public void rollingF(boolean isRollingF) {
-    //if the belt is rolling "in", the HotDog intakes
-    if (isRollingF) {
-      mode = HotDog_Mode_Type.INTAKING;
-    } else mode = HotDog_Mode_Type.DISABLED;
-  }
-
-  public void rollingB(boolean isRollingB) {
-    //if the belt is rolling "out", the belt is moving away from the tower (opposite direction)
-    if (isRollingB) {
-      mode = HotDog_Mode_Type.REVERSE;
-    } else mode = HotDog_Mode_Type.DISABLED;
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
- /*   switch( mode )
-    {
-
-      //when the HotDog is intaking, speed is set to 15 m/s
-      case INTAKING:
-        leftM.set(ControlMode.PercentOutput, 5);
-        rightM.set(ControlMode.PercentOutput, 10);
-        hotDog.set(ControlMode.PercentOutput, 5);
-      break;
-
-      case DISABLED:
-        leftM.set(ControlMode.PercentOutput, 0);
-        rightM.set(ControlMode.PercentOutput, 0);
-        hotDog.set(ControlMode.PercentOutput, 0);
-      break;
-
-      //when the HotDog belts spin away from the tower, change sign to change direction
-      case REVERSE:
-        leftM.set(ControlMode.PercentOutput, -5);
-        rightM.set(ControlMode.PercentOutput, -10);
-        hotDog.set(ControlMode.PercentOutput, -5);
-      break;
-*/
     }
   
     public void HDIntaking() {
