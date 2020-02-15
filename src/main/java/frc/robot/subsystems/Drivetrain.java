@@ -48,6 +48,9 @@ public class Drivetrain extends SubsystemBase {
   public int smartMotionSlot = 0;
   private final ADIS16470_IMU imu;
 
+  private double leftNyoom;
+  private double rightNyoom;
+
   public Drivetrain() {
     imu = new ADIS16470_IMU();
     
@@ -137,8 +140,21 @@ public class Drivetrain extends SubsystemBase {
     //rightDriveFollower1.setIdleMode(IdleMode.kCoast);
   }
   public void arcadeDrive(double speed ,double turn){
-    leftDriveMaster.set(speed - turn);
-    rightDriveMaster.set(-speed- turn);
+
+    leftNyoom = ( speed - turn );
+    rightNyoom = ( -speed - turn );
+    
+    double deadband = 0.03;
+
+    if( Math.abs( leftNyoom ) < deadband ) {
+      speed = 0;
+    }
+    if ( Math.abs( rightNyoom ) < deadband ) {
+      turn = 0;
+    }
+
+    leftDriveMaster.set( leftNyoom );
+    rightDriveMaster.set( rightNyoom );
   }
 
   @Override
