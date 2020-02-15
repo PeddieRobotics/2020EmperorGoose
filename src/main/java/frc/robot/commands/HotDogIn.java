@@ -37,10 +37,7 @@ public class HotDogIn extends CommandBase {
 
   //called when the command ends/interrupted
   @Override
-  public void end(boolean interrupted) {
-
-    hotDog.rollingF(false);
-    
+  public void end(boolean interrupted) {    
   }
 
   //called when the command should end
