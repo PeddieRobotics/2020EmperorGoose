@@ -16,24 +16,31 @@ public final class Constants {
     public static final int RIGHT_MASTER = 3;
     public static final int RIGHT_FOLLOWER = 4;
 
-    public static final int HOTDOG_LEFT = 5;
-    public static final int HOTDOG_RIGHT = 6; //possibly will use if engineers do a hopper w/2 motors???
-
+    public static final int HOPPER_LEFT_WALL = 5;
+    public static final int HOPPER_RIGHT_WALL = 6; //possibly will use if engineers do a hopper w/2 motors???
+    public static final int HOPPER_FLOOR = 10;
     public static final int FLYWHEEL_1 = 7;
     public static final int FLYWHEEL_2 = 8;
 
-    public static final int INTAKE_MOTOR_1 = 9;
+    public static final int INTAKE_MOTOR  = 9;
 
+    public static final int TOWER_TOP = 12;
+    public static final int TOWER_BOTTOM = 11;
     //Solenoids
     public static final int SOLENOID_INTAKE_1 = 1;
     public static final int SOLENOID_INTAKE_2 = 2;
-    
+    public static final int SOLENOID_HOOD = 3;
     public static final double p = 0.0004; 
     public static final double i = 0.0000;
     public static final double d = 0.0000; 
     public static final double ff = 0.000176 ;
     public static final double ffOffset = 0.000002;
 
+
+    public static final double FLYWHEEL_P = 0;
+    public static final double FLYWHEEL_I = 0;
+    public static final double FLYWHEEL_D = 0;
+    public static final double FLYWHEEL_FF = 0;
     public static final double accMultiplier = 0.23;
     public static final double accOffset = 0.00;
 }

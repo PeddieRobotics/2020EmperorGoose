@@ -41,14 +41,14 @@ public class CSVServer {
      * @throws IOException makes sure our socket 
      * doesnt create any errors
      */
-    public void testings(ArrayList<String[]> ones)  throws IOException {
+    public void sendDataAccrossNetwork(ArrayList<String[]> dArrayList)  throws IOException {
          
         try (ServerSocket listener = new ServerSocket(5800)) {
             
                 try (Socket realServer = listener.accept()) {
                     PrintWriter o = new PrintWriter(realServer.getOutputStream(), true);
-                    for(int i =0; i < ones.size();i++){
-                        o.println(addComas(ones.get(i)));
+                    for(int i =0; i < dArrayList.size();i++){
+                        o.println(addComas(dArrayList.get(i)));
                     }
                     realServer.close();
                     

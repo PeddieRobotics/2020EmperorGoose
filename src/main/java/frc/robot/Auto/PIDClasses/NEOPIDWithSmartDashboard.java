@@ -1,6 +1,7 @@
 package frc.robot.Auto.PIDClasses;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.SmartDashboardSubsystem;
 
 public class NEOPIDWithSmartDashboard extends SmartDashboardSubsystem{
@@ -39,7 +40,7 @@ public class NEOPIDWithSmartDashboard extends SmartDashboardSubsystem{
         if(currentFF != getDouble("ff "+slotID)){ DriverStation.reportError("hey", false);neo.setFF(getDouble("ff " + slotID)); currentFF = getDouble("ff "+slotID);}
         if(currentArbFF != getDouble("arbFF "+slotID)){DriverStation.reportError("hey", false); neo.setArbFF(getDouble("arbFF " + slotID)); currentArbFF = getDouble("arbFF "+slotID);}
         if(currentSetpoint != getDouble("setpoint "+slotID)){ DriverStation.reportError("hey", false);neo.setSmartVelocity(getDouble("setpoint " + slotID)); currentSetpoint = getDouble("setpoint "+slotID);}
-        
+        SmartDashboard.putNumber("currentVelocity " + slotID, neo.getVelocity());
         
     }
 

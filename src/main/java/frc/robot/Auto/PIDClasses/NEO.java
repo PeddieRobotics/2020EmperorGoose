@@ -27,6 +27,7 @@ public class NEO extends CANSparkMax{
     public final ArbFFUnits defaultFFUnits = ArbFFUnits.kVoltage;
     public final ControlType defaultControlType = ControlType.kSmartVelocity;
     CANEncoder motorEncoder;
+    public boolean hasCreatedAPID = false;
     public NEO(int deviceID) {
         
         super(deviceID, MotorType.kBrushless);
@@ -153,15 +154,25 @@ public class NEO extends CANSparkMax{
    
     }
     public void addPIDController( double p, double d, double i, double ff, double arbFF ,double maxVel, double minVel, double maxAccel, double minOutput, double maxOutput, AccelStrategy accelStrategy, ControlType controlType, ArbFFUnits ffUnits, int smartMotionSlot){
+        if(!hasCreatedAPID){
+            hasCreatedAPID= true;
+        }
         m_pidController.addPID(p, d, i, ff, arbFF, maxVel, minVel, maxAccel, minOutput, maxOutput,accelStrategy , controlType, ffUnits, smartMotionSlot);
     }
+    public void hasCreatedAPID(){
+        if(!hasCreatedAPID){
+            addPIDController(defaultP,0);//if no PID create a pid on zero
+        }
+    }
     public void changePIDController(int slot){
+        
         m_pidController.changeCurrentPID(slot);
     }
     public double getVelocity(){
        return motorEncoder.getVelocity();
     }
     public void setP(double p){
+        hasCreatedAPID();
         m_pidController.setP(p,m_pidController.currentPIDSlot);
     }
     public void setI(double i){

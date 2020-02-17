@@ -2,69 +2,64 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class Intake extends SubsystemBase {
 
   private static enum Intake_Mode_Type {
     INTAKING, DISABLED
   }
-  private Intake_Mode_Type mode;
 
+  public Intake_Mode_Type currentMode;
   private Solenoid leftSolenoid, rightSolenoid;
   private boolean isDown;
 
-  private TalonSRX leftIntakeMotor, rightIntakeMotor;
+  private TalonSRX intakeMotorTalon;
+  private VictorSPX intakeMotorVictor;
 
   public Intake() {
-
-    leftSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_1);
-    rightSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_2);
+    currentMode = Intake_Mode_Type.DISABLED;
+    //leftSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_1);
+    //rightSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_2);
     isDown = false;
 
-    leftIntakeMotor = new TalonSRX(Constants.INTAKE_MOTOR_1);
-
+    intakeMotorTalon = new TalonSRX(Constants.INTAKE_MOTOR);
+    intakeMotorVictor = new VictorSPX(Constants.INTAKE_MOTOR);
   }
-
-  public void intake(boolean isIntaking) {
-
-    if( isIntaking ) {
-      mode = Intake_Mode_Type.INTAKING;
-    } else {
-      mode = Intake_Mode_Type.DISABLED;
+  public void setIntakeMotor(double setpoint){
+    if(Robot.isCompetitionRobot()){
+      intakeMotorTalon.set(ControlMode.PercentOutput,setpoint);
+    }else{
+      intakeMotorVictor.set(ControlMode.PercentOutput,setpoint);
     }
-
   }
-
+  public void setSoleniods(boolean up){
+    if(up){
+      currentMode = Intake_Mode_Type.DISABLED;
+    }else{
+      currentMode = Intake_Mode_Type.INTAKING;
+    }
+    leftSolenoid.set(up);
+    rightSolenoid.set(up);
+  }
+  public void startIntake(){
+   currentMode = Intake_Mode_Type.INTAKING;
+   setIntakeMotor(1.0); 
+  }
+  public void stopIntake(){
+    currentMode = Intake_Mode_Type.DISABLED;
+    setIntakeMotor(0);
+  }
+  public boolean isIntaking(){
+    return(currentMode == Intake_Mode_Type.INTAKING);
+  }
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-
-    switch( mode ) 
-    {
-
-      case INTAKING:
-
-        isDown = true;
-        leftIntakeMotor.set(ControlMode.PercentOutput, .5);
-        rightIntakeMotor.set(ControlMode.PercentOutput, .5);
-
-      break;
-
-      case DISABLED:
-
-        isDown = false;
-        leftIntakeMotor.set(ControlMode.PercentOutput, 0);
-        rightIntakeMotor.set(ControlMode.PercentOutput, 0);
-
-      break;
-
-    }
-
-    leftSolenoid.set(isDown);
-    rightSolenoid.set(isDown);
+  
   }
 }

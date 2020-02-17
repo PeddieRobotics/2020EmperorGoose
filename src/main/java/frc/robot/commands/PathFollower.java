@@ -148,7 +148,7 @@ public class PathFollower extends CommandBase {
     String timeDiff = Double.toString(endTime - startTime);
     try {
       points.add(m_dDrivetrain.getPIDVariables());
-      serv.testings(points);
+      serv.sendDataAccrossNetwork(points);
     } catch (IOException e) {
       // TODO Auto-generated catch block
       e.printStackTrace();

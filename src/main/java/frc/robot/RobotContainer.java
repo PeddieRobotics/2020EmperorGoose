@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import java.util.ArrayList;
+
 import com.team319.trajectory.Path;
 
 import edu.wpi.first.wpilibj.GenericHID;
@@ -23,8 +25,16 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.PathFollower;
+import frc.robot.commands.testCommandForStuff;
+import frc.robot.commands.IntakeCommands.toggleIntakeState;
+import frc.robot.commands.JoystickCommandGroups.toggleIntakeUpAndDown;
+import frc.robot.commands.TowerCommands.indexPowerCells;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.HotDog;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.TestSubsytem;
+import frc.robot.subsystems.Tower;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -43,8 +53,11 @@ public class RobotContainer {
   JoystickButton leftTrigger; 
   SendableChooser<Path> chooser = new SendableChooser<Path>(); 
   SendableChooser<String> path2  = new SendableChooser<String>();
-  private HotDog hd;
-  
+  //TestSubsytem test = new TestSubsytem();
+  Tower m_Tower = new Tower();
+  Hopper m_Hopper = new Hopper();
+  Shooter m_Shoot = new Shooter();
+  Intake m_Intake = new Intake(); 
   Joystick leftJoystick;
   Joystick rightJoystick;
 
@@ -54,29 +67,31 @@ public class RobotContainer {
   public RobotContainer() {
 
     CommandLooper.getInstance().startAndSetPeriodic(5);
+    m_Tower.setDefaultCommand(new indexPowerCells(m_Tower, m_Hopper));
     leftJoystick = new Joystick(0);
     rightJoystick = new Joystick(1);
 
     left1 = new JoystickButton(leftJoystick, 1);
     left2 = new JoystickButton(leftJoystick, 2);
-      left3 = new JoystickButton(leftJoystick, 3);
-      left4 = new JoystickButton(leftJoystick, 4);
+    left3 = new JoystickButton(leftJoystick, 3);
+    left4 = new JoystickButton(leftJoystick, 4);
 
     right1 = new JoystickButton(rightJoystick, 1);
-      right2 = new JoystickButton(rightJoystick, 2);
-      right3 = new JoystickButton(rightJoystick, 3);
-      right4 = new JoystickButton(rightJoystick, 4);
+  right2 = new JoystickButton(rightJoystick, 2);
+    right3 = new JoystickButton(rightJoystick, 3);
+    right4 = new JoystickButton(rightJoystick, 4);
    
    // chooser.addOption("real 30", realThirty);
-    SmartDashboard.putData("path 1",chooser);
-    SmartDashboard.putData("path 2",path2);
-    path2.addOption("turn 12 move 12s","testPath");
+  //  SmartDashboard.putData("path 1",chooser);
+  //  SmartDashboard.putData("path 2",path2);
+   // path2.addOption("turn 12 move 12s","testPath");
     
-    path2.addOption("real 10s","real10");
+   // path2.addOption("real 10s","real10");
     
-    path2.addOption("real 20s","real20");
+    //path2.addOption("real 20s","real20");
     
     //Configure the button bindings
+    
     configureButtonBindings();
   }
 
@@ -87,7 +102,8 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    
+    left1.toggleWhenPressed(new toggleIntakeState(m_Intake));
+    right1.toggleWhenActive(new ParallelCommand(raiseHood(), ))
   }
 
   
@@ -98,7 +114,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
+    final PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
     CommandLooper.getInstance().addCommand(follow2);
 
     return follow2;

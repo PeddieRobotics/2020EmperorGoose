@@ -51,19 +51,19 @@ public class Drivetrain extends SubsystemBase {
   public Drivetrain() {
     imu = new ADIS16470_IMU();
     
-    //leftDriveMaster = new NEO(1);
-    //rightDriveMaster = new NEO(3);
-    //leftDriveFollower1=new NEO(2,leftDriveMaster);
-    //rightDriveFollower1 = new NEO(4,rightDriveMaster);
-    //rightDriveMaster.addPIDController(Constants.p,Constants.d,Constants.i,Constants.ff+Constants.ffOffset,0);
-    //leftDriveMaster.addPIDController(Constants.p,Constants.d,Constants.i,Constants.ff,0);
-    NEOPIDWithSmartDashboard leftDriveMaster = new NEOPIDWithSmartDashboard(1);
+    leftDriveMaster = new NEO(1);
+    rightDriveMaster = new NEO(3);
+    leftDriveFollower1=new NEO(2,leftDriveMaster);
+    rightDriveFollower1 = new NEO(4,rightDriveMaster);
+    rightDriveMaster.addPIDController(Constants.p,Constants.d,Constants.i,Constants.ff+Constants.ffOffset,0);
+    leftDriveMaster.addPIDController(Constants.p,Constants.d,Constants.i,Constants.ff,0);
+    //NEOPIDWithSmartDashboard leftDriveMaster = new NEOPIDWithSmartDashboard(1);
+   
+  //  NEOPIDWithSmartDashboard rightDriveMaster = new NEOPIDWithSmartDashboard(2);
     
-    NEOPIDWithSmartDashboard rightDriveMaster = new NEOPIDWithSmartDashboard(2);
+   // NEOPIDWithSmartDashboard leftDriveFollower1 = new NEOPIDWithSmartDashboard(3);
     
-    NEOPIDWithSmartDashboard leftDriveFollower1 = new NEOPIDWithSmartDashboard(3);
-    
-    NEOPIDWithSmartDashboard rightDriveFollower2 = new NEOPIDWithSmartDashboard(4);
+   // NEOPIDWithSmartDashboard rightDriveFollower2 = new NEOPIDWithSmartDashboard(4);
   }
   /**
    * 
