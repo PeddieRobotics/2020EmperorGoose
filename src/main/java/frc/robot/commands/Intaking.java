@@ -6,13 +6,13 @@ import frc.robot.subsystems.Intake;
 public class Intaking extends CommandBase {
 
   private Intake intake;
-  private boolean reverse1;
-  private boolean moving;
-  public Intaking(Intake intake1, boolean move, boolean reverse) {
+  private boolean isReversing;
+  private boolean isMoving;
+  public Intaking(Intake intakeSubsystem, boolean move, boolean reverse) {
     // Use addRequirements() here to declare subsystem dependencies.
-    reverse1 = reverse;
-    intake = intake1;
-    moving = move;
+    isReversing = reverse;
+    intake = intakeSubsystem;
+    isMoving = move;
 
     addRequirements(intake);
   }
@@ -24,13 +24,13 @@ public class Intaking extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   public void execute() {
-    if (moving && reverse1) {
+    if (isMoving && isReversing) {  //call intake command with it moving AND reversing -> it reverses
       intake.reverse();
     }
-    else if (!moving) {
+    else if (!isMoving) {           //say moving is false and it stops spinning
       intake.disable();
     }
-    else if (moving && !reverse1) {
+    else if (isMoving && !isReversing) {  //normal intake if moving and not reversing
       intake.intaking();
     }
   }

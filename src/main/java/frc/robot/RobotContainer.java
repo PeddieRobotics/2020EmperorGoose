@@ -38,7 +38,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   
   private PathFollower follow10;
-  private final Drivetrain m_driveTrain = new Drivetrain();
+  private final Drivetrain driveTrain = new Drivetrain();
   Joystick left ;
   JoystickButton leftTrigger; 
   SendableChooser<Path> chooser = new SendableChooser<Path>(); 
@@ -78,6 +78,7 @@ public class RobotContainer {
     
     //Configure the button bindings
     configureButtonBindings();
+
   }
 
   /**
@@ -87,7 +88,9 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+
     
+
   }
 
   
@@ -98,18 +101,21 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
+    PathFollower follow2 = new PathFollower(driveTrain, path2.getSelected(),true);
     CommandLooper.getInstance().addCommand(follow2);
 
     return follow2;
 
   }
+
   public void setBrakeMode(){
-    m_driveTrain.setBrake();
+    driveTrain.setBrake();
   }
+
   public void setCoastMode(){
-    m_driveTrain.setCoast();
+    driveTrain.setCoast();
   }
+
   public double getSpeed() {
     return leftJoystick.getRawAxis(0);
   }
