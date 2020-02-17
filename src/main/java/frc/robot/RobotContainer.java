@@ -103,7 +103,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     left1.toggleWhenPressed(new toggleIntakeState(m_Intake));
-    right1.toggleWhenActive(new ParallelCommand(raiseHood(), ))
+    
   }
 
   
