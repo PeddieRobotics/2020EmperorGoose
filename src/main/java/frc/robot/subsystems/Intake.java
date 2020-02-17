@@ -12,7 +12,7 @@ import frc.robot.Robot;
 public class Intake extends SubsystemBase {
 
   private static enum Intake_Mode_Type {
-    INTAKING, DISABLED
+    INTAKING, DISABLED, REVERSE
   }
 
   public Intake_Mode_Type currentMode;
@@ -22,11 +22,14 @@ public class Intake extends SubsystemBase {
   private TalonSRX intakeMotorTalon;
   private VictorSPX intakeMotorVictor;
 
+  //private TalonSRX intakeMotor;
+  private VictorSPX intakeMotor;
   public Intake() {
     currentMode = Intake_Mode_Type.DISABLED;
     //leftSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_1);
     //rightSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_2);
     isDown = false;
+    intakeMotor = new VictorSPX(Constants.INTAKE_MOTOR_1);
 
     intakeMotorTalon = new TalonSRX(Constants.INTAKE_MOTOR);
     intakeMotorVictor = new VictorSPX(Constants.INTAKE_MOTOR);
@@ -37,6 +40,7 @@ public class Intake extends SubsystemBase {
     }else{
       intakeMotorVictor.set(ControlMode.PercentOutput,setpoint);
     }
+    //intakeMotor = new TalonSRX(Constants.INTAKE_MOTOR_1);
   }
   public void setSoleniods(boolean up){
     if(up){
@@ -61,5 +65,30 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
   
+    // This method will be called once per scheduler run
+
+  }
+
+  public void intaking() {
+    intakeMotor.set(ControlMode.PercentOutput, .5);
+    intakeMotor.set(ControlMode.PercentOutput, .5);
+    leftSolenoid.set(true);
+    rightSolenoid.set(true);
+  }
+
+  public void reverse() {
+    intakeMotor.set(ControlMode.PercentOutput, -.5);
+    intakeMotor.set(ControlMode.PercentOutput, -.5);
+    leftSolenoid.set(true);
+    rightSolenoid.set(true);
+  }
+
+  public void disable() {
+    intakeMotor.set(ControlMode.PercentOutput, 0);
+    intakeMotor.set(ControlMode.PercentOutput, 0);
+    leftSolenoid.set(false);
+    rightSolenoid.set(false);
   }
 }
+//change enum to boolean (is it down or up)
+//
