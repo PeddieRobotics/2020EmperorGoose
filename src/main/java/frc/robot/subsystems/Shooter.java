@@ -20,19 +20,34 @@ public class Shooter extends SubsystemBase {
   NEO flyWheelFoward, flyWheelBackward;
  
   public Shooter() {
-    flyWheelFoward = new NEO(Constants.FLYWHEEL_1);
-    flyWheelBackward = new NEO(Constants.FLYWHEEL_2);
-    flyWheelFoward.addPIDController(Constants.FLYWHEEL_P,Constants.FLYWHEEL_D,Constants.FLYWHEEL_I,Constants.FLYWHEEL_FF,0);
-    flyWheelBackward.addPIDController(Constants.FLYWHEEL_P,Constants.FLYWHEEL_D,Constants.FLYWHEEL_I,Constants.FLYWHEEL_FF,0);
+
+    flyWheelFoward = new NEO( Constants.FLYWHEEL_1 );
+    flyWheelBackward = new NEO( Constants.FLYWHEEL_2 );
+
+    flyWheelFoward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
+    flyWheelBackward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
     
   } 
-  public void setMotors(double setpoint){
-    flyWheelFoward.setVelocity(setpoint);
-    flyWheelBackward.setVelocity(-setpoint);
+
+  /**
+   * sets shooter motors
+   * @param setpoint shooter speed
+   */
+  public void setMotors( double setpoint ) {
+
+    flyWheelFoward.setVelocity( setpoint );
+    flyWheelBackward.setVelocity( -setpoint );
+
   }
-  public void stopMotors(){
+
+  /**
+   * disables shooter
+   */
+  public void disable() {
+
     flyWheelFoward.set(0);
     flyWheelBackward.set(0);
+
   }
 
   @Override
