@@ -29,7 +29,7 @@ public class Intake extends SubsystemBase {
     //leftSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_1);
     //rightSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_2);
     isDown = false;
-    intakeMotor = new VictorSPX(Constants.INTAKE_MOTOR_1);
+    intakeMotor = new VictorSPX(Constants.INTAKE_MOTOR);
 
     intakeMotorTalon = new TalonSRX(Constants.INTAKE_MOTOR);
     intakeMotorVictor = new VictorSPX(Constants.INTAKE_MOTOR);
