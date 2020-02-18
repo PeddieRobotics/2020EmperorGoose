@@ -139,12 +139,12 @@ public class Drivetrain extends SubsystemBase {
    
     //rightDriveFollower1.setIdleMode(IdleMode.kCoast);
   }
-  public void arcadeDrive(double speed ,double turn){
+  public void arcadeDrive(double speed, double turn){
 
     leftNyoom = ( speed - turn );
     rightNyoom = ( -speed - turn );
     
-    double deadband = 0.03;
+    double deadband = 0.05;
 
     if( Math.abs( leftNyoom ) < deadband ) {
       speed = 0;

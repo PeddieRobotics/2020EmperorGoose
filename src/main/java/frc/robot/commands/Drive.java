@@ -19,6 +19,7 @@ public class Drive extends CommandBase {
 
     drive = driveTrain;
     rContainer = robotContainer;
+    addRequirements(driveTrain);
     normalizedDrive = true; //WE ARE DRIVING NORMALIZED
     
   }
