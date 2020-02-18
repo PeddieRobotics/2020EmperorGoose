@@ -1,9 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
 /*
 *Pid tuning methods tried
 * random guess: didn't work
@@ -31,6 +25,7 @@ import frc.robot.Auto.PIDClasses.NEOPIDWithSmartDashboard;
 
 
 public class Drivetrain extends SubsystemBase {
+
   private static final int kTicksPerRev = 1;
   private static final double kWheelDiameter = 6.0 / 12.0 / 11.11 / Math.PI;
   private static final double kMaxVelocity = 7.5;
@@ -40,11 +35,13 @@ public class Drivetrain extends SubsystemBase {
   private double leftspeed, rightspeed;
 
   CANPIDController m_pidController, m_pidController2;
+  
   private boolean atDistances;
   private boolean atAngle;
 
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
   public double kP2, kI2, kD2, kIz2, kFF2, kMaxOutput2, kMinOutput2, maxRPM2, maxVel2, minVel2, maxAcc2, allowedErr2;
+
   public int smartMotionSlot = 0;
   private final ADIS16470_IMU imu;
 
@@ -52,30 +49,35 @@ public class Drivetrain extends SubsystemBase {
   private double rightNyoom;
 
   public Drivetrain() {
+
     imu = new ADIS16470_IMU();
     
     leftDriveMaster = new NEO(1);
     rightDriveMaster = new NEO(3);
-    leftDriveFollower1=new NEO(2,leftDriveMaster);
-    rightDriveFollower1 = new NEO(4,rightDriveMaster);
-    rightDriveMaster.addPIDController(Constants.p,Constants.d,Constants.i,Constants.ff+Constants.ffOffset,0);
-    leftDriveMaster.addPIDController(Constants.p,Constants.d,Constants.i,Constants.ff,0);
+    leftDriveFollower1=new NEO(2, leftDriveMaster );
+    rightDriveFollower1 = new NEO(4, rightDriveMaster );
+
+    rightDriveMaster.addPIDController( Constants.p, Constants.d, Constants.i, Constants.ff + Constants.ffOffset, 0 );
+    leftDriveMaster.addPIDController( Constants.p, Constants.d, Constants.i, Constants.ff, 0 );
     //NEOPIDWithSmartDashboard leftDriveMaster = new NEOPIDWithSmartDashboard(1);
    
-  //  NEOPIDWithSmartDashboard rightDriveMaster = new NEOPIDWithSmartDashboard(2);
+    //  NEOPIDWithSmartDashboard rightDriveMaster = new NEOPIDWithSmartDashboard(2);
     
-   // NEOPIDWithSmartDashboard leftDriveFollower1 = new NEOPIDWithSmartDashboard(3);
+    // NEOPIDWithSmartDashboard leftDriveFollower1 = new NEOPIDWithSmartDashboard(3);
     
-   // NEOPIDWithSmartDashboard rightDriveFollower2 = new NEOPIDWithSmartDashboard(4);
+    // NEOPIDWithSmartDashboard rightDriveFollower2 = new NEOPIDWithSmartDashboard(4);
   }
+
   /**
    * 
    * @return Returns the angle in degrees
    */
-  public double returnAngle(){
+  public double returnAngle() {
+
     return imu.getAngle();
     
   }
+
   /**
    * 
    * @param left_velocity the velocity to send to the left motor in rpm
@@ -85,34 +87,43 @@ public class Drivetrain extends SubsystemBase {
    * @param rightAccel the acceleration in m/s/s
    */
 
-  public void setVelocity(double left_velocity,double right_velocity, double heading, double leftAccel, double rightAccel){
-    leftDriveMaster.setArbFF(-0.05+(-leftAccel*Constants.accMultiplier));//0.05 is the deadband
-    rightDriveMaster.setArbFF(0.05+(rightAccel*Constants.accMultiplier));
-    leftDriveMaster.setVelocity(-left_velocity+heading);
-    rightDriveMaster.setVelocity(right_velocity+heading);
+  public void setVelocity( double left_velocity, double right_velocity, double heading, double leftAccel, double rightAccel ) {
+
+    leftDriveMaster.setArbFF( -0.05 + ( -leftAccel * Constants.accMultiplier ) ); //0.05 is the deadband
+    rightDriveMaster.setArbFF( 0.05 + ( rightAccel * Constants.accMultiplier ) );
+
+    leftDriveMaster.setVelocity( -left_velocity + heading );
+    rightDriveMaster.setVelocity( right_velocity + heading );
+
   }
 
   /**
    * 
    * @return Velocity of the left Drive master
    */
-  public double returnLeftVelocity(){
+  public double returnLeftVelocity() {
+
     return leftDriveMaster.getVelocity();
+
   }
   /**
    * 
    * @return Velocity of the right drive master
    */
-  public double returnRightVelocity(){
+  public double returnRightVelocity() {
+
     return -rightDriveMaster.getVelocity();
+
   }
   /**
    * 
    * @return report pid vars as a string that can be added to csv
    */
-  public String[] getPIDVariables(){
+  public String[] getPIDVariables() {
+
     String[] variables = new String[6];
     variables[0] = "variables";
+
     variables[1] = "p" + Constants.p;
     
     variables[2] = "i" + Constants.i;
@@ -122,27 +133,30 @@ public class Drivetrain extends SubsystemBase {
     variables[4] = "f" + Constants.ff;
 
     variables[5] = "accl" + Constants.accMultiplier;
+
     return variables;
+
   }
   
-  public void setBrake(){
+  public void setBrake() {
+
     //leftDriveMaster.setIdleMode(IdleMode.kBrake);
     //rightDriveMaster.setIdleMode(IdleMode.kBrake);
+
     //leftDriveFollower1.setIdleMode(IdleMode.kBrake);
     //rightDriveFollower1.setIdleMode(IdleMode.kBrake);
 
   }
-  public void setCoast(){
+  public void setCoast() {
+
     //leftDriveMaster.setIdleMode(IdleMode.kCoast);
     //rightDriveMaster.setIdleMode(IdleMode.kCoast);
+
     //leftDriveFollower1.setIdleMode(IdleMode.kCoast);
-   
     //rightDriveFollower1.setIdleMode(IdleMode.kCoast);
   }
-  public void arcadeDrive(double speed, double turn){
+  public void arcadeDrive( double speed, double turn ) {
 
-    leftNyoom = ( speed - turn );
-    rightNyoom = ( -speed - turn );
     
     double deadband = 0.05;
 
@@ -153,19 +167,25 @@ public class Drivetrain extends SubsystemBase {
       turn = 0;
     }
 
+    leftNyoom = ( speed - turn );
+    rightNyoom = ( -speed - turn );
+    
     leftDriveMaster.set( leftNyoom );
     rightDriveMaster.set( rightNyoom );
+
   }
 
   @Override
   public void periodic() {
-    
   }
+
   /**
    * Resets yaw to zero
    */
   public void resetADIS() {
+
     imu.reset();
+
   }
   /**
    * 
@@ -176,8 +196,10 @@ public class Drivetrain extends SubsystemBase {
    * Calibrates imu, only call if imu hasn't move, movement will show up as drift in so don't calibrate if moved! 
    * If moved then just restart robot code
    */
-  public void calibrateIMU(){
+  public void calibrateIMU() {
+
     imu.calibrate();
+
   }
 
 }

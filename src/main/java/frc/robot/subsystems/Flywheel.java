@@ -34,10 +34,15 @@ public class Flywheel extends SubsystemBase {
     
   }
 
-  public void setSpeed(double setpoint)
-  {
+  /**
+   * runs the flywheel
+   * @param setpoint speed of the flywheel
+   */
+  public void setSpeed( double setpoint ) {
+
     leftMotor.setVelocity(setpoint);
     rightMotor.setVelocity(-setpoint);
+
   }
 
   @Override

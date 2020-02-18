@@ -17,18 +17,23 @@ import frc.robot.Constants;
 import frc.robot.Auto.PIDClasses.NEO;
 
 public class Tower extends SubsystemBase {
+
   private NEO topMotor, bottomMotor;
   private final AnalogInput m_topSensor0, m_topSensor1, m_bottomSensor2, m_bottomSensor3;
   
-   public Tower() {
-    topMotor = new NEO(Constants.TOWER_TOP);
-    bottomMotor = new NEO(Constants.TOWER_BOTTOM);
+  public Tower() {
+
+    topMotor = new NEO( Constants.TOWER_TOP );
+    bottomMotor = new NEO( Constants.TOWER_BOTTOM );
+
     topMotor.setBrake();
     bottomMotor.setBrake();
+
     m_topSensor0 = new AnalogInput(0);
     m_topSensor1 = new AnalogInput(1);
     m_bottomSensor2 = new AnalogInput(2);
     m_bottomSensor3 = new AnalogInput(3);
+
   }
 
   @Override
@@ -36,48 +41,77 @@ public class Tower extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void runTopMotor(double speed){
-    topMotor.set(speed);
+  /**
+   * runs the top motor
+   * @param speed speed of motor
+   */
+  public void runTopMotor( double speed ) {
+
+    topMotor.set( speed );
     bottomMotor.set(0);
+
   }
-  public void runBottomMotor(double speed) {
+
+  /**
+   * runs bottom motor
+   * @param speed speed of motor
+   */
+  public void runBottomMotor( double speed ) {
+
     topMotor.set(0);
-    bottomMotor.set(-speed);
+    bottomMotor.set( -speed );
+
   }
   
-  public void runMotors(double speed) {
-    topMotor.set(speed);
-    bottomMotor.set(-speed);
+  /**
+   * runs both motors at the same speed
+   * @param speed speed of motors
+   */
+  public void runMotors( double speed ) {
+
+    topMotor.set( speed );
+    bottomMotor.set( -speed );
+
   }
-  public boolean senses_ball_Bottom()
-  {
-    if (m_bottomSensor2.getVoltage() < 3||m_bottomSensor3.getVoltage()<3) 
-    {
+
+  /**
+   * does the base of the tower sense a ball inside it?
+   * @return boolean of whether there is a ball at the base of the tower or not
+   */
+  public boolean senses_ball_Bottom() {
+
+    if ( m_bottomSensor2.getVoltage() < 3 || m_bottomSensor3.getVoltage() < 3 ) {
       return true;
-    }
-    else 
-    {
+    } else {
       return false;
     }
+
   }
-  public void printSensorVolts(){
+
+  /**
+   * prints sensor volts
+   */
+  public void printSensorVolts() {
+
     SmartDashboard.putNumber("volatage of one", m_topSensor0.getVoltage());
     SmartDashboard.putNumber("volatage of two", m_topSensor1.getVoltage());
     SmartDashboard.putNumber("volatage of three", m_bottomSensor2.getVoltage());
     SmartDashboard.putNumber("volatage of four", m_bottomSensor3.getVoltage());
   
   }
-  public boolean senses_ball_Top()
-  {
 
-    if (m_topSensor0.getVoltage() < 3||m_topSensor1.getVoltage()<3) 
-    {
+  /**
+   * does the top of the tower sense a ball inside it?
+   * @return boolean of whether there is a ball at the top of the tower or not
+   */
+  public boolean senses_ball_Top() {
+
+    if ( m_topSensor0.getVoltage() < 3 || m_topSensor1.getVoltage() < 3 ) {
       return true;
-    }
-    else 
-    {
+    } else {
       return false;
     }
+
   }
 
 }

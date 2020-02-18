@@ -29,7 +29,7 @@ public class stopFlywheel extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Shooter.stopMotors();
+    m_Shooter.disable();
   }
 
   // Called once the command ends or is interrupted.
