@@ -19,13 +19,14 @@ public class startFlywheel extends CommandBase {
   public startFlywheel(Shooter rcShooter) {
     m_Shooter = rcShooter;
     addRequirements(rcShooter);
+    
+    SmartDashboard.putNumber("setpoint",0.0);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("setpoint",0.0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

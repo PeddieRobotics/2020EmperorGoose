@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -62,7 +63,7 @@ public class Intake extends SubsystemBase {
    * start intake
    */
   public void startIntake() {
-
+    DriverStation.reportError("fasle",false);
    currentMode = Intake_Mode_Type.INTAKING;
    setIntakeMotor( 1.0 ); 
 
@@ -98,7 +99,7 @@ public class Intake extends SubsystemBase {
    * intake the ball(s)
    */
   public void intake() {
-
+    
     intakeMotor.set( ControlMode.PercentOutput, .5 );
     intakeMotor.set( ControlMode.PercentOutput, .5 );
 

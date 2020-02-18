@@ -29,7 +29,7 @@ public final class Constants {
     //Solenoids
     public static final int SOLENOID_INTAKE_1 = 1;
     public static final int SOLENOID_INTAKE_2 = 2;
-    public static final int SOLENOID_HOOD = 3;
+    public static final int SOLENOID_HOOD = 1;
     public static final double p = 0.0004; 
     public static final double i = 0.0000;
     public static final double d = 0.0000; 

@@ -34,9 +34,10 @@ public class Shooter extends SubsystemBase {
    * @param setpoint shooter speed
    */
   public void setMotors( double setpoint ) {
-
-    flyWheelFoward.setVelocity( setpoint );
-    flyWheelBackward.setVelocity( -setpoint );
+   flyWheelBackward.setVelocity(0);
+   flyWheelFoward.setVelocity(0);
+   //flyWheelFoward.setVelocity( setpoint );
+   //flyWheelBackward.setVelocity( -setpoint );
 
   }
 
@@ -45,8 +46,8 @@ public class Shooter extends SubsystemBase {
    */
   public void disable() {
 
-    flyWheelFoward.set(0);
-    flyWheelBackward.set(0);
+    //flyWheelFoward.set(0);
+    //flyWheelBackward.set(0);
 
   }
 

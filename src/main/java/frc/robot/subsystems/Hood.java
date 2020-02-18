@@ -19,13 +19,13 @@ public class Hood extends SubsystemBase {
 
   public Hood() {
 
-    hoodSolenoid = new Solenoid(Constants.SOLENOID_HOOD);
+    //hoodSolenoid = new Solenoid(Constants.SOLENOID_HOOD);
 
   }
 
   public void setUp(boolean isUp){
 
-    hoodSolenoid.set( isUp ); //set solenoid up if isUp is true, down if false
+   // hoodSolenoid.set( isUp ); //set solenoid up if isUp is true, down if false
 
   }
   

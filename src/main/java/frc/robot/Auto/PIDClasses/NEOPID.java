@@ -58,44 +58,25 @@ public class NEOPID {
     public void setArbFF(double arbFF){
         currentArbFF = arbFF;
     }
-    public void setDefaultVelocity(CANPIDController controller, double velocity){
-        
-        controller.setReference(velocity, m_controlType, pidSlot,currentArbFF, m_FFUnits);
-    }
-    public void setDefaultSmartVelocity(CANPIDController controller, double velocity){
-        
-        controller.setReference(velocity, m_controlType, pidSlot,currentArbFF, m_FFUnits);
-    }
-    public void setDefaultPosition(CANPIDController controller, double position){
-        
-        controller.setReference(position, m_controlType, pidSlot,currentArbFF, m_FFUnits);
-
-    }
-    public void setDefaultVoltage(CANPIDController controller, double voltage){
-        controller.setReference(voltage, m_controlType, pidSlot,currentArbFF, m_FFUnits);
-    }
-    public void setDefaultPercent(CANPIDController controller,double percent){
-        controller.setReference(percent, m_controlType, pidSlot,currentArbFF, m_FFUnits);
-    }
     public void setSmartVelocity(CANPIDController controller, double velocity){
         
-        controller.setReference(velocity, m_controlType, pidSlot,currentArbFF, m_FFUnits);
+        controller.setReference(velocity, ControlType.kSmartVelocity, pidSlot,currentArbFF, m_FFUnits);
     }
     public void setVelocity(CANPIDController controller, double velocity){
         
-        controller.setReference(velocity, m_controlType, pidSlot,currentArbFF, m_FFUnits);
+        controller.setReference(velocity, ControlType.kVelocity, pidSlot,currentArbFF, m_FFUnits);
     }
     public void setPosition(CANPIDController controller,double position){
         
-        controller.setReference(position, m_controlType, pidSlot,currentArbFF, m_FFUnits);
+        controller.setReference(position, ControlType.kPosition, pidSlot,currentArbFF, m_FFUnits);
     }
     public void setVoltage(CANPIDController controller, double voltage){
         
-        controller.setReference(voltage, m_controlType, pidSlot,currentArbFF, m_FFUnits);
+        controller.setReference(voltage, ControlType.kVoltage, pidSlot,currentArbFF, m_FFUnits);
     }
     public void setPercent(CANPIDController controller, double percent){
         
-        controller.setReference(percent, m_controlType, pidSlot,currentArbFF, m_FFUnits);
+        controller.setReference(percent, ControlType.kDutyCycle, pidSlot,currentArbFF, m_FFUnits);
         
     }
     

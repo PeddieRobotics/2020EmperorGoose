@@ -20,9 +20,9 @@ public class indexPowerCells extends CommandBase {
    */
   Tower m_Tower;
   Hopper m_Hopper; 
-  boolean hasSeenBall=false;
+  boolean reversing=false;
   double startWaitTime = 0;
-  
+  int ballTimeCount = 0;
   public indexPowerCells(Tower rcTower, Hopper rcHopper) {
     m_Hopper = rcHopper;
     m_Tower = rcTower;
@@ -39,38 +39,39 @@ public class indexPowerCells extends CommandBase {
   @Override
   public void execute() {
     m_Tower.printSensorVolts();
-    // if it has seen a ball and it hasn't been 2 seconds, do nothing
-    if(hasSeenBall&&!(Timer.getFPGATimestamp()-startWaitTime>=2.0)){
-      m_Hopper.runAll(-.3, .2, -.3);    
-      // do nothing
-    }
-    //if it has seen a ball and been more than two seconds but less than 2.2 seconds, run backwards
-    else if(hasSeenBall&&(Timer.getFPGATimestamp()-startWaitTime>=2)&&!(Timer.getFPGATimestamp()-startWaitTime>=2.2)){
-      m_Tower.runTopMotor(-1.0);
-      m_Hopper.runAll(-.3, .2, -.3);
-    }
-    //if it hasn't seen a ball and doesn't sense a top keep intaking the balls
-    else if (!hasSeenBall&&!m_Tower.senses_ball_Top()) {
+    if(!m_Tower.senses_ball_Top()){
       m_Tower.runMotors(1.0);
-      m_Hopper.runAll(-.3, .2, -.3);
+      DriverStation.reportError("no balls running all", false);
+      m_Hopper.runAll(-0.3,0.2,-0.3);
     }
-    //if it hasn't seen a ball but it does sense a top ball then let it know we've seen a ball, and start the counter
-    else if(!hasSeenBall){
-      hasSeenBall = true;
-      startWaitTime=Timer.getFPGATimestamp();
+    else if(m_Tower.senses_ball_Top()&&!m_Tower.senses_ball_Bottom()&&!reversing){
+      reversing = true;
+      
+      DriverStation.reportError("no balls running all", false);
+      ballTimeCount = 0;
     }
-    // if there's a ball on the top and no ball on the bottom, 
-    // then run only the bottom motors and stop the top motors
-    else if (m_Tower.senses_ball_Top() && !m_Tower.senses_ball_Bottom()){
-      m_Tower.runTopMotor(0);
+    else if(reversing&&ballTimeCount<4){
+      ballTimeCount++;
+      
+      DriverStation.reportError("no balls running all", false);
+      m_Tower.runTopMotor(-0.5);
+      m_Tower.runBottomMotor(0);
+      m_Hopper.runAll(0, 0, 0);
+    }
+    else if(!m_Tower.senses_ball_Bottom()){
       m_Tower.runBottomMotor(1.0);
+      
+      DriverStation.reportError("no balls running all", false);
+      m_Hopper.runAll(-0.3,0.2,-0.3);
     }
-
-    // if there's a ball on top and bottom, stop everything
-    else if (m_Tower.senses_ball_Top() && m_Tower.senses_ball_Bottom()){
-      m_Tower.runMotors(0);
-      hasSeenBall=false;
+    else{
+      m_Tower.runMotors(0.0);
+      
+      m_Hopper.runAll(0.0, 0.0, 0.0);
     }
+  
+    // if it has seen a ball and it hasn't been 2 seconds, do nothing
+    
   }
 
   // Called once the command ends or is interrupted.

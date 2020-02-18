@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -27,12 +28,17 @@ import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.Drive;
 import frc.robot.commands.PathFollower;
 import frc.robot.commands.testCommandForStuff;
+import frc.robot.commands.FlyWheelCommands.putHoodUp;
+import frc.robot.commands.FlyWheelCommands.startFlywheel;
 import frc.robot.commands.IntakeCommands.toggleIntakeState;
 import frc.robot.commands.JoystickCommandGroups.toggleIntakeUpAndDown;
+import frc.robot.commands.LimelightCommands.buttonAim;
 import frc.robot.commands.TowerCommands.indexPowerCells;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TestSubsytem;
 import frc.robot.subsystems.Tower;
@@ -59,6 +65,8 @@ public class RobotContainer {
   Hopper m_Hopper = new Hopper();
   Shooter m_Shoot = new Shooter();
   Intake m_Intake = new Intake(); 
+  Hood m_Hood = new Hood();
+  Limelight m_limelight = new Limelight();
   Joystick leftJoystick;
   Joystick rightJoystick;
 
@@ -107,7 +115,10 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     left1.toggleWhenPressed(new toggleIntakeState(m_Intake));
+    right1.whenActive(new ParallelCommandGroup( new startFlywheel(m_Shoot), new putHoodUp(m_Hood)));
+    right2.whenActive(new buttonAim(m_driveTrain, m_limelight));
     
+
   }
 
   
