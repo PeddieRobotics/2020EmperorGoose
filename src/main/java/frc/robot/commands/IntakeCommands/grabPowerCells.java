@@ -1,10 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,9 +9,15 @@ public class grabPowerCells extends CommandBase {
    * Creates a new grabPowerCells.
    */
   Intake m_Intake;
-  public grabPowerCells(Intake rcIntake) {
+
+  /**
+   * @param rcIntake Intake subsystem
+   */
+  public grabPowerCells( Intake rcIntake ) {
+
     m_Intake = rcIntake;
     addRequirements(rcIntake);
+
   }
 
   // Called when the command is initially scheduled.
@@ -29,13 +28,17 @@ public class grabPowerCells extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
     m_Intake.startIntake();
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    DriverStation.reportError("Has been interupted", false);
+
+    DriverStation.reportError( "Has been interupted", false );
+
   }
 
   // Returns true when the command should end.

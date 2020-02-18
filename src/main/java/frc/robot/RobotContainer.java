@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Framework.CommandLooper;
+import frc.robot.commands.Drive;
 import frc.robot.commands.PathFollower;
 import frc.robot.commands.testCommandForStuff;
 import frc.robot.commands.IntakeCommands.toggleIntakeState;
@@ -66,9 +67,10 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-    CommandLooper.getInstance().startAndSetPeriodic(5);
-    m_Tower.setDefaultCommand(new indexPowerCells(m_Tower, m_Hopper));
-    leftJoystick = new Joystick(0);
+  CommandLooper.getInstance().startAndSetPeriodic(5);
+   m_Tower.setDefaultCommand(new indexPowerCells(m_Tower, m_Hopper));
+    
+   leftJoystick = new Joystick(0);
     rightJoystick = new Joystick(1);
 
     left1 = new JoystickButton(leftJoystick, 1);
@@ -92,7 +94,9 @@ public class RobotContainer {
     
     //Configure the button bindings
     
+    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain,this));
     configureButtonBindings();
+
   }
 
   /**
@@ -127,11 +131,11 @@ public class RobotContainer {
     m_driveTrain.setCoast();
   }
   public double getSpeed() {
-    return leftJoystick.getRawAxis(0);
+    return -leftJoystick.getRawAxis(1);
   }
 
   public double getTurn() {
-    return rightJoystick.getRawAxis(1);
+    return rightJoystick.getRawAxis(0);
   }
   
 }

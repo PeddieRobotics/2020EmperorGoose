@@ -23,6 +23,10 @@ public class Hood extends SubsystemBase {
 
   }
 
+  /**
+   * sets the hood up/down
+   * @param isUp if true, the hood is up; if false, it's down
+   */
   public void setUp(boolean isUp){
 
     hoodSolenoid.set( isUp ); //set solenoid up if isUp is true, down if false

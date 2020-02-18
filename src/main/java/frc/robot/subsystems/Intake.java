@@ -31,20 +31,12 @@ public class Intake extends SubsystemBase {
     //leftSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_1);
     //rightSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_2);
     isDown = false;
-    intakeMotor = new VictorSPX( Constants.INTAKE_MOTOR );
 
-    intakeMotorTalon = new TalonSRX( Constants.INTAKE_MOTOR );
-    intakeMotorVictor = new VictorSPX( Constants.INTAKE_MOTOR );  //again, atm, not used
-
+    intakeMotorVictor = new VictorSPX(Constants.INTAKE_MOTOR);
   }
 
   public void setIntakeMotor(double setpoint){
-
-    if( Robot.isCompetitionRobot() ) {
-      intakeMotorTalon.set( ControlMode.PercentOutput, setpoint );
-    } else {
-      intakeMotorVictor.set( ControlMode.PercentOutput, setpoint );
-    }
+    intakeMotorVictor.set(ControlMode.PercentOutput, setpoint);
     //intakeMotor = new TalonSRX(Constants.INTAKE_MOTOR_1);
 
   }
