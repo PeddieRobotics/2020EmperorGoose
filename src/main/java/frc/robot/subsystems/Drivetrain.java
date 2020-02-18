@@ -157,7 +157,9 @@ public class Drivetrain extends SubsystemBase {
   }
   public void arcadeDrive( double speed, double turn ) {
 
-    
+    leftDriveMaster.set(speed-turn);
+    rightDriveMaster.set(-speed-turn);
+    /*
     double deadband = 0.05;
 
     if( Math.abs( leftNyoom ) < deadband ) {
@@ -172,7 +174,7 @@ public class Drivetrain extends SubsystemBase {
     
     leftDriveMaster.set( leftNyoom );
     rightDriveMaster.set( rightNyoom );
-
+    */
   }
 
   @Override

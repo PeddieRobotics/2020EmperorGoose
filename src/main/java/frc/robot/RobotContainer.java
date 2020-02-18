@@ -59,7 +59,6 @@ public class RobotContainer {
   Hopper m_Hopper = new Hopper();
   Shooter m_Shoot = new Shooter();
   Intake m_Intake = new Intake(); 
-  Drive m_drive = new Drive(m_driveTrain, this);
   Joystick leftJoystick;
   Joystick rightJoystick;
 
@@ -70,7 +69,8 @@ public class RobotContainer {
 
   CommandLooper.getInstance().startAndSetPeriodic(5);
    m_Tower.setDefaultCommand(new indexPowerCells(m_Tower, m_Hopper));
-    leftJoystick = new Joystick(0);
+    
+   leftJoystick = new Joystick(0);
     rightJoystick = new Joystick(1);
 
     left1 = new JoystickButton(leftJoystick, 1);
@@ -94,7 +94,7 @@ public class RobotContainer {
     
     //Configure the button bindings
     
-    m_driveTrain.setDefaultCommand(m_drive);
+    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain,this));
     configureButtonBindings();
 
   }
