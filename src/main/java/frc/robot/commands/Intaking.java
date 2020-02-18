@@ -31,11 +31,7 @@ public class Intaking extends CommandBase {
       intake.disable();
     }
     else if (isMoving && !isReversing) {
-<<<<<<< HEAD
-      intake.startIntake();
-=======
       intake.intake();
->>>>>>> 16945688bb9e4d3489cc4444ec1136fd21f2c9e4
     }
   }
 
