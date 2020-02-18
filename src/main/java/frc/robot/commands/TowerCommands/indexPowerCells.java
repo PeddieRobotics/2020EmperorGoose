@@ -39,11 +39,7 @@ public class indexPowerCells extends CommandBase {
 
     if(hasSeenBall&&!(Timer.getFPGATimestamp()-startWaitTime>=2.0)){
 <<<<<<< HEAD
-<<<<<<< HEAD
       m_Hopper.runAll( -0.3, 0.2, -0.3 );    
-=======
-      m_Hopper.runAll(-.3, .2, -.3);    
->>>>>>> 16945688bb9e4d3489cc4444ec1136fd21f2c9e4
 =======
       m_Hopper.runAll(-.3, .2, -.3);    
 >>>>>>> 16945688bb9e4d3489cc4444ec1136fd21f2c9e4
@@ -53,11 +49,7 @@ public class indexPowerCells extends CommandBase {
     else if(hasSeenBall&&(Timer.getFPGATimestamp()-startWaitTime>=2)&&!(Timer.getFPGATimestamp()-startWaitTime>=2.2)){
       m_Tower.runTopMotor(-1.0);
 <<<<<<< HEAD
-<<<<<<< HEAD
       m_Hopper.runAll( -0.3, 0.2, -0.3 );
-=======
-      m_Hopper.runAll(-.3, .2, -.3);
->>>>>>> 16945688bb9e4d3489cc4444ec1136fd21f2c9e4
 =======
       m_Hopper.runAll(-.3, .2, -.3);
 >>>>>>> 16945688bb9e4d3489cc4444ec1136fd21f2c9e4
@@ -66,11 +58,7 @@ public class indexPowerCells extends CommandBase {
     else if (!hasSeenBall&&!m_Tower.senses_ball_Top()) {
       m_Tower.runMotors(1.0);
 <<<<<<< HEAD
-<<<<<<< HEAD
       m_Hopper.runAll( -0.3, 0.2, -0.3 );
-=======
-      m_Hopper.runAll(-.3, .2, -.3);
->>>>>>> 16945688bb9e4d3489cc4444ec1136fd21f2c9e4
 =======
       m_Hopper.runAll(-.3, .2, -.3);
 >>>>>>> 16945688bb9e4d3489cc4444ec1136fd21f2c9e4
