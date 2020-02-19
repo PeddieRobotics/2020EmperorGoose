@@ -152,9 +152,15 @@ public abstract class SmartDashboardSubsystem implements Subsystem, Sendable {
     return null;
   }
   public Double getDouble(String s){
+    if(get(s)==null){
+      return (new Double(0));
+    }
     return (double)get(s);
   }
   public Integer getInteger(String s){
+    if(get(s)==null){
+      return (new Integer(0));
+    }
     return (int)get(s);
   }
   public void manageVariables(){

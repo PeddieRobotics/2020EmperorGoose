@@ -30,20 +30,20 @@ public final class Constants {
     public static final int SOLENOID_INTAKE_1 = 1;
     public static final int SOLENOID_INTAKE_2 = 2;
     public static final int SOLENOID_HOOD = 1;
-    public static final double p = 0.0004; 
-    public static final double i = 0.0000;
-    public static final double d = 0.0000; 
-    public static final double ff = 0.000176 ;
-    public static final double ffOffset = 0.000002;
+    public static final double DRIVETRAIN_P = 0.0004; 
+    public static final double DRIVETRAIN_I = 0.0000;
+    public static final double DRIVETRAIN_D = 0.0000; 
+    public static final double DRIVETRAIN_FF = 0.000176 ;
+    public static final double DRIVETRAIN_FF_OFFSET = 0.000002;
+    
+    public static final double DRIVETRAIN_ACC = 0.23;
+    public static final double DRIVETRAIN_ACC_OFFSET = 0.00;
 
 
     public static final double FLYWHEEL_P = 0;
     public static final double FLYWHEEL_I = 0;
     public static final double FLYWHEEL_D = 0;
-    public static final double FLYWHEEL_FF = 0;
-    public static final double accMultiplier = 0.23;
-    public static final double accOffset = 0.00;
-
+    public static final double FLYWHEEL_FF = 0.0002;
     //PID for Flywheel
 
     public static final double flywheelP = 0.0004; 

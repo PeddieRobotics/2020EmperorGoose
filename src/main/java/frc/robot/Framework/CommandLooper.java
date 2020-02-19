@@ -27,6 +27,7 @@ public class CommandLooper{
         listOfCommands = new Vector<Command>();//initialize stuff
         runTimesForSmartCommands = new ArrayList<Integer>();
         listOfSmartCommands = new HashMap<Integer, ArrayList<Command>>();
+
     }
     /**
      * Everything should be run through this!(to make life easier)

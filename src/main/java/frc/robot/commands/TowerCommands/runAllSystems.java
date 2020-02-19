@@ -8,6 +8,7 @@
 package frc.robot.commands.TowerCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Tower;
 
 public class runAllSystems extends CommandBase {
@@ -15,8 +16,10 @@ public class runAllSystems extends CommandBase {
    * Creates a new indexPowerCells.
    */
   Tower m_Tower;
-  public runAllSystems(Tower rcTower) {
+  Hopper m_Hopper;
+  public runAllSystems(Tower rcTower, Hopper hopper) {
     m_Tower = rcTower;
+
     addRequirements(rcTower);
   }
 
@@ -34,6 +37,7 @@ public class runAllSystems extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_Tower.runMotors(0);
   }
 
   // Returns true when the command should end.

@@ -57,8 +57,8 @@ public class Drivetrain extends SubsystemBase {
     leftDriveFollower1=new NEO(2, leftDriveMaster );
     rightDriveFollower1 = new NEO(4, rightDriveMaster );
 
-    rightDriveMaster.addPIDController( Constants.p, Constants.d, Constants.i, Constants.ff + Constants.ffOffset, 0 );
-    leftDriveMaster.addPIDController( Constants.p, Constants.d, Constants.i, Constants.ff, 0 );
+    rightDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF + Constants.DRIVETRAIN_FF_OFFSET, 0 );
+    leftDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF, 0 );
     //NEOPIDWithSmartDashboard leftDriveMaster = new NEOPIDWithSmartDashboard(1);
    
     //  NEOPIDWithSmartDashboard rightDriveMaster = new NEOPIDWithSmartDashboard(2);
@@ -89,8 +89,8 @@ public class Drivetrain extends SubsystemBase {
 
   public void setVelocity( double left_velocity, double right_velocity, double heading, double leftAccel, double rightAccel ) {
 
-    leftDriveMaster.setArbFF( -0.05 + ( -leftAccel * Constants.accMultiplier ) ); //0.05 is the deadband
-    rightDriveMaster.setArbFF( 0.05 + ( rightAccel * Constants.accMultiplier ) );
+    leftDriveMaster.setArbFF( -0.05 + ( -leftAccel * Constants.DRIVETRAIN_ACC ) ); //0.05 is the deadband
+    rightDriveMaster.setArbFF( 0.05 + ( rightAccel * Constants.DRIVETRAIN_ACC ) );
 
     leftDriveMaster.setVelocity( -left_velocity + heading );
     rightDriveMaster.setVelocity( right_velocity + heading );
@@ -124,15 +124,15 @@ public class Drivetrain extends SubsystemBase {
     String[] variables = new String[6];
     variables[0] = "variables";
 
-    variables[1] = "p" + Constants.p;
+    variables[1] = "p" + Constants.DRIVETRAIN_P;
     
-    variables[2] = "i" + Constants.i;
+    variables[2] = "i" + Constants.DRIVETRAIN_I;
     
-    variables[3] = "d" + Constants.d;
+    variables[3] = "d" + Constants.DRIVETRAIN_D;
     
-    variables[4] = "f" + Constants.ff;
+    variables[4] = "f" + Constants.DRIVETRAIN_FF;
 
-    variables[5] = "accl" + Constants.accMultiplier;
+    variables[5] = "accl" + Constants.DRIVETRAIN_ACC;
 
     return variables;
 
@@ -140,32 +140,30 @@ public class Drivetrain extends SubsystemBase {
   
   public void setBrake() {
 
-    //leftDriveMaster.setIdleMode(IdleMode.kBrake);
-    //rightDriveMaster.setIdleMode(IdleMode.kBrake);
+    leftDriveMaster.setIdleMode(IdleMode.kBrake);
+    rightDriveMaster.setIdleMode(IdleMode.kBrake);
 
-    //leftDriveFollower1.setIdleMode(IdleMode.kBrake);
-    //rightDriveFollower1.setIdleMode(IdleMode.kBrake);
+    leftDriveFollower1.setIdleMode(IdleMode.kBrake);
+    rightDriveFollower1.setIdleMode(IdleMode.kBrake);
 
   }
   public void setCoast() {
 
-    //leftDriveMaster.setIdleMode(IdleMode.kCoast);
-    //rightDriveMaster.setIdleMode(IdleMode.kCoast);
+    leftDriveMaster.setIdleMode(IdleMode.kCoast);
+    rightDriveMaster.setIdleMode(IdleMode.kCoast);
 
-    //leftDriveFollower1.setIdleMode(IdleMode.kCoast);
-    //rightDriveFollower1.setIdleMode(IdleMode.kCoast);
+    leftDriveFollower1.setIdleMode(IdleMode.kCoast);
+    rightDriveFollower1.setIdleMode(IdleMode.kCoast);
   }
   public void arcadeDrive( double speed, double turn ) {
 
-    leftDriveMaster.set(speed-turn);
-    rightDriveMaster.set(-speed-turn);
-    /*
-    double deadband = 0.05;
+    
+    double deadband = 0.08;
 
-    if( Math.abs( leftNyoom ) < deadband ) {
+    if( Math.abs( speed ) < deadband ) {
       speed = 0;
     }
-    if ( Math.abs( rightNyoom ) < deadband ) {
+    if ( Math.abs( turn ) < deadband ) {
       turn = 0;
     }
 
@@ -174,7 +172,7 @@ public class Drivetrain extends SubsystemBase {
     
     leftDriveMaster.set( leftNyoom );
     rightDriveMaster.set( rightNyoom );
-    */
+    
   }
 
   @Override

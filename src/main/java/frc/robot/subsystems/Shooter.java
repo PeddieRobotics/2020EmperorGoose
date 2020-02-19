@@ -21,11 +21,12 @@ public class Shooter extends SubsystemBase {
  
   public Shooter() {
 
-    flyWheelFoward = new NEO( Constants.FLYWHEEL_1 );
+    flyWheelFoward = new NEO( Constants.FLYWHEEL_1 )
+    ;
     flyWheelBackward = new NEO( Constants.FLYWHEEL_2 );
 
-    //flyWheelFoward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
-    //flyWheelBackward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
+    flyWheelFoward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
+    flyWheelBackward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
     
   } 
 
@@ -34,13 +35,17 @@ public class Shooter extends SubsystemBase {
    * @param setpoint shooter speed
    */
   public void setMotors( double setpoint ) {
-   //flyWheelBackward.setVelocity(0);
-  // flyWheelFoward.setVelocity(0);
- flyWheelBackward.set(0);
+   flyWheelBackward.setVelocity(-setpoint);
+   flyWheelFoward.setVelocity(setpoint);
+ 
     //flyWheelFoward.set(0);
    //flyWheelFoward.setVelocity( setpoint );
    //flyWheelBackward.setVelocity( -setpoint );
 
+  }
+  public void setMotorPercentOutput(double setpoint){
+    flyWheelBackward.set(0);
+    flyWheelFoward.set(0);
   }
 
   /**

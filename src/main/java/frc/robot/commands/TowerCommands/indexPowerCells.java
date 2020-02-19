@@ -39,21 +39,24 @@ public class indexPowerCells extends CommandBase {
   @Override
   public void execute() {
     m_Tower.printSensorVolts();
+    if(!m_Tower.senses_ball_Top()){
       m_Tower.runMotors(1.0);
-      DriverStation.reportError("no balls running all", false);
+      //DriverStation.reportError("no balls running all", false);
       m_Hopper.runAll(-0.3,-0.5,-0.2);
+    }
     
-    /*
     else if(m_Tower.senses_ball_Top()&&!m_Tower.senses_ball_Bottom()&&!reversing){
+    
       reversing = true;
       
-      DriverStation.reportError("no balls running all", false);
+      //DriverStation.reportError("no balls running all", false);
       ballTimeCount = 0;
+    
     }
     else if(reversing&&ballTimeCount<4){
       ballTimeCount++;
       
-      DriverStation.reportError("no balls running all", false);
+    //  DriverStation.reportError("no balls running all", false);
       m_Tower.runTopMotor(-0.5);
       m_Tower.runBottomMotor(0);
       m_Hopper.runAll(0, 0, 0);
@@ -61,14 +64,14 @@ public class indexPowerCells extends CommandBase {
     else if(!m_Tower.senses_ball_Bottom()){
       m_Tower.runBottomMotor(1.0);
       
-      DriverStation.reportError("no balls running all", false);
+    //  DriverStation.reportError("no balls running all", false);
       m_Hopper.runAll(-0.3,0.2,-0.3);
     }
     else{
       m_Tower.runMotors(0.0);
       
       m_Hopper.runAll(0.0, 0.0, 0.0);
-    }*/
+    }
   
     // if it has seen a ball and it hasn't been 2 seconds, do nothing
     
@@ -77,6 +80,7 @@ public class indexPowerCells extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    DriverStation.reportError("ending", false);
   }
 
   // Returns true when the command should end.

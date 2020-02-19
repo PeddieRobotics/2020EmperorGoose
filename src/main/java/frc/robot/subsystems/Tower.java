@@ -106,7 +106,7 @@ public class Tower extends SubsystemBase {
    */
   public boolean senses_ball_Top() {
 
-    if ( m_topSensor0.getVoltage() < 3 || m_topSensor1.getVoltage() < 3 ) {
+    if ( m_topSensor0.getVoltage() < 3 ) {
       return true;
     } else {
       return false;

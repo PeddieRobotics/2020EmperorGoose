@@ -23,7 +23,7 @@ public class startFlywheel extends CommandBase {
     SmartDashboard.putNumber("setpoint",0.0);
     // Use addRequirements() here to declare subsystem dependencies.
   }
-
+  
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
@@ -32,14 +32,14 @@ public class startFlywheel extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Shooter.setMotors(SmartDashboard.getNumber("setpoint",0.0));
+    m_Shooter.setMotors(2000);
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
+    m_Shooter.setMotorPercentOutput(0.0);
   }
 
   // Returns true when the command should end.

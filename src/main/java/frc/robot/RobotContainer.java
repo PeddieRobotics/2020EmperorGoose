@@ -34,6 +34,7 @@ import frc.robot.commands.IntakeCommands.toggleIntakeState;
 import frc.robot.commands.JoystickCommandGroups.toggleIntakeUpAndDown;
 import frc.robot.commands.LimelightCommands.buttonAim;
 import frc.robot.commands.TowerCommands.indexPowerCells;
+import frc.robot.commands.TowerCommands.runAllSystems;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
@@ -63,11 +64,11 @@ public class RobotContainer {
   //TestSubsytem test = new TestSubsytem();
   Tower m_Tower = new Tower();
   Hopper m_Hopper = new Hopper();
- // Shooter m_Shoot = new Shooter();
+  Shooter m_Shoot = new Shooter();
   Intake m_Intake = new Intake(); 
   Hood m_Hood = new Hood();
   Limelight m_limelight = new Limelight();
-  TestSubsytem test = new TestSubsytem();
+  //TestSubsytem test = new TestSubsytem();
   Joystick leftJoystick;
   Joystick rightJoystick;
 
@@ -116,8 +117,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     left1.toggleWhenPressed(new toggleIntakeState(m_Intake));
- //   right1.whenActive(new ParallelCommandGroup( new startFlywheel(m_Shoot), new putHoodUp(m_Hood)));
-    right2.whenActive(new buttonAim(m_driveTrain, m_limelight));
+    right1.whileActiveContinuous(new ParallelCommandGroup( new runAllSystems(m_Tower, m_Hopper), new startFlywheel(m_Shoot), new putHoodUp(m_Hood)));
+   
+    //right2.whenActive(new buttonAim(m_driveTrain, m_limelight));
     
 
   }
