@@ -35,7 +35,7 @@ public class NEO extends CANSparkMax{
         setIdleMode(IdleMode.kCoast);
         m_pidController = new NEOPIDController(this);//get us la pid controler 
         motorEncoder = getEncoder();
-        changeControlFramePeriod(1);
+        changeControlFramePeriod(20);
         // TODO Auto-generated constructor stub
     }
     public NEO(int deviceID, NEO master){

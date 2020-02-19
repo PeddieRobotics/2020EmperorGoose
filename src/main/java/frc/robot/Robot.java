@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
 
   RobotContainer m_RobotContainer;
-  static boolean isCompetitionRobot = true;
+  static boolean isCompetitionRobot = false;
 
   public void robotInit() {
 
@@ -38,7 +38,7 @@ public class Robot extends TimedRobot {
   }
   
   public void teleopInit() {
-    isCompetitionRobot = true;// in teleop we are competing
+   // isCompetitionRobot = true;// in teleop we are competing
     m_RobotContainer.setCoastMode();
   }
 
@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
   }
 
   public void testInit() {
-    isCompetitionRobot = false; // in test we are using the practice robot;
+   // isCompetitionRobot = false; // in test we are using the practice robot;
   }
 
   public void testPeriodic() {

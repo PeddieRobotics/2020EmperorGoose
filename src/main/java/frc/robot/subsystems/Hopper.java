@@ -19,8 +19,9 @@ public class Hopper extends SubsystemBase {
 
 
   public Hopper() {
+    floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
 
-    /**
+     /**
      * changes the motors based off if the robot is comp bot or pbot
      */
     if( Robot.isCompetitionRobot() ) { //comp robot has TalonSRX's
@@ -28,13 +29,12 @@ public class Hopper extends SubsystemBase {
       //left and right motors for the HotDog belts
       leftWallTalon = new TalonSRX( Constants.HOPPER_LEFT_WALL );
       rightWallTalon = new TalonSRX( Constants.HOPPER_RIGHT_WALL );
-      floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
-
+   
     } else {  //pbot has VictorSPX's
 
       rightWallVictor = new VictorSPX( Constants.HOPPER_LEFT_WALL );
       leftWallVictor = new VictorSPX( Constants.HOPPER_RIGHT_WALL );
-      floorVictor = new VictorSPX( Constants.HOPPER_FLOOR );
+//      floorVictor = new VictorSPX( Constants.HOPPER_FLOOR );
 
     }
   }
@@ -64,8 +64,8 @@ public class Hopper extends SubsystemBase {
    * @param setpoint set the floor to this speed
    */
   public void setFloor( double setpoint ) {
-
-    setMotors( floorTalon, floorVictor, setpoint );
+    floorTalon.set( ControlMode.PercentOutput, setpoint );
+  
 
   }
 
