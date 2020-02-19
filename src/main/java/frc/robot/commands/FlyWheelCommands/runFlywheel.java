@@ -14,17 +14,15 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Framework.MovingAverage;
 import frc.robot.subsystems.Shooter;
 
-public class startFlywheel extends CommandBase {
+public class runFlywheel extends CommandBase {
   /**
    * Creates a new startFlywheel.
    */
   Shooter m_Shooter;
   MovingAverage avgOfSpeed;
-  public startFlywheel(Shooter rcShooter) {
+  public runFlywheel(Shooter rcShooter) {
     m_Shooter = rcShooter;
     addRequirements(rcShooter);
-    avgOfSpeed= new MovingAverage(10);
-    SmartDashboard.putNumber("setpoint",0.0);
     // Use addRequirements() here to declare subsystem dependencies.
   }
   
@@ -39,10 +37,6 @@ public class startFlywheel extends CommandBase {
   public void execute() {
   
     m_Shooter.setMotors(2000);
-    avgOfSpeed.add(m_Shooter.getSpeed());
-    SmartDashboard.putNumber("avg of speed", avgOfSpeed.get());
-    SmartDashboard.putNumber("avg value",avgOfSpeed.get());
-    CommandScheduler.getInstance().schedule();
   }
 
   // Called once the command ends or is interrupted.
@@ -56,7 +50,7 @@ public class startFlywheel extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (Math.abs(avgOfSpeed.get()-2000)<20);  
+    return false;
   }
 
 }

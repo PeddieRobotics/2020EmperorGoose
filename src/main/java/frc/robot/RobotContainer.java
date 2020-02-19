@@ -29,12 +29,15 @@ import frc.robot.commands.Drive;
 import frc.robot.commands.PathFollower;
 import frc.robot.commands.testCommandForStuff;
 import frc.robot.commands.FlyWheelCommands.putHoodUp;
+import frc.robot.commands.FlyWheelCommands.runFlywheel;
 import frc.robot.commands.FlyWheelCommands.startFlywheel;
+import frc.robot.commands.HopperCommands.stopHopper;
 import frc.robot.commands.IntakeCommands.toggleIntakeState;
 import frc.robot.commands.JoystickCommandGroups.toggleIntakeUpAndDown;
 import frc.robot.commands.LimelightCommands.buttonAim;
 import frc.robot.commands.TowerCommands.indexPowerCells;
 import frc.robot.commands.TowerCommands.runAllSystems;
+import frc.robot.commands.TowerCommands.stopTower;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
@@ -43,6 +46,7 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TestSubsytem;
 import frc.robot.subsystems.Tower;
+import frc.robot.commands.*;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -78,21 +82,21 @@ public class RobotContainer {
   public RobotContainer() {
 
   CommandLooper.getInstance().startAndSetPeriodic(5);
-   m_Tower.setDefaultCommand(new indexPowerCells(m_Tower, m_Hopper));
+    m_Tower.setDefaultCommand(new indexPowerCells(m_Tower, m_Hopper));
     
-   leftJoystick = new Joystick(0);
-    rightJoystick = new Joystick(1);
+    leftJoystick = new Joystick(0);
+    //rightJoystick = new Joystick(1);
 
     left1 = new JoystickButton(leftJoystick, 1);
     left2 = new JoystickButton(leftJoystick, 2);
     left3 = new JoystickButton(leftJoystick, 3);
     left4 = new JoystickButton(leftJoystick, 4);
-
+/*
     right1 = new JoystickButton(rightJoystick, 1);
-  right2 = new JoystickButton(rightJoystick, 2);
+    right2 = new JoystickButton(rightJoystick, 2);
     right3 = new JoystickButton(rightJoystick, 3);
     right4 = new JoystickButton(rightJoystick, 4);
-   
+   */
    // chooser.addOption("real 30", realThirty);
   //  SmartDashboard.putData("path 1",chooser);
   //  SmartDashboard.putData("path 2",path2);
@@ -104,7 +108,7 @@ public class RobotContainer {
     
     //Configure the button bindings
     
-    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain,this));
+    //m_driveTrain.setDefaultCommand(new Drive(m_driveTrain,this));
     configureButtonBindings();
 
   }
@@ -116,9 +120,11 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    left1.toggleWhenPressed(new toggleIntakeState(m_Intake));
-    right1.whileActiveContinuous(new ParallelCommandGroup( new runAllSystems(m_Tower, m_Hopper), new startFlywheel(m_Shoot), new putHoodUp(m_Hood)));
-   
+    //left1.toggleWhenPressed(new toggleIntakeState(m_Intake));
+    left1.whileActiveContinuous(new SequentialCommandGroup(new ParallelCommandGroup( new startFlywheel(m_Shoot), 
+    new stopTower(m_Tower), new stopHopper(m_Hopper)), new ParallelCommandGroup(new runAllSystems(m_Tower, m_Hopper), 
+    new runFlywheel(m_Shoot))));
+    
     //right2.whenActive(new buttonAim(m_driveTrain, m_limelight));
     
 

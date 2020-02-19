@@ -59,7 +59,7 @@ public class CSVLogger{
         String[] currVarList = new String[variablesBeingRecorded.size()];
         for(int i =0; i < variablesBeingRecorded.size();i++){
             Supplier<Object> variableObject= variablesBeingRecorded.get(i);
-            String variableValue = variableObject.get().toString();
+            String variableValue = variableObject.get().toString();//thanks antonio
             currVarList[i] = variableValue;
         }
         loggedVariableList.add(currVarList);

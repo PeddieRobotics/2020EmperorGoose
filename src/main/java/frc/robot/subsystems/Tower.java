@@ -79,13 +79,11 @@ public class Tower extends SubsystemBase {
    * @return boolean of whether there is a ball at the base of the tower or not
    */
   public boolean senses_ball_Bottom() {
-
     if ( m_bottomSensor2.getVoltage() < 3 || m_bottomSensor3.getVoltage() < 3 ) {
       return true;
     } else {
       return false;
     }
-
   }
 
   /**

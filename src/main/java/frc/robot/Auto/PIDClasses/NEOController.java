@@ -7,11 +7,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class NEOController {
     static NEOController mainController;
     
-    ArrayList<NEO> neoList = new ArrayList<NEO>();
-    ArrayList<NEOPIDWithSmartDashboard> neoSDPidList = new ArrayList<NEOPIDWithSmartDashboard>();
-    ArrayList<Integer> neoID = new ArrayList<Integer>();
+    ArrayList<NEO> neoList;
+    ArrayList<NEOPIDWithSmartDashboard> neoSDPidList; 
+    ArrayList<Integer> neoID;
     public NEOController(){
-
+        neoList= new ArrayList<NEO>();
+        neoSDPidList = new ArrayList<NEOPIDWithSmartDashboard>();
+        neoID = new ArrayList<Integer>();
     }
     public static NEOController getInstance(){
         if(mainController==null){

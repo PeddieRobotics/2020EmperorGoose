@@ -18,11 +18,10 @@ public class Shooter extends SubsystemBase {
    * Creates a new Shooter.
    */
   NEO flyWheelFoward, flyWheelBackward;
- 
+  double m_Setpoint;
   public Shooter() {
-
-    flyWheelFoward = new NEO( Constants.FLYWHEEL_1 )
-    ;
+    m_Setpoint=0;
+    flyWheelFoward = new NEO( Constants.FLYWHEEL_1 );
     flyWheelBackward = new NEO( Constants.FLYWHEEL_2 );
 
     flyWheelFoward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
@@ -35,13 +34,16 @@ public class Shooter extends SubsystemBase {
    * @param setpoint shooter speed
    */
   public void setMotors( double setpoint ) {
+    m_Setpoint = setpoint;
    flyWheelBackward.setVelocity(-setpoint);
    flyWheelFoward.setVelocity(setpoint);
- 
     //flyWheelFoward.set(0);
    //flyWheelFoward.setVelocity( setpoint );
    //flyWheelBackward.setVelocity( -setpoint );
 
+  }
+  public double getSpeed(){
+    return flyWheelFoward.getVelocity();
   }
   public void setMotorPercentOutput(double setpoint){
     flyWheelBackward.set(0);
