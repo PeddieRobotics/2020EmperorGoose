@@ -3,16 +3,30 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
+/**                                  *****                                              *
+ *                                                                                      *
+ *                                                                                      *
+ * NOTE: THIS COMMAND IS JANKY. Needs organization, and to be moved to "IntakeCommands" *
+ *                                                                                      *
+ *                                                                                      *
+ *                                   *****                                              */
+
 public class Intaking extends CommandBase {
 
   private Intake intake;
   private boolean isReversing;
   private boolean isMoving;
-  public Intaking(Intake intake1, boolean move, boolean reverse) {
+
+  /**
+   * @param rcIntake Intake subsystem
+   * @param b_IsMoving if true, the intake is moving
+   * @param b_IsReversing if true, the intake is REVERSING
+   */
+  public Intaking(Intake rcIntake, boolean b_IsMoving, boolean b_IsReversing) {
     // Use addRequirements() here to declare subsystem dependencies.
-    isReversing = reverse;
-    intake = intake1;
-    isMoving = move;
+    isReversing = b_IsReversing;
+    isMoving = b_IsMoving;
+    intake = rcIntake;
 
     addRequirements(intake);
   }

@@ -25,11 +25,15 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.Drive;
+import frc.robot.commands.Intaking;
 import frc.robot.commands.PathFollower;
 import frc.robot.commands.testCommandForStuff;
 import frc.robot.commands.IntakeCommands.toggleIntakeState;
+import frc.robot.commands.IntakeCommands.stopIntake;
+import frc.robot.commands.JoystickCommandGroups.DisableShootingSubsystems;
 import frc.robot.commands.JoystickCommandGroups.toggleIntakeUpAndDown;
 import frc.robot.commands.TowerCommands.indexPowerCells;
+import frc.robot.commands.TowerCommands.stopTower;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
@@ -44,6 +48,7 @@ import frc.robot.subsystems.Tower;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 
+
 public class RobotContainer {
   Notifier runPathFaster;
   // The robot's subsystems and commands are defined here...
@@ -57,7 +62,7 @@ public class RobotContainer {
   //TestSubsytem test = new TestSubsytem();
   Tower m_Tower = new Tower();
   Hopper m_Hopper = new Hopper();
-  Shooter m_Shoot = new Shooter();
+  Shooter m_Shooter = new Shooter();
   Intake m_Intake = new Intake(); 
   Joystick leftJoystick;
   Joystick rightJoystick;
@@ -67,10 +72,10 @@ public class RobotContainer {
 
   public RobotContainer() {
 
-  CommandLooper.getInstance().startAndSetPeriodic(5);
-   m_Tower.setDefaultCommand(new indexPowerCells(m_Tower, m_Hopper));
+    CommandLooper.getInstance().startAndSetPeriodic(5);
+    m_Tower.setDefaultCommand(new indexPowerCells(m_Tower, m_Hopper));
     
-   leftJoystick = new Joystick(0);
+    leftJoystick = new Joystick(0);
     rightJoystick = new Joystick(1);
 
     left1 = new JoystickButton(leftJoystick, 1);
@@ -79,22 +84,22 @@ public class RobotContainer {
     left4 = new JoystickButton(leftJoystick, 4);
 
     right1 = new JoystickButton(rightJoystick, 1);
-  right2 = new JoystickButton(rightJoystick, 2);
+    right2 = new JoystickButton(rightJoystick, 2);
     right3 = new JoystickButton(rightJoystick, 3);
     right4 = new JoystickButton(rightJoystick, 4);
    
-   // chooser.addOption("real 30", realThirty);
-  //  SmartDashboard.putData("path 1",chooser);
-  //  SmartDashboard.putData("path 2",path2);
-   // path2.addOption("turn 12 move 12s","testPath");
+    // chooser.addOption("real 30", realThirty);
+    //  SmartDashboard.putData("path 1",chooser);
+    //  SmartDashboard.putData("path 2",path2);
+    // path2.addOption("turn 12 move 12s","testPath");
     
-   // path2.addOption("real 10s","real10");
+    // path2.addOption("real 10s","real10");
     
     //path2.addOption("real 20s","real20");
     
     //Configure the button bindings
     
-    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain,this));
+    m_driveTrain.setDefaultCommand( new Drive( m_driveTrain, this ) );
     configureButtonBindings();
 
   }
@@ -106,7 +111,12 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    left1.toggleWhenPressed(new toggleIntakeState(m_Intake));
+
+    left1.toggleWhenPressed( new toggleIntakeState( m_Intake ) );
+    left2.whenPressed( new stopIntake( m_Intake ) );
+    left3.whenHeld(new Intaking( m_Intake, true, true ) );
+
+    right2.whenPressed( new DisableShootingSubsystems( m_Tower, m_Shooter, m_Hopper ) );
     
   }
 
