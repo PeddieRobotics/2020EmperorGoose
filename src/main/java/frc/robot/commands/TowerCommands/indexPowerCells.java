@@ -53,7 +53,7 @@ public class indexPowerCells extends CommandBase {
       ballTimeCount = 0;
     
     }
-    else if(reversing&&ballTimeCount<4){
+    else if(reversing&&ballTimeCount<6){
       ballTimeCount++;
       
     //  DriverStation.reportError("no balls running all", false);

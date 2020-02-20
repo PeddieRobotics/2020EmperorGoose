@@ -18,7 +18,9 @@ public class MovingAverage {
         sum =0;
         list = new double[listLen];
     }
-
+    public boolean isFull(){
+        return hasFilled;
+    }
     public void clearInitialize(){
         i=0;
         for(int i =0; i < list.length;i++){

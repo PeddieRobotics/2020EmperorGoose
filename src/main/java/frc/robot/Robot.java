@@ -10,16 +10,8 @@ public class Robot extends TimedRobot {
   static boolean isCompetitionRobot = false;
 
   public void robotInit() {
-    PortForwarder.add(5800,"10.58.95.11",5800);
     PortForwarder.add(5801,"10.58.95.11",5801);
-    PortForwarder.add(5802,"10.58.95.11",5802);
-    PortForwarder.add(5803,"10.58.95.11",5803);
-    PortForwarder.add(5804,"10.58.95.11",5804);
     PortForwarder.add(5805,"10.58.95.11",5805);
-    PortForwarder.add(5806,"10.58.95.11",5806);
-    PortForwarder.add(5807,"10.58.95.11",5807);
-    PortForwarder.add(5808,"10.58.95.11",5808);
-    PortForwarder.add(5809,"10.58.95.11",5809);
     m_RobotContainer = new RobotContainer();
 
   }
@@ -34,7 +26,7 @@ public class Robot extends TimedRobot {
 
   
   public void disabledInit() {
-    m_RobotContainer.setBrakeMode();
+    m_RobotContainer.setCoastMode();
   }
  
   public void disabledPeriodic() {

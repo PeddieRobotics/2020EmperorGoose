@@ -38,7 +38,7 @@ public class startFlywheel extends CommandBase {
   @Override
   public void execute() {
   
-    m_Shooter.setMotors(2000);
+    m_Shooter.setMotors(3300);
     avgOfSpeed.add(m_Shooter.getSpeed());
     SmartDashboard.putNumber("avg of speed", avgOfSpeed.get());
     SmartDashboard.putNumber("avg value",avgOfSpeed.get());
@@ -48,7 +48,7 @@ public class startFlywheel extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  
+    DriverStation.reportError("done here", false);
     m_Shooter.setMotorPercentOutput(0.0);
   
   }
@@ -56,7 +56,9 @@ public class startFlywheel extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (Math.abs(avgOfSpeed.get()-2000)<20);  
+    
+    return ((Math.abs(avgOfSpeed.get()-2000)<100)&&avgOfSpeed.isFull());  
+  
   }
 
 }

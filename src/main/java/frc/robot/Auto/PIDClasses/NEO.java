@@ -47,6 +47,7 @@ public class NEO extends CANSparkMax{
         m_pidController= new NEOPIDController(this);
         motorEncoder = getEncoder();
         changeControlFramePeriod(100);
+        NEOController.getInstance().addNEO(this);
     }
     /**
      * Changes the motors to break mode, this means if one tries to move them when they are not recieving a 

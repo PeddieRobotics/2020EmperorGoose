@@ -29,20 +29,20 @@ public class runFlywheel extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    avgOfSpeed.clearInitialize();
+    //avgOfSpeed.clearInitialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  
-    m_Shooter.setMotors(2000);
+    m_Shooter.setMotors(3300);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  
+    if(!interrupted){DriverStation.reportError("is interupted",false);
+  }
     m_Shooter.setMotorPercentOutput(0.0);
   
   }
