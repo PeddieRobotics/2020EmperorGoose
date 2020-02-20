@@ -1,3 +1,5 @@
+// need to merge contents of execute() to feedToTower.end(), redundant command 
+
 package frc.robot.commands.HopperCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
