@@ -57,7 +57,7 @@ public class startFlywheel extends CommandBase {
   @Override
   public boolean isFinished() {
     
-    return ((Math.abs(avgOfSpeed.get()-2000)<100)&&avgOfSpeed.isFull());  
+    return ((Math.abs(avgOfSpeed.get()-3300)<100)&&avgOfSpeed.isFull());  
   
   }
 

@@ -71,7 +71,9 @@ public class NEOPIDWithSmartDashboard extends SmartDashboardSubsystem{
         if(currentSetpoint !=pidSetpoint){ DriverStation.reportError("hey", false);neo.setSmartVelocity(pidSetpoint);currentSetpoint=pidSetpoint;}
         
         if(!(neo==null)){
-        SmartDashboard.putNumber("currentVelocity " + slotID, neo.getVelocity());
+            
+            SmartDashboard.putNumber("currentVelocity " + slotID, neo.getVelocity());
+        
         }
     }
 

@@ -25,7 +25,7 @@ public class testAuto extends SequentialCommandGroup {
   public testAuto(Hopper hopperRC, Tower towerRC, Shooter shooterRC) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super( new ParallelRaceGroup(new shootFlyWheel(towerRC,shooterRC,hopperRC), new WaitCommand(2)));
+    super( new ParallelRaceGroup(new shootFlyWheel(towerRC,shooterRC,hopperRC), new WaitCommand(3)));
 
   }
 }

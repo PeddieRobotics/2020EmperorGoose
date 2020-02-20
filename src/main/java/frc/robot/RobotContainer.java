@@ -28,6 +28,7 @@ import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.Drive;
 import frc.robot.commands.PathFollower;
 import frc.robot.commands.testCommandForStuff;
+import frc.robot.commands.AutoCommandGroups.testAuto;
 import frc.robot.commands.FlyWheelCommands.putHoodUp;
 import frc.robot.commands.FlyWheelCommands.runFlywheel;
 import frc.robot.commands.FlyWheelCommands.startFlywheel;
@@ -139,7 +140,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     final PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
-    CommandLooper.getInstance().addCommand(follow2);
+    
+    CommandLooper.getInstance().addCommand(new testAuto(m_Hopper, m_Tower, m_Shoot));
 
     return follow2;
 
