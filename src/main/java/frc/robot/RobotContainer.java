@@ -1,10 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
 import java.util.ArrayList;
@@ -27,6 +20,7 @@ import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.Drive;
 import frc.robot.commands.Intaking;
 import frc.robot.commands.PathFollower;
+import frc.robot.commands.Shoot;
 import frc.robot.commands.testCommandForStuff;
 import frc.robot.commands.IntakeCommands.toggleIntakeState;
 import frc.robot.commands.IntakeCommands.stopIntake;
@@ -35,40 +29,36 @@ import frc.robot.commands.JoystickCommandGroups.toggleIntakeUpAndDown;
 import frc.robot.commands.TowerCommands.indexPowerCells;
 import frc.robot.commands.TowerCommands.stopTower;
 import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.TestSubsytem;
 import frc.robot.subsystems.Tower;
 
-/**
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
- */
-
-
 public class RobotContainer {
+
   Notifier runPathFaster;
   // The robot's subsystems and commands are defined here...
   
-  private PathFollower follow10;
+  private PathFollower pFollower;
   private final Drivetrain m_driveTrain = new Drivetrain();
-  Joystick left ;
-  JoystickButton leftTrigger; 
+
   SendableChooser<Path> chooser = new SendableChooser<Path>(); 
   SendableChooser<String> path2  = new SendableChooser<String>();
+
   //TestSubsytem test = new TestSubsytem();
   Tower m_Tower = new Tower();
   Hopper m_Hopper = new Hopper();
   Shooter m_Shooter = new Shooter();
   Intake m_Intake = new Intake(); 
+  Flywheel m_Flywheel = new Flywheel();
+
   Joystick leftJoystick;
   Joystick rightJoystick;
 
-  JoystickButton left1, left2, left3, left4;
-  JoystickButton right1, right2, right3, right4;
+  JoystickButton leftTrigger, left2, left3, left4;
+  JoystickButton rightTrigger, right2, right3, right4;
 
   public RobotContainer() {
 
@@ -78,12 +68,12 @@ public class RobotContainer {
     leftJoystick = new Joystick(0);
     rightJoystick = new Joystick(1);
 
-    left1 = new JoystickButton(leftJoystick, 1);
+    leftTrigger = new JoystickButton(leftJoystick, 1);
     left2 = new JoystickButton(leftJoystick, 2);
     left3 = new JoystickButton(leftJoystick, 3);
     left4 = new JoystickButton(leftJoystick, 4);
 
-    right1 = new JoystickButton(rightJoystick, 1);
+    rightTrigger = new JoystickButton(rightJoystick, 1);
     right2 = new JoystickButton(rightJoystick, 2);
     right3 = new JoystickButton(rightJoystick, 3);
     right4 = new JoystickButton(rightJoystick, 4);
@@ -112,10 +102,11 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    left1.toggleWhenPressed( new toggleIntakeState( m_Intake ) );
+    leftTrigger.toggleWhenPressed( new toggleIntakeState( m_Intake ) );
     left2.whenPressed( new stopIntake( m_Intake ) );
     left3.whenHeld(new Intaking( m_Intake, true, true ) );
 
+    rightTrigger.whenHeld( new Shoot( m_Flywheel, m_Tower ) );
     right2.whenPressed( new DisableShootingSubsystems( m_Tower, m_Shooter, m_Hopper ) );
     
   }

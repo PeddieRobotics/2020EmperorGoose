@@ -19,12 +19,19 @@ public class Shoot extends CommandBase {
   private Flywheel m_fly;
   private Tower m_tower;
   private double setpoint = 0.0;
-  public Shoot(Flywheel f, Tower n) {
-    m_fly = f;
-    m_tower = n;
-    addRequirements(f);
-    addRequirements(n);
-    // Use addRequirements() here to declare subsystem dependencies.
+
+  /**
+   * @param rcFlywheel Flywheel subsystem
+   * @param rcTower Tower subsystem
+   */
+  public Shoot( Flywheel rcFlywheel, Tower rcTower ) {
+
+    m_fly = rcFlywheel;
+    m_tower = rcTower;
+    addRequirements( rcFlywheel );
+    addRequirements( rcTower );
+    // Use addRequirements() here to declare subsystem dependencies
+
   }
 
   // Called when the command is initially scheduled.
@@ -36,10 +43,12 @@ public class Shoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+
    setpoint = SmartDashboard.getNumber("setpoint", 0.0);
     //setpoint = 1000;
     m_tower.runMotors(0.1);
     m_fly.setSpeed(setpoint);
+
   }
 
   // Called once the command ends or is interrupted.
