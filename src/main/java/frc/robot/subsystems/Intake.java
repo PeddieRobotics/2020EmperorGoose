@@ -20,73 +20,48 @@ public class Intake extends SubsystemBase {
   private boolean isDown;
 
   private TalonSRX intakeMotorTalon;
-  private VictorSPX intakeMotorVictor;  //both are to use if we change the intake motor. atm, not used.
+  private VictorSPX intakeMotorVictor;
 
   //private TalonSRX intakeMotor;
-  private VictorSPX intakeMotor;  //MOTOR IN USE (currently)
-
+  private VictorSPX intakeMotor;
   public Intake() {
-
     currentMode = Intake_Mode_Type.DISABLED;
     //leftSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_1);
     //rightSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_2);
     isDown = false;
+    intakeMotor = new VictorSPX(Constants.INTAKE_MOTOR);
 
+    intakeMotorTalon = new TalonSRX(Constants.INTAKE_MOTOR);
     intakeMotorVictor = new VictorSPX(Constants.INTAKE_MOTOR);
   }
-
   public void setIntakeMotor(double setpoint){
-    intakeMotorVictor.set(ControlMode.PercentOutput, setpoint);
+    if(Robot.isCompetitionRobot()){
+      intakeMotorTalon.set(ControlMode.PercentOutput,setpoint);
+    }else{
+      intakeMotorVictor.set(ControlMode.PercentOutput,setpoint);
+    }
     //intakeMotor = new TalonSRX(Constants.INTAKE_MOTOR_1);
-
   }
-  
-  /**
-   * 
-   * @param up whether the intake is up or not
-   */
-  public void setSoleniods( boolean up ){
-
-    if( up ) {
+  public void setSoleniods(boolean up){
+    if(up){
       currentMode = Intake_Mode_Type.DISABLED;
-    } else {
+    }else{
       currentMode = Intake_Mode_Type.INTAKING;
     }
-
-    leftSolenoid.set( up );
-    rightSolenoid.set( up );
-
+    leftSolenoid.set(up);
+    rightSolenoid.set(up);
   }
-
-  /**
-   * start intake
-   */
-  public void startIntake() {
-
+  public void startIntake(){
    currentMode = Intake_Mode_Type.INTAKING;
-   setIntakeMotor( 1.0 ); 
-
+   setIntakeMotor(1.0); 
   }
-
-  /**
-   * stop intake
-   */
-  public void stopIntake() {
-
+  public void stopIntake(){
     currentMode = Intake_Mode_Type.DISABLED;
-    setIntakeMotor( 0 );
-
+    setIntakeMotor(0);
   }
-
-  /**
-   * @return whether we're intaking or not
-   */
-  public boolean isIntaking() {
-
-    return( currentMode == Intake_Mode_Type.INTAKING );
-
+  public boolean isIntaking(){
+    return(currentMode == Intake_Mode_Type.INTAKING);
   }
-
   @Override
   public void periodic() {
   
@@ -94,45 +69,24 @@ public class Intake extends SubsystemBase {
 
   }
 
-  /**
-   * intake the ball(s)
-   */
-  public void intake() {
-
-    intakeMotor.set( ControlMode.PercentOutput, .5 );
-    intakeMotor.set( ControlMode.PercentOutput, .5 );
-
-    leftSolenoid.set( true );
-    rightSolenoid.set( true );
-
+  public void intaking() {
+    intakeMotor.set(ControlMode.PercentOutput, .5);
+    intakeMotor.set(ControlMode.PercentOutput, .5);
+    leftSolenoid.set(true);
+    rightSolenoid.set(true);
   }
 
-  /**
-   * reverse intake (to fix jams)
-   */
   public void reverse() {
-
-    intakeMotor.set( ControlMode.PercentOutput, -.5 );
-    intakeMotor.set( ControlMode.PercentOutput, -.5 );
-
-    leftSolenoid.set( true );
-    rightSolenoid.set( true );
-
+    intakeMotor.set(ControlMode.PercentOutput, -.5);
+    intakeMotor.set(ControlMode.PercentOutput, -.5);
+    leftSolenoid.set(true);
+    rightSolenoid.set(true);
   }
 
-  /**
-   * disable
-   */
   public void disable() {
-
-    intakeMotor.set( ControlMode.PercentOutput, 0 );
-    intakeMotor.set( ControlMode.PercentOutput, 0 );
-
-    leftSolenoid.set( false );
-    rightSolenoid.set( false );
-
+    intakeMotor.set(ControlMode.PercentOutput, 0);
+    intakeMotor.set(ControlMode.PercentOutput, 0);
+    leftSolenoid.set(false);
+    rightSolenoid.set(false);
   }
-
 }
-//change enum to boolean (is it down or up)
-//

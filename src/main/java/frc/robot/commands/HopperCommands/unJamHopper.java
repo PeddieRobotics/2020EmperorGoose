@@ -1,13 +1,25 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 package frc.robot.commands.HopperCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Hopper;
 
 public class unJamHopper extends CommandBase {
   /**
    * Creates a new unJamHopper.
    */
-  public unJamHopper() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  Hopper m_Hopper;
+
+  public unJamHopper(Hopper hopper) {
+    m_Hopper = hopper;
+    addRequirements( hopper );
+    //test
   }
 
   // Called when the command is initially scheduled.
@@ -18,6 +30,9 @@ public class unJamHopper extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_Hopper.setLeftWall(-0.5);
+    m_Hopper.setRightWall(-0.5);
+    m_Hopper.setFloor(-0.5);
   }
 
   // Called once the command ends or is interrupted.

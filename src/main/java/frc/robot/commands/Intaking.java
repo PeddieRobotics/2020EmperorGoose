@@ -45,7 +45,7 @@ public class Intaking extends CommandBase {
       intake.disable();
     }
     else if (isMoving && !isReversing) {
-      intake.intake();
+      intake.intaking();
     }
   }
 
