@@ -23,8 +23,8 @@ public class Tower extends SubsystemBase {
   
   public Tower() {
 
-    topMotor = new NEO( Constants.TOWER_TOP );
-    bottomMotor = new NEO( Constants.TOWER_BOTTOM );
+    topMotor = new NEO( Constants.TOWER_BOTTOM );
+    bottomMotor = new NEO( Constants.TOWER_TOP );
 
     topMotor.setBrake();
     bottomMotor.setBrake();

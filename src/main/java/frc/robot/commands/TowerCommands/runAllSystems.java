@@ -7,6 +7,7 @@
 
 package frc.robot.commands.TowerCommands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Tower;
@@ -31,6 +32,7 @@ public class runAllSystems extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    DriverStation.reportError("false",false);
     m_Tower.runMotors(.9);
   }
 

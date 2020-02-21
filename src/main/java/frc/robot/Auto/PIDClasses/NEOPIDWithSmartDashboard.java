@@ -55,12 +55,12 @@ public class NEOPIDWithSmartDashboard extends SmartDashboardSubsystem{
     @Override
     public void periodic(){
         manageVariables();
-        double pidP = getDouble("p"+slotID);
-        double pidD = getDouble("d"+slotID);
-        double pidI = getDouble("i"+slotID);
-        double pidFF = getDouble("ff"+slotID);
-        double pidArbFF = getDouble("arbFF"+slotID);
-        double pidSetpoint = getDouble("setpoint"+slotID);
+        double pidP = getDouble("p "+slotID);
+        double pidD = getDouble("d "+slotID);
+        double pidI = getDouble("i "+slotID);
+        double pidFF = getDouble("ff "+slotID);
+        double pidArbFF = getDouble("arbFF "+slotID);
+        double pidSetpoint = getDouble("setpoint "+slotID);
         
         //update our setpoints, dont update unless changed or we will casue issues because updating burn flashed params at 50hz is not possible
         if(currentP != pidP){DriverStation.reportError("hey", false); neo.setP(pidP); currentP = pidP;}

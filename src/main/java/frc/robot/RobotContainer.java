@@ -34,6 +34,7 @@ import frc.robot.commands.FlyWheelCommands.runFlywheel;
 import frc.robot.commands.FlyWheelCommands.startFlywheel;
 import frc.robot.commands.HopperCommands.stopHopper;
 import frc.robot.commands.IntakeCommands.toggleIntakeState;
+import frc.robot.commands.JoystickCommandGroups.shootFlyWheel;
 import frc.robot.commands.JoystickCommandGroups.toggleIntakeUpAndDown;
 import frc.robot.commands.LimelightCommands.buttonAim;
 import frc.robot.commands.TowerCommands.indexPowerCells;
@@ -66,14 +67,13 @@ public class RobotContainer {
   JoystickButton leftTrigger; 
   SendableChooser<Path> chooser = new SendableChooser<Path>(); 
   SendableChooser<String> path2  = new SendableChooser<String>();
-  //TestSubsytem test = new TestSubsytem();
-  Tower m_Tower = new Tower();
+  TestSubsytem test = new TestSubsytem();
+   Tower m_Tower = new Tower();
   Hopper m_Hopper = new Hopper();
   Shooter m_Shoot = new Shooter();
   Intake m_Intake = new Intake(); 
-  Hood m_Hood = new Hood();
+ Hood m_Hood = new Hood();
   Limelight m_limelight = new Limelight();
-  //TestSubsytem test = new TestSubsytem();
   Joystick leftJoystick;
   Joystick rightJoystick;
 
@@ -121,9 +121,10 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    //left1.toggleWhenPressed(new toggleIntakeState(m_Intake));
-    final PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
-    CommandLooper.getInstance().addCommand(new testAuto(m_Hopper, m_Tower, m_Shoot,follow2));
+  //   left1.toggleWhenPressed(new toggleIntakeState(m_Intake));
+      left2.whileActiveContinuous(new shootFlyWheel(m_Tower, m_Shoot, m_Hopper));
+     // final PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
+   // CommandLooper.getInstance().addCommand(new testAuto(m_Hopper, m_Tower, m_Shoot,follow2));
     
     //right2.whenActive(new buttonAim(m_driveTrain, m_limelight));
     
@@ -139,7 +140,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     final PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
-    CommandLooper.getInstance().addCommand(new testAuto(m_Hopper, m_Tower, m_Shoot,follow2));
+ //   CommandLooper.getInstance().addCommand(new testAuto(m_Hopper, m_Tower, m_Shoot,m_Hood));
     
     return null;
 

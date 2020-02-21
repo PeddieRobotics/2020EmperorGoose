@@ -17,7 +17,7 @@ public class Intake extends SubsystemBase {
   }
 
   public Intake_Mode_Type currentMode;
-  private Solenoid leftSolenoid, rightSolenoid;
+  private Solenoid intakeSolenoid;
   private boolean isDown;
 
   private TalonSRX intakeMotorTalon;
@@ -29,16 +29,14 @@ public class Intake extends SubsystemBase {
   public Intake() {
 
     currentMode = Intake_Mode_Type.DISABLED;
-    //leftSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_1);
-    //rightSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_2);
+    intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE_1);
     isDown = false;
-
-    intakeMotorVictor = new VictorSPX(Constants.INTAKE_MOTOR);
+    intakeMotorTalon= new TalonSRX(9);
   }
 
   public void setIntakeMotor(double setpoint){
-    intakeMotorVictor.set(ControlMode.PercentOutput, setpoint);
-    //intakeMotor = new TalonSRX(Constants.INTAKE_MOTOR_1);
+    
+    intakeMotorTalon.set(ControlMode.PercentOutput,setpoint);
 
   }
   
@@ -54,8 +52,7 @@ public class Intake extends SubsystemBase {
       currentMode = Intake_Mode_Type.INTAKING;
     }
 
-    leftSolenoid.set( up );
-    rightSolenoid.set( up );
+    intakeSolenoid.set( up );
 
   }
 
@@ -63,9 +60,8 @@ public class Intake extends SubsystemBase {
    * start intake
    */
   public void startIntake() {
-    DriverStation.reportError("fasle",false);
-   currentMode = Intake_Mode_Type.INTAKING;
-   setIntakeMotor( 1.0 ); 
+   setIntakeMotor( .8 ); 
+    intakeSolenoid.set(true);
 
   }
 
@@ -76,6 +72,7 @@ public class Intake extends SubsystemBase {
 
     currentMode = Intake_Mode_Type.DISABLED;
     setIntakeMotor( 0 );
+    intakeSolenoid.set(false);
 
   }
 
@@ -103,8 +100,7 @@ public class Intake extends SubsystemBase {
     intakeMotor.set( ControlMode.PercentOutput, .5 );
     intakeMotor.set( ControlMode.PercentOutput, .5 );
 
-    leftSolenoid.set( true );
-    rightSolenoid.set( true );
+   intakeSolenoid.set(true);
 
   }
 
@@ -116,8 +112,6 @@ public class Intake extends SubsystemBase {
     intakeMotor.set( ControlMode.PercentOutput, -.5 );
     intakeMotor.set( ControlMode.PercentOutput, -.5 );
 
-    leftSolenoid.set( true );
-    rightSolenoid.set( true );
 
   }
 
@@ -128,9 +122,7 @@ public class Intake extends SubsystemBase {
 
     intakeMotor.set( ControlMode.PercentOutput, 0 );
     intakeMotor.set( ControlMode.PercentOutput, 0 );
-
-    leftSolenoid.set( false );
-    rightSolenoid.set( false );
+    intakeSolenoid.set(false);
 
   }
 

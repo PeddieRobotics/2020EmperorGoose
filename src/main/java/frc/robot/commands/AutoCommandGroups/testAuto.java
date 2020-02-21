@@ -13,10 +13,12 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.PathFollower;
 import frc.robot.commands.sendStuffToDS;
 import frc.robot.commands.JoystickCommandGroups.shootFlyWheel;
+import frc.robot.commands.TowerCommands.runTowerBasedOffFlyWheel;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Tower;
-
+import frc.robot.commands.FlyWheelCommands.*;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
@@ -24,9 +26,9 @@ public class testAuto extends SequentialCommandGroup {
   /**
    * Creates a new testAuto.
    */
-  public testAuto(Hopper hopperRC, Tower towerRC, Shooter shooterRC, PathFollower path) {
+  public testAuto(Hopper hopperRC, Tower towerRC, Shooter shooterRC, Hood hoodRC) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super( new ParallelRaceGroup(new shootFlyWheel(towerRC,shooterRC,hopperRC), path, new WaitCommand(5)));
+    super( new ParallelRaceGroup(new shootFlyWheel(towerRC,shooterRC,hopperRC), new shooterHasShot(towerRC, 3, shooterRC),new putHoodUp(hoodRC)));
   }
 }

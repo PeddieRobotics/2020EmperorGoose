@@ -7,7 +7,7 @@ import edu.wpi.first.wpiutil.net.PortForwarder;
 public class Robot extends TimedRobot {
 
   RobotContainer m_RobotContainer;
-  static boolean isCompetitionRobot = false;
+  static boolean isCompetitionRobot = true;
 
   public void robotInit() {
     PortForwarder.add(5801,"10.58.95.11",5801);

@@ -33,6 +33,7 @@ public class Shooter extends SubsystemBase {
     
     CSVLogger.getInstance().addStringToHeader("velocity");
     CSVLogger.getInstance().addVariablesToRecored(this::getAvgVelocity);
+ 
   } 
 
   /**

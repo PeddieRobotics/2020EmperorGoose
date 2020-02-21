@@ -27,9 +27,8 @@ public final class Constants {
     public static final int TOWER_TOP = 12;
     public static final int TOWER_BOTTOM = 11;
     //Solenoids
-    public static final int SOLENOID_INTAKE_1 = 1;
-    public static final int SOLENOID_INTAKE_2 = 2;
-    public static final int SOLENOID_HOOD = 1;
+    public static final int SOLENOID_INTAKE_1 = 7;
+    public static final int SOLENOID_HOOD = 6;
     public static final double DRIVETRAIN_P = 0.0004; 
     public static final double DRIVETRAIN_I = 0.0000;
     public static final double DRIVETRAIN_D = 0.0000; 
@@ -40,10 +39,10 @@ public final class Constants {
     public static final double DRIVETRAIN_ACC_OFFSET = 0.00;
 
 
-    public static final double FLYWHEEL_P = 0.000001;
+    public static final double FLYWHEEL_P = 0.00008;
     public static final double FLYWHEEL_I = 0;
     public static final double FLYWHEEL_D = 0;
-    public static final double FLYWHEEL_FF = 0.00020;
+    public static final double FLYWHEEL_FF = 0.00021;
     //PID for Flywheel
 
 }

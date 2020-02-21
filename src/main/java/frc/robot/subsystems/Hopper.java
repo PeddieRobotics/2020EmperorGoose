@@ -74,7 +74,7 @@ public class Hopper extends SubsystemBase {
    */
   public void setLeftWall( double setpoint ) { 
 
-    leftWallVictor.set(ControlMode.PercentOutput, setpoint);
+    leftWallTalon.set(ControlMode.PercentOutput, setpoint);
 
   }
 
@@ -82,7 +82,7 @@ public class Hopper extends SubsystemBase {
    * @param setpoint set th right wall to this speed
    */
   public void setRightWall( double setpoint ) {
-    rightWallVictor.set(ControlMode.PercentOutput,setpoint);
+    rightWallTalon.set(ControlMode.PercentOutput,setpoint);
   }
 
 
@@ -101,6 +101,14 @@ public class Hopper extends SubsystemBase {
 
     setFloor( -.3 );      //currently: -0.3
 
+  }
+  public void stopAll(){
+    
+    setRightWall( 0 );  //currently: -0.3
+
+    setLeftWall( 0 );    //currently:  0.2
+
+    setFloor( 0 );      //currently: -0.3
   }
 
   @Override

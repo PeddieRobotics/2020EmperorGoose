@@ -7,6 +7,8 @@
 
 package frc.robot.commands.TowerCommands;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Framework.Logging.CSVLogger;
 import frc.robot.subsystems.Hopper;
@@ -35,10 +37,15 @@ public class runTowerBasedOffFlyWheel extends CommandBase {
 
   @Override
   public void execute() {
-    
-    if(Math.abs(m_Shooter.getAvgVelocity()-3300)<40){
+    DriverStation.reportError("running",false);
+    if(Math.abs(m_Shooter.getAvgVelocity()-400)<1400){
       m_Tower.runMotors(.5);
-      m_Hopper.runAll(-.5,.5,-.2);
+      m_Hopper.setLeftWall(SmartDashboard.getNumber("onePercent",0.0));
+    
+      m_Hopper.setRightWall(SmartDashboard.getNumber("twoPercent",0.0));
+      
+      m_Hopper.setFloor(SmartDashboard.getNumber("threePercent",0.0));
+      
     }  
     else {
       m_Tower.runMotors(0);

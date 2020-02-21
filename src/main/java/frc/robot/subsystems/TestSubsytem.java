@@ -7,10 +7,14 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Auto.PIDClasses.NEOPIDWithSmartDashboard;
+import frc.robot.Auto.PIDClasses.TalonSRXWithSmartDashboard;
 
 public class TestSubsytem extends SubsystemBase {
   /**
@@ -20,36 +24,20 @@ Solenoid solenoid1;
 Solenoid solenoid2;
 Solenoid solenoid3;
 Solenoid solenoid4;
-
+TalonSRX one;
+TalonSRX two;
+TalonSRX three;
   public TestSubsytem() {
-    NEOPIDWithSmartDashboard neoOne = new NEOPIDWithSmartDashboard(7);
-    
-    NEOPIDWithSmartDashboard neoTwp = new NEOPIDWithSmartDashboard(8);
-    
-    NEOPIDWithSmartDashboard neoThree = new NEOPIDWithSmartDashboard(11);
-    
-    NEOPIDWithSmartDashboard neoFour = new NEOPIDWithSmartDashboard(12);
-    solenoid1 = new Solenoid(1);      
-    solenoid2 = new Solenoid(2);  
-    solenoid3 = new Solenoid(3);  
-    solenoid4 = new Solenoid(4); 
-    SmartDashboard.putBoolean("oneSolenoid", false); 
-    
-    SmartDashboard.putBoolean("twoSolenoid", false); 
-    
-    SmartDashboard.putBoolean("threeSolenoid", false); 
-    
-    SmartDashboard.putBoolean("fourSolenoid", false); 
-    
+    SmartDashboard.putNumber("onePercent",0.0);
+    SmartDashboard.putNumber("twoPercent",0.0);
+    SmartDashboard.putNumber("threePercent",0.0);
+    SmartDashboard.putNumber("fourPercent",0.0);
+
   }
 
 
   @Override
   public void periodic() {
-    solenoid1.set(SmartDashboard.getBoolean("oneSolenoid", false)); 
-    solenoid1.set(SmartDashboard.getBoolean("twoSolenoid", false));
-    solenoid3.set(SmartDashboard.getBoolean("threeSolenoid", false));
-    solenoid4.set(SmartDashboard.getBoolean("fourSolenoid", false));
     // This method will be called once per scheduler run
   }
 }
