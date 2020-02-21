@@ -21,9 +21,7 @@ public class Flywheel extends SubsystemBase {
    */
   NEO leftMotor, rightMotor;
   CANPIDController m_pidController, m_pidController2;
-
   public Flywheel() {
-    
     leftMotor = new NEO(Constants.FLYWHEEL_1);
     rightMotor = new NEO(Constants.FLYWHEEL_2);
     //NEOPIDWithSmartDashboard left = new NEOPIDWithSmartDashboard(Constants.FLYWHEEL_1);
