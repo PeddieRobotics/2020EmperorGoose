@@ -10,6 +10,8 @@ package frc.robot.commands.AutoCommandGroups;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.PathFollower;
+import frc.robot.commands.sendStuffToDS;
 import frc.robot.commands.JoystickCommandGroups.shootFlyWheel;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
@@ -22,10 +24,9 @@ public class testAuto extends SequentialCommandGroup {
   /**
    * Creates a new testAuto.
    */
-  public testAuto(Hopper hopperRC, Tower towerRC, Shooter shooterRC) {
+  public testAuto(Hopper hopperRC, Tower towerRC, Shooter shooterRC, PathFollower path) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super( new ParallelRaceGroup(new shootFlyWheel(towerRC,shooterRC,hopperRC), new WaitCommand(3)));
-
+    super( new ParallelRaceGroup(new shootFlyWheel(towerRC,shooterRC,hopperRC), path, new WaitCommand(5)));
   }
 }

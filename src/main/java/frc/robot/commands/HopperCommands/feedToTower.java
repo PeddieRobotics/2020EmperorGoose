@@ -29,8 +29,8 @@ public class feedToTower extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Hopper.setLeftWall(.2);
-    m_Hopper.setRightWall(-.32);
+    m_Hopper.setLeftWall(-.2);
+    m_Hopper.setRightWall(-.5);
     m_Hopper.setFloor(-.32);
   }
 

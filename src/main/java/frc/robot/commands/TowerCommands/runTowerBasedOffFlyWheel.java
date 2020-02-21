@@ -8,31 +8,50 @@
 package frc.robot.commands.TowerCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Framework.Logging.CSVLogger;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Tower;
 
 public class runTowerBasedOffFlyWheel extends CommandBase {
   /**
    * Creates a new runTowerBasedOffFlyWheel.
    */
-  public runTowerBasedOffFlyWheel() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  Hopper m_Hopper;
+  Tower m_Tower;
+  Shooter m_Shooter;
+  public runTowerBasedOffFlyWheel(Hopper rcHopper, Tower rcTower, Shooter rcShooter) {
+  
+    m_Shooter = rcShooter;
+    m_Tower = rcTower;
+    m_Hopper = rcHopper;
+  
   }
+  
 
-  // Called when the command is initially scheduled.
-  @Override
+@Override
   public void initialize() {
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
+    if(Math.abs(m_Shooter.getAvgVelocity()-3300)<40){
+      m_Tower.runMotors(.5);
+      m_Hopper.runAll(-.5,.5,-.2);
+    }  
+    else {
+      m_Tower.runMotors(0);
+      m_Hopper.runAll(0,0,0);
+    }
+
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+  
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

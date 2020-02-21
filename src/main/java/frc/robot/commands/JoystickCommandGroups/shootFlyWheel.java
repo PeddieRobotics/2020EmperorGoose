@@ -13,6 +13,7 @@ import frc.robot.commands.FlyWheelCommands.runFlywheel;
 import frc.robot.commands.FlyWheelCommands.startFlywheel;
 import frc.robot.commands.HopperCommands.stopHopper;
 import frc.robot.commands.TowerCommands.runAllSystems;
+import frc.robot.commands.TowerCommands.runTowerBasedOffFlyWheel;
 import frc.robot.commands.TowerCommands.stopTower;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Shooter;
@@ -21,23 +22,23 @@ import frc.robot.subsystems.Tower;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class shootFlyWheel extends SequentialCommandGroup {
+public class shootFlyWheel extends ParallelCommandGroup {
   /**
    * Creates a new shootFlyWheel.
    */
   Tower m_Tower;
   Shooter m_Shooter;
   Hopper m_Hopper;
-  public shootFlyWheel(Tower towerRC, Shooter shooterRC, Hopper hopperRC) {
+  public shootFlyWheel(Tower rcTower, Shooter rcShooter, Hopper rcHopper) {
+    
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new ParallelCommandGroup(new startFlywheel(shooterRC), 
-    new stopTower(towerRC), new stopHopper(hopperRC)), new ParallelCommandGroup(new runAllSystems(towerRC, hopperRC), 
-    new runFlywheel(shooterRC)));
+    
+    super(new runFlywheel(rcShooter),new runTowerBasedOffFlyWheel(rcHopper, rcTower, rcShooter));
 
-    m_Tower=towerRC;
-    m_Shooter = shooterRC;
-    m_Hopper = hopperRC;
-
+    m_Tower = rcTower;
+    m_Shooter = rcShooter;
+    m_Hopper = rcHopper;
+  
   }
 }

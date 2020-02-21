@@ -40,14 +40,10 @@ public final class Constants {
     public static final double DRIVETRAIN_ACC_OFFSET = 0.00;
 
 
-    public static final double FLYWHEEL_P = 0;
+    public static final double FLYWHEEL_P = 0.000001;
     public static final double FLYWHEEL_I = 0;
     public static final double FLYWHEEL_D = 0;
-    public static final double FLYWHEEL_FF = 0.0002;
+    public static final double FLYWHEEL_FF = 0.00020;
     //PID for Flywheel
 
-    public static final double flywheelP = 0.0004; 
-    public static final double flywheelI = 0.0000;
-    public static final double flywheelD = 0.0000; 
-    public static final double flywheelFF = 0.000176 ;
 }

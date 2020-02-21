@@ -32,8 +32,8 @@ public class Hopper extends SubsystemBase {
    
     } else {  //pbot has VictorSPX's
 
-      rightWallVictor = new VictorSPX( Constants.HOPPER_LEFT_WALL );
-      leftWallVictor = new VictorSPX( Constants.HOPPER_RIGHT_WALL );
+      rightWallVictor = new VictorSPX( Constants.HOPPER_RIGHT_WALL );
+      leftWallVictor = new VictorSPX( Constants.HOPPER_LEFT_WALL );
 //      floorVictor = new VictorSPX( Constants.HOPPER_FLOOR );
 
     }
@@ -74,7 +74,7 @@ public class Hopper extends SubsystemBase {
    */
   public void setLeftWall( double setpoint ) { 
 
-    setMotors( leftWallTalon, leftWallVictor, setpoint );
+    leftWallVictor.set(ControlMode.PercentOutput, setpoint);
 
   }
 
@@ -82,22 +82,24 @@ public class Hopper extends SubsystemBase {
    * @param setpoint set th right wall to this speed
    */
   public void setRightWall( double setpoint ) {
-
-    setMotors( rightWallTalon, rightWallVictor, setpoint );
-
+    rightWallVictor.set(ControlMode.PercentOutput,setpoint);
   }
 
-/**
+
+  /**
  * run all parts of the hopper
  * @param floorSetpoint set the floor to this speed
  * @param leftSetpoint set the left wall to this speed
  * @param rightSetpoint set the right wall to this speed
  */
-  public void runAll( double floorSetpoint, double leftSetpoint, double rightSetpoint ) {
 
-    setRightWall( rightSetpoint );  //currently: -0.3
-    setLeftWall( leftSetpoint );    //currently:  0.2
-    setFloor( floorSetpoint );      //currently: -0.3
+  public void runAll( double floorSetpoint, double leftSetpoint, double rightSetpoint ) {
+    
+    setRightWall( -.3 );  //currently: -0.3
+
+    setLeftWall( .5 );    //currently:  0.2
+
+    setFloor( -.3 );      //currently: -0.3
 
   }
 

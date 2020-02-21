@@ -164,7 +164,7 @@ public class GraphsForCSV extends Application {
         Group root = new Group();
         Canvas canvas = new Canvas(WIDTH, HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-
+        
         primaryStage.setTitle("This is really running");//i was dealing w/ bugs okay
         boxes = new ArrayList<CheckBox>();
 

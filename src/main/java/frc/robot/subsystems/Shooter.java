@@ -12,6 +12,8 @@ import frc.robot.Auto.PIDClasses.NEO;
 import frc.robot.Auto.PIDClasses.NEOPIDWithSmartDashboard;
 import frc.robot.Auto.PIDClasses.TalonSRXWithSmartDashboard;
 import frc.robot.Auto.PIDClasses.VictorSPXWithSmartDashboard;
+import frc.robot.Framework.MovingAverage;
+import frc.robot.Framework.Logging.CSVLogger;
 
 public class Shooter extends SubsystemBase {
   /**
@@ -19,14 +21,18 @@ public class Shooter extends SubsystemBase {
    */
   NEO flyWheelFoward, flyWheelBackward;
   double m_Setpoint;
+  MovingAverage avgOfFlyWheelSpeeds;
   public Shooter() {
     m_Setpoint=0;
+    avgOfFlyWheelSpeeds = new MovingAverage(10);
     flyWheelFoward = new NEO( Constants.FLYWHEEL_1 );
     flyWheelBackward = new NEO( Constants.FLYWHEEL_2 );
 
     flyWheelFoward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
     flyWheelBackward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
     
+    CSVLogger.getInstance().addStringToHeader("velocity");
+    CSVLogger.getInstance().addVariablesToRecored(this::getAvgVelocity);
   } 
 
   /**
@@ -35,16 +41,26 @@ public class Shooter extends SubsystemBase {
    */
   public void setMotors( double setpoint ) {
     m_Setpoint = setpoint;
-   flyWheelBackward.setVelocity(-setpoint);
-   flyWheelFoward.setVelocity(setpoint);
-    //flyWheelFoward.set(0);
-   //flyWheelFoward.setVelocity( setpoint );
-   //flyWheelBackward.setVelocity( -setpoint );
+  
+    flyWheelBackward.setVelocity(-setpoint);
+  
+    flyWheelFoward.setVelocity(setpoint);
+  
+    avgOfFlyWheelSpeeds.add(flyWheelFoward.getVelocity());
 
   }
+
   public double getSpeed(){
+  
     return flyWheelFoward.getVelocity();
+  
   }
+  
+  public double getAvgVelocity(){
+
+    return avgOfFlyWheelSpeeds.get();
+  }
+  
   public void setMotorPercentOutput(double setpoint){
     flyWheelBackward.set(0);
     flyWheelFoward.set(0);

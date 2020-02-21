@@ -101,11 +101,11 @@ public class RobotContainer {
    // chooser.addOption("real 30", realThirty);
   //  SmartDashboard.putData("path 1",chooser);
   //  SmartDashboard.putData("path 2",path2);
-   // path2.addOption("turn 12 move 12s","testPath");
+    path2.addOption("turn 12 move 12s","testPath");
     
-   // path2.addOption("real 10s","real10");
+    path2.addOption("real 10s","real10");
     
-    //path2.addOption("real 20s","real20");
+    path2.addOption("real 20s","real20");
     
     //Configure the button bindings
     
@@ -122,9 +122,8 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     //left1.toggleWhenPressed(new toggleIntakeState(m_Intake));
-    left1.whileActiveContinuous(new SequentialCommandGroup(new ParallelCommandGroup( new startFlywheel(m_Shoot), 
-    new stopTower(m_Tower), new stopHopper(m_Hopper)), new ParallelCommandGroup(new runAllSystems(m_Tower, m_Hopper), 
-    new runFlywheel(m_Shoot))));
+    final PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
+    CommandLooper.getInstance().addCommand(new testAuto(m_Hopper, m_Tower, m_Shoot,follow2));
     
     //right2.whenActive(new buttonAim(m_driveTrain, m_limelight));
     
@@ -140,10 +139,9 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
     final PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
+    CommandLooper.getInstance().addCommand(new testAuto(m_Hopper, m_Tower, m_Shoot,follow2));
     
-    CommandLooper.getInstance().addCommand(new testAuto(m_Hopper, m_Tower, m_Shoot));
-
-    return follow2;
+    return null;
 
   }
   public void setBrakeMode(){
