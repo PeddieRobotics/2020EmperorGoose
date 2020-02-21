@@ -1,3 +1,10 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -8,15 +15,9 @@ public class stopIntake extends CommandBase {
    * Creates a new grabPowerCells.
    */
   Intake m_Intake;
-
-  /**
-   * @param rcIntake Intake subsystem
-   */
-  public stopIntake( Intake rcIntake ) {
-
+  public stopIntake(Intake rcIntake) {
     m_Intake = rcIntake;
-    addRequirements( rcIntake );
-
+    addRequirements(rcIntake);
   }
 
   // Called when the command is initially scheduled.
@@ -27,9 +28,7 @@ public class stopIntake extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
     m_Intake.stopIntake();
-    
   }
 
   // Called once the command ends or is interrupted.

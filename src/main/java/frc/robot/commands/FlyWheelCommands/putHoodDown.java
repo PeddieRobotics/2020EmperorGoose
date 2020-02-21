@@ -1,31 +1,37 @@
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
+
 package frc.robot.commands.FlyWheelCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Shooter;
 
 public class putHoodDown extends CommandBase {
   /**
    * Creates a new putHoodDown.
    */
   Hood m_Hood;
-
-  /**
-   * @param hoodRC Hood subsystem
-   */
-  public putHoodDown( Hood hoodRC ) {
-
+  public putHoodDown(Hood hoodRC) {
     m_Hood = hoodRC;
-    addRequirements( hoodRC );
+    addRequirements(hoodRC);
     // Use addRequirements() here to declare subsystem dependencies.
-
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+<<<<<<< HEAD
 
     m_Hood.setUp(false);  //puts hood down
 
+=======
+    m_Hood.set(false);
+>>>>>>> parent of 1625469... Cleaned up commands
   }
 
   // Called every time the scheduler runs while the command is scheduled.

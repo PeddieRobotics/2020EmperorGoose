@@ -45,7 +45,11 @@ public class Intaking extends CommandBase {
       intake.disable();
     }
     else if (isMoving && !isReversing) {
+<<<<<<< HEAD
       intake.intake();
+=======
+      intake.intaking();
+>>>>>>> parent of 1625469... Cleaned up commands
     }
   }
 

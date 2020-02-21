@@ -30,14 +30,14 @@ public class Shoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("setpoint", setpoint);
+    //SmartDashboard.putNumber("setpoint", setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   setpoint = SmartDashboard.getNumber("setpoint", 0.0);
-    //setpoint = 1000;
+   // setpoint = SmartDashboard.getNumber("setpoint", 0.0);
+    setpoint = 1000;
     m_tower.runMotors(0.1);
     m_fly.setSpeed(setpoint);
   }

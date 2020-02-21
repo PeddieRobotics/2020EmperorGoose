@@ -25,19 +25,15 @@ public class Limelight extends SubsystemBase {
 
   }
 
-  //Tvert is the vertical sidelength of the rough bounding box (0 - 320 pixels)
   public double getTvert(){
     return tvert.getDouble(0.0);
   }
-  //Thor is the horizontal sidelength of the rough bounding box (0 - 320 pixels)
   public double getThor(){
     return thor.getDouble(0.0);
   }
-  //Tx is the Horizontal Offset From Crosshair To Target
   public double getTx(){
     return tx.getDouble(0.0);
   }
-  //Ty is the Vertical Offset From Crosshair To Target
   public double getTy(){
     return ty.getDouble(0.0);
   }
