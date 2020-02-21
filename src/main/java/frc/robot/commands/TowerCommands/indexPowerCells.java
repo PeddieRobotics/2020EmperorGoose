@@ -42,39 +42,25 @@ public class indexPowerCells extends CommandBase {
   public void execute() {
     m_Tower.printSensorVolts();
     // if it has seen a ball and it hasn't been 2 seconds, do nothing
-<<<<<<< HEAD
 
     if( hasSeenBall&&!( Timer.getFPGATimestamp() - startWaitTime >= 2.0 ) ) {
 
       m_Hopper.runAll( -0.3, 0.2, -0.3 );    
 
-=======
-    if(hasSeenBall&&!(Timer.getFPGATimestamp()-startWaitTime>=2.0)){
-      m_Hopper.runAll();    
-      // do nothing
->>>>>>> parent of 1625469... Cleaned up commands
     }
     //if it has seen a ball and been more than two seconds but less than 2.2 seconds, run backwards
     else if( hasSeenBall && ( Timer.getFPGATimestamp() - startWaitTime >= 2 ) && !( Timer.getFPGATimestamp() - startWaitTime >= 2.2 ) ) {
 
       m_Tower.runTopMotor(-1.0);
-<<<<<<< HEAD
       m_Hopper.runAll( -0.3, 0.2, -0.3 );
 
-=======
-      m_Hopper.runAll();
->>>>>>> parent of 1625469... Cleaned up commands
     }
     //if it hasn't seen a ball and doesn't sense a top keep intaking the balls
     else if ( !hasSeenBall && !m_Tower.senses_ball_Top() ) {
 
       m_Tower.runMotors(1.0);
-<<<<<<< HEAD
       m_Hopper.runAll( -0.3, 0.2, -0.3 );
 
-=======
-      m_Hopper.runAll();
->>>>>>> parent of 1625469... Cleaned up commands
     }
     //if it hasn't seen a ball but it does sense a top ball then let it know we've seen a ball, and start the counter
     else if( !hasSeenBall ){

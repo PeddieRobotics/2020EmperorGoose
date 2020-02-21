@@ -24,11 +24,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Framework.CommandLooper;
-<<<<<<< HEAD
 import frc.robot.commands.Drive;
-import frc.robot.commands.Intaking;
-=======
->>>>>>> parent of 1625469... Cleaned up commands
 import frc.robot.commands.PathFollower;
 import frc.robot.commands.testCommandForStuff;
 import frc.robot.commands.IntakeCommands.toggleIntakeState;
@@ -77,10 +73,7 @@ public class RobotContainer {
 
     CommandLooper.getInstance().startAndSetPeriodic(5);
     m_Tower.setDefaultCommand(new indexPowerCells(m_Tower, m_Hopper));
-<<<<<<< HEAD
     
-=======
->>>>>>> parent of 1625469... Cleaned up commands
     leftJoystick = new Joystick(0);
     rightJoystick = new Joystick(1);
 
@@ -105,10 +98,7 @@ public class RobotContainer {
     
     //Configure the button bindings
     
-<<<<<<< HEAD
     m_driveTrain.setDefaultCommand( new Drive( m_driveTrain, this ) );
-=======
->>>>>>> parent of 1625469... Cleaned up commands
     configureButtonBindings();
   }
 
@@ -122,7 +112,6 @@ public class RobotContainer {
 
     left1.toggleWhenPressed( new toggleIntakeState( m_Intake ) );
     left2.whenPressed( new stopIntake( m_Intake ) );
-    left3.whenHeld(new Intaking( m_Intake, true, true ) );
 
     right2.whenPressed( new DisableShootingSubsystems( m_Tower, m_Shooter, m_Hopper ) );
     

@@ -25,13 +25,9 @@ public class putHoodDown extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-<<<<<<< HEAD
 
     m_Hood.setUp(false);  //puts hood down
 
-=======
-    m_Hood.set(false);
->>>>>>> parent of 1625469... Cleaned up commands
   }
 
   // Called every time the scheduler runs while the command is scheduled.
