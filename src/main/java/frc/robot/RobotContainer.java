@@ -22,6 +22,8 @@ import frc.robot.commands.Intaking;
 import frc.robot.commands.PathFollower;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.testCommandForStuff;
+import frc.robot.commands.FlyWheelCommands.putHoodDown;
+import frc.robot.commands.FlyWheelCommands.putHoodUp;
 import frc.robot.commands.IntakeCommands.toggleIntakeState;
 import frc.robot.commands.IntakeCommands.stopIntake;
 import frc.robot.commands.JoystickCommandGroups.DisableShootingSubsystems;
@@ -30,6 +32,7 @@ import frc.robot.commands.TowerCommands.indexPowerCells;
 import frc.robot.commands.TowerCommands.stopTower;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -53,12 +56,15 @@ public class RobotContainer {
   Shooter m_Shooter = new Shooter();
   Intake m_Intake = new Intake(); 
   Flywheel m_Flywheel = new Flywheel();
+  Hood m_Hood = new Hood();
 
   Joystick leftJoystick;
   Joystick rightJoystick;
+  Joystick opJoystick;
 
   JoystickButton leftTrigger, left2, left3, left4;
   JoystickButton rightTrigger, right2, right3, right4;
+  JoystickButton opTrigger, op2, op3, op4, op5, op6;
 
   public RobotContainer() {
 
@@ -67,6 +73,7 @@ public class RobotContainer {
     
     leftJoystick = new Joystick(0);
     rightJoystick = new Joystick(1);
+    opJoystick = new Joystick(3);
 
     leftTrigger = new JoystickButton(leftJoystick, 1);
     left2 = new JoystickButton(leftJoystick, 2);
@@ -77,6 +84,13 @@ public class RobotContainer {
     right2 = new JoystickButton(rightJoystick, 2);
     right3 = new JoystickButton(rightJoystick, 3);
     right4 = new JoystickButton(rightJoystick, 4);
+
+    opTrigger = new JoystickButton(opJoystick, 1);
+    op2 = new JoystickButton(opJoystick, 2);
+    op3 = new JoystickButton(opJoystick, 3);
+    op4 = new JoystickButton(opJoystick, 4);
+    op5 = new JoystickButton(opJoystick, 5);
+    op6 = new JoystickButton(opJoystick, 6);
    
     // chooser.addOption("real 30", realThirty);
     //  SmartDashboard.putData("path 1",chooser);
@@ -102,12 +116,15 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    leftTrigger.toggleWhenPressed( new toggleIntakeState( m_Intake ) );
+    leftTrigger.whenPressed( new Intaking( m_Intake, true, false ) );
     left2.whenPressed( new stopIntake( m_Intake ) );
     left3.whenHeld(new Intaking( m_Intake, true, true ) );
 
     rightTrigger.whenHeld( new Shoot( m_Flywheel, m_Tower ) );
     right2.whenPressed( new DisableShootingSubsystems( m_Tower, m_Shooter, m_Hopper ) );
+
+    opTrigger.whenPressed( new putHoodUp( m_Hood ) );
+    op2.whenPressed( new putHoodDown( m_Hood ) );
     
   }
 
@@ -125,12 +142,15 @@ public class RobotContainer {
     return follow2;
 
   }
-  public void setBrakeMode(){
+
+  public void setBrakeMode() {
     m_driveTrain.setBrake();
   }
-  public void setCoastMode(){
+
+  public void setCoastMode() {
     m_driveTrain.setCoast();
   }
+
   public double getSpeed() {
     return -leftJoystick.getRawAxis(1);
   }
