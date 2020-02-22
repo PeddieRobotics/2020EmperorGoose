@@ -7,7 +7,6 @@ import edu.wpi.first.wpiutil.net.PortForwarder;
 public class Robot extends TimedRobot {
 
   RobotContainer m_RobotContainer;
-  static boolean isCompetitionRobot = true;
 
   public void robotInit() {
     PortForwarder.add(5801,"10.58.95.11",5801);
@@ -15,9 +14,7 @@ public class Robot extends TimedRobot {
     m_RobotContainer = new RobotContainer();
 
   }
-  public static boolean isCompetitionRobot(){
-    return isCompetitionRobot;
-  }
+
   public void robotPeriodic() {
 
     CommandScheduler.getInstance().run();
@@ -40,7 +37,7 @@ public class Robot extends TimedRobot {
   }
   
   public void teleopInit() {
-   // isCompetitionRobot = true;// in teleop we are competing
+    m_RobotContainer.configureButtonBindings();
     m_RobotContainer.setCoastMode();
   }
 
@@ -48,7 +45,7 @@ public class Robot extends TimedRobot {
   }
 
   public void testInit() {
-   // isCompetitionRobot = false; // in test we are using the practice robot;
+    m_RobotContainer.configureTestButtonBindings();
   }
 
   public void testPeriodic() {

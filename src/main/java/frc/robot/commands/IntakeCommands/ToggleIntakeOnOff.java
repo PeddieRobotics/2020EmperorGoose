@@ -5,35 +5,41 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.IntakeCommands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Intake;
 
-public class testCommandForStuff extends CommandBase {
-  /**
-   * Creates a new testCommand.
-   */
-  public testCommandForStuff() {
-    
+public class ToggleIntakeOnOff extends CommandBase {
+
+  private Intake m_intake;
+
+  public ToggleIntakeOnOff(Intake intake) {
+    m_intake = intake;
+    addRequirements(intake);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    // Depending on whether the intake motor is on, switch to the opposite state
+    if(m_intake.isIntaking()){
+      m_intake.stopIntake();
+    }
+    else{
+      m_intake.startIntake();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
   }
 
   // Returns true when the command should end.

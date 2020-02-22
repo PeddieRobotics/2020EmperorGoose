@@ -5,26 +5,31 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.IntakeCommands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Framework.Logging.CSVLogger;
+import frc.robot.subsystems.Intake;
 
-public class sendStuffToDS extends CommandBase {
-  /**
-   * Creates a new sendStuffToDS.
-   */
-  public sendStuffToDS() {
+public class ToggleIntakeUpDown extends CommandBase {
+
+  private Intake m_intake;
+
+  public ToggleIntakeUpDown(Intake intake) {
+    m_intake = intake;
+    addRequirements(intake);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
-    CSVLogger.getInstance().sendDataToDS(true);
-    DriverStation.reportError("Sending data", false);
+    // Depending on whether the intake motor is on, switch to the opposite state
+    if(m_intake.isIntakeDown()){
+      m_intake.raiseIntake();
+    }
+    else{
+      m_intake.lowerIntake();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,6 +45,6 @@ public class sendStuffToDS extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

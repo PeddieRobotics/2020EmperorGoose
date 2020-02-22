@@ -1,6 +1,6 @@
-package frc.robot;
-
 /**
+ *  FRC 5895 (Peddie School Robotics)
+
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
  * declared globally (i.e. public static).  Do not put anything functional in this class.
@@ -8,6 +8,9 @@ package frc.robot;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
+
+package frc.robot;
+
 public final class Constants {
 
     //Motors - organized as drive, then hopper, then flywheel, and intake
@@ -27,8 +30,11 @@ public final class Constants {
     public static final int TOWER_TOP = 12;
     public static final int TOWER_BOTTOM = 11;
     //Solenoids
-    public static final int SOLENOID_INTAKE_1 = 7;
+    public static final int SOLENOID_INTAKE = 7;
     public static final int SOLENOID_HOOD = 6;
+    public static final int SOLENOID_CLIMBER_1 = 4;
+    public static final int SOLENOID_CLIMBER_2 = 5;
+
     public static final double DRIVETRAIN_P = 0.0004; 
     public static final double DRIVETRAIN_I = 0.0000;
     public static final double DRIVETRAIN_D = 0.0000; 

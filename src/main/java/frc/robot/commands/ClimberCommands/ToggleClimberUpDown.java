@@ -4,28 +4,30 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
-package frc.robot.commands.FlyWheelCommands;
+package frc.robot.commands.ClimberCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Hood;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Climber;
 
-public class putHoodUp extends CommandBase {
-  /**
-   * Creates a new putHoodDown.
-   */
-  Hood m_Hood;
-  public putHoodUp(Hood hoodRC) {
-    m_Hood = hoodRC;
-    addRequirements(hoodRC);
-    // Use addRequirements() here to declare subsystem dependencies.
+public class ToggleClimberUpDown extends CommandBase {
+
+  private Climber m_climber;
+
+  public ToggleClimberUpDown(Climber climber) {
+    m_climber = climber;
+    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_Hood.setUp(true);
+    // Depending on whether the climber is extended up, switch to the opposite state
+    if(m_climber.isClimberUp()){
+        m_climber.lowerClimber();
+      }
+      else{
+        m_climber.raiseClimber();
+      }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,12 +38,11 @@ public class putHoodUp extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_Hood.setUp(false);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;//should be interupted by the CommandScheduler once another command is called
+    return false;
   }
 }

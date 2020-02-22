@@ -1,5 +1,5 @@
 /**
- * Drivetrain.java
+ * FRC 5895 (Peddie School Robotics)
  * The Drivetrain subsystem runs the motors for all
  * wheels and deals with implementing joystick control of the robot.
  */

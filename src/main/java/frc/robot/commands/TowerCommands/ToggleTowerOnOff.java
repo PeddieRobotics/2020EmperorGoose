@@ -5,31 +5,38 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.FlyWheelCommands;
+package frc.robot.commands.TowerCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Tower;
 
-public class stopFlywheel extends CommandBase {
-  /**
-   * Creates a new stopFlywheel.
-   */
-  Shooter m_Shooter;
-  public stopFlywheel(Shooter rcShooter) {
-    // Use addRequirements() here to declare subsystem dependencies.
-    m_Shooter = rcShooter;
-    addRequirements(rcShooter);
+public class ToggleTowerOnOff extends CommandBase {
+  
+  private Tower m_tower;
+
+  public ToggleTowerOnOff(Tower tower) {
+    m_tower = tower;
+    addRequirements(tower);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // Depending on whether the tower motors are on, switch to the opposite state
+    // Should not be actively indexing either way
+    if(m_tower.isRunningForward()){
+        m_tower.runMotors(0.0);
+        m_tower.setCurrentMode(Tower.TowerModeType.DISABLED);
+    }
+    else{
+        m_tower.runMotors(0.5);
+        m_tower.setCurrentMode(Tower.TowerModeType.FORWARD);
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Shooter.disable();
   }
 
   // Called once the command ends or is interrupted.

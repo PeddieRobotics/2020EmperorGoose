@@ -4,7 +4,7 @@
  * ArcadeDrive (joystick drive) command for the robot's drivetrain.
  */
 
-package frc.robot.commands;
+package frc.robot.commands.DriveCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;

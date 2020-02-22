@@ -4,31 +4,27 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
-package frc.robot.commands.AutoCommandGroups;
+package frc.robot.commands.AutoCommands;
 
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.PathFollower;
-import frc.robot.commands.sendStuffToDS;
-import frc.robot.commands.JoystickCommandGroups.shootFlyWheel;
-import frc.robot.commands.TowerCommands.runTowerBasedOffFlyWheel;
+import frc.robot.commands.AutoCommands.FollowPath;
+import frc.robot.commands.MiscCommands.SendStuffToDS;
+import frc.robot.commands.JoystickCommands.ShootFlywheel;
+import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Tower;
-import frc.robot.commands.FlyWheelCommands.*;
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class testAuto extends SequentialCommandGroup {
-  /**
-   * Creates a new testAuto.
-   */
-  public testAuto(Hopper hopperRC, Tower towerRC, Shooter shooterRC, Hood hoodRC) {
-    // Add your commands in the super() call, e.g.
-    // super(new FooCommand(), new BarCommand());
-    super( new ParallelRaceGroup(new shootFlyWheel(towerRC,shooterRC,hopperRC), new shooterHasShot(towerRC, 3, shooterRC),new putHoodUp(hoodRC)));
+import frc.robot.commands.FlywheelCommands.*;
+
+public class TestAuto extends SequentialCommandGroup {
+
+  public TestAuto(Hopper hopper, Tower tower, Flywheel flywheel, Hood hood) {
+
+    super( new ParallelRaceGroup(new ShootFlywheel(tower, flywheel, hopper, 3350),
+          new FlywheelHasShot(tower, 3, flywheel),
+          new RaiseHood(hood)));
   }
 }

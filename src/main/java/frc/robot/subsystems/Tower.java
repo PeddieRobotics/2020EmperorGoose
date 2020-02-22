@@ -7,9 +7,6 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,10 +15,18 @@ import frc.robot.Auto.PIDClasses.NEO;
 
 public class Tower extends SubsystemBase {
 
+  public static enum TowerModeType {
+    INDEXING, FORWARD, DISABLED, REVERSE
+  }
+
+  private TowerModeType currentMode;
+
   private NEO topMotor, bottomMotor;
   private final AnalogInput m_topSensor0, m_topSensor1, m_bottomSensor2, m_bottomSensor3;
   
   public Tower() {
+
+    currentMode = TowerModeType.DISABLED;
 
     topMotor = new NEO( Constants.TOWER_BOTTOM );
     bottomMotor = new NEO( Constants.TOWER_TOP );
@@ -72,6 +77,14 @@ public class Tower extends SubsystemBase {
     topMotor.set( speed );
     bottomMotor.set( -speed );
 
+  }
+  
+  public boolean isRunningForward(){
+    return (currentMode == TowerModeType.FORWARD);
+  }
+
+  public void setCurrentMode(TowerModeType mode){
+    currentMode = mode;
   }
 
   /**

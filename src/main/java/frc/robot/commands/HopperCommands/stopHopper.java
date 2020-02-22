@@ -9,29 +9,24 @@ package frc.robot.commands.HopperCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.Tower;
 
-public class stopHopper extends CommandBase {
-  /**
-   * Creates a new feedToTower.
-   */
-  Hopper m_Hopper;
-  public stopHopper(Hopper hopperRC) {
-    m_Hopper = hopperRC;
-    addRequirements(hopperRC);
+public class StopHopper extends CommandBase {
+  
+  private Hopper m_hopper;
+  
+  public StopHopper(Hopper hopper) {
+    m_hopper = hopper;
+    addRequirements(hopper);
   
   }
   @Override
   public void initialize() {
-  
+    m_hopper.stopAll();  
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Hopper.setLeftWall(0);
-    m_Hopper.setRightWall(0);
-    m_Hopper.setFloor(0);
   }
 
   // Called once the command ends or is interrupted.

@@ -7,54 +7,47 @@
 
 package frc.robot.commands.TowerCommands;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.WPILibVersion;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Tower;
 
-public class indexPowerCells extends CommandBase {
-  /**
-   * Creates a new indexPowerCells.
-   */
-  Tower m_Tower;
-  Hopper m_Hopper; 
-  boolean reversing=false;
-  double startWaitTime = 0;
-  int ballTimeCount = 0;
-  public indexPowerCells(Tower rcTower, Hopper rcHopper) {
-    m_Hopper = rcHopper;
-    m_Tower = rcTower;
-    addRequirements(rcHopper);
-    addRequirements(rcTower);
+public class IndexPowerCells extends CommandBase {
+  
+  private Tower m_tower;
+  private Hopper m_hopper; 
+  private boolean reversing = false;
+  private int ballTimeCount = 0;
+
+  public IndexPowerCells(Tower tower, Hopper hopper) {
+    m_hopper = hopper;
+    m_tower = tower;
+    addRequirements(hopper);
+    addRequirements(tower);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_tower.setCurrentMode(Tower.TowerModeType.INDEXING);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  
     
-    m_Tower.printSensorVolts();
-    if(!m_Tower.senses_ball_Top()){
-      m_Tower.runMotors(0.5);
+    m_tower.printSensorVolts();
+    if(!m_tower.senses_ball_Top()){
+      m_tower.runMotors(0.5);
       //DriverStation.reportError("no balls running all", false);
-      m_Hopper.runAll(-0.3,0.5,-0.3);
+      m_hopper.runAll(-0.3,0.5,-0.3);
     }
     
-    else if(m_Tower.senses_ball_Top()&&!m_Tower.senses_ball_Bottom()&&!reversing){
+    else if(m_tower.senses_ball_Top() && !m_tower.senses_ball_Bottom()&&!reversing){
     
       reversing = true;
       
-      m_Hopper.runAll(-0.3,0.5,-0.3);
+      m_hopper.runAll(-0.3,0.5,-0.3);
       //DriverStation.reportError("no balls running all", false);
       ballTimeCount = 0;
     
@@ -63,20 +56,20 @@ public class indexPowerCells extends CommandBase {
       ballTimeCount++;
       
     //  DriverStation.reportError("no balls running all", false);
-      m_Tower.runTopMotor(-0.5);
-      m_Tower.runBottomMotor(0);
-      m_Hopper.runAll(0, 0, 0);
+      m_tower.runTopMotor(-0.5);
+      m_tower.runBottomMotor(0);
+      m_hopper.runAll(0, 0, 0);
     }
-    else if(!m_Tower.senses_ball_Bottom()){
-      m_Tower.runBottomMotor(0.5);
+    else if(!m_tower.senses_ball_Bottom()){
+      m_tower.runBottomMotor(0.5);
       
     //  DriverStation.reportError("no balls running all", false);
-      m_Hopper.runAll(-0.3, 0.5,-0.3);
+      m_hopper.runAll(-0.3, 0.5,-0.3);
     }
     else{
-      m_Tower.runMotors(0.0);
+      m_tower.runMotors(0.0);
       
-      m_Hopper.stopAll();
+      m_hopper.stopAll();
     }
   
     // if it has seen a ball and it hasn't been 2 seconds, do nothing
@@ -86,6 +79,10 @@ public class indexPowerCells extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_tower.runMotors(0.0);
+    m_hopper.stopAll();
+    m_tower.setCurrentMode(Tower.TowerModeType.DISABLED);
+
     DriverStation.reportError("ending", false);
   }
 

@@ -5,37 +5,34 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.IntakeCommands;
+package frc.robot.commands.FlywheelCommands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Hood;
 
-public class grabPowerCells extends CommandBase {
-  /**
-   * Creates a new grabPowerCells.
-   */
-  Intake m_Intake;
-  public grabPowerCells(Intake rcIntake) {
-    m_Intake = rcIntake;
-    addRequirements(rcIntake);
+public class RaiseHood extends CommandBase {
+
+  private Hood m_hood;
+
+  public RaiseHood(Hood hood) {
+    m_hood = hood;
+    addRequirements(hood);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_hood.raiseHood();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Intake.startIntake();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    DriverStation.reportError("Has been interupted", false);
   }
 
   // Returns true when the command should end.

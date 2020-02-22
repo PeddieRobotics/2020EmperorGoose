@@ -8,29 +8,27 @@
 package frc.robot.commands.TowerCommands;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Framework.Logging.CSVLogger;
 import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Tower;
 
-public class runTowerBasedOffFlyWheel extends CommandBase {
+public class RunTowerBasedOffFlyWheel extends CommandBase {
   /**
    * Creates a new runTowerBasedOffFlyWheel.
    */
-  Hopper m_Hopper;
-  Tower m_Tower;
-  Shooter m_Shooter;
-  public runTowerBasedOffFlyWheel(Hopper rcHopper, Tower rcTower, Shooter rcShooter) {
+  private Hopper m_hopper;
+  private Tower m_tower;
+  private Flywheel m_flywheel;
+
+  public RunTowerBasedOffFlyWheel(Hopper hopper, Tower tower, Flywheel flywheel) {
   
-    m_Shooter = rcShooter;
-    m_Tower = rcTower;
-    m_Hopper = rcHopper;
+    m_flywheel = flywheel;
+    m_tower = tower;
+    m_hopper = hopper;
   
   }
   
-
 @Override
   public void initialize() {
   }
@@ -38,13 +36,13 @@ public class runTowerBasedOffFlyWheel extends CommandBase {
   @Override
   public void execute() {
     DriverStation.reportError("running",false);
-    if(Math.abs(m_Shooter.getAvgVelocity()-400)<1400){
-      m_Tower.runMotors(.5);
-      m_Hopper.runAll(0, 0, 0); 
+    if(Math.abs(m_flywheel.getAvgVelocity()-400)<1400){
+      m_tower.runMotors(.5);
+      m_hopper.runAll(0, 0, 0); 
     }  
     else {
-      m_Tower.runMotors(0);
-      m_Hopper.stopAll();
+      m_tower.runMotors(0);
+      m_hopper.stopAll();
     }
 
   }

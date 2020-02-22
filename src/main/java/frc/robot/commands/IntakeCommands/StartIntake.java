@@ -5,21 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.HopperCommands;
+package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Intake;
 
-public class UnjamHopper extends CommandBase {
-  /**
-   * Creates a new unJamHopper.
-   */
-  public UnjamHopper() {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class StartIntake extends CommandBase {
+  
+  private Intake m_Intake;
+  
+  public StartIntake(Intake intake) {
+    m_Intake = intake;
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_Intake.startIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

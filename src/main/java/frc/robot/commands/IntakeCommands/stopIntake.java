@@ -10,25 +10,24 @@ package frc.robot.commands.IntakeCommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Intake;
 
-public class stopIntake extends CommandBase {
-  /**
-   * Creates a new grabPowerCells.
-   */
-  Intake m_Intake;
-  public stopIntake(Intake rcIntake) {
-    m_Intake = rcIntake;
-    addRequirements(rcIntake);
+public class StopIntake extends CommandBase {
+  
+  private Intake m_intake;
+
+  public StopIntake(Intake intake) {
+    m_intake = intake;
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_intake.stopIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Intake.stopIntake();
   }
 
   // Called once the command ends or is interrupted.

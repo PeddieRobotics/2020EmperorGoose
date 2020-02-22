@@ -5,16 +5,13 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.FlyWheelCommands;
+package frc.robot.commands.FlywheelCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class waitUntilAtSetpoint extends CommandBase {
-  /**
-   * Creates a new waitUntilAtSetpoint.
-   */
-  public waitUntilAtSetpoint() {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class WaitUntilAtSetpoint extends CommandBase {
+
+  public WaitUntilAtSetpoint() {
   }
 
   // Called when the command is initially scheduled.

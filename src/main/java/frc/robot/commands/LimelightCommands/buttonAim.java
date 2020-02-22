@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
 
-public class buttonAim extends CommandBase {
+public class ButtonAim extends CommandBase {
   /**
    * Creates a new buttonAim.
    */
@@ -23,7 +23,7 @@ public class buttonAim extends CommandBase {
   double min_command = 0.05;
   double steering_adjust;
 
-  public buttonAim(Drivetrain d, Limelight l) {
+  public ButtonAim(Drivetrain d, Limelight l) {
     m_limelight = l;
     m_drivetrain = d;
     addRequirements(d);

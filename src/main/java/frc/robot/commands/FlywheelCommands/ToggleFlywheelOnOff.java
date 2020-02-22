@@ -5,33 +5,35 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.HopperCommands;
+package frc.robot.commands.FlywheelCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.Tower;
+import frc.robot.subsystems.Flywheel;
 
-public class feedToTower extends CommandBase {
-  /**
-   * Creates a new feedToTower.
-   */
-  Hopper m_Hopper;
-  public feedToTower(Hopper hopperRC) {
-    m_Hopper = hopperRC;
-    addRequirements(hopperRC);
-  
+public class ToggleFlywheelOnOff extends CommandBase {
+
+  private Flywheel m_flywheel;
+
+  public ToggleFlywheelOnOff(Flywheel flywheel) {
+    m_flywheel = flywheel;
+    addRequirements(flywheel);
   }
+
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-  
+    // Depending on whether the flywheel is on (running forwards), switch to the opposite state
+    if(m_flywheel.isShooting()){
+        m_flywheel.setMotors(1500);
+      }
+      else{
+        m_flywheel.disable();
+      }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Hopper.setLeftWall(-.2);
-    m_Hopper.setRightWall(-.5);
-    m_Hopper.setFloor(-.32);
   }
 
   // Called once the command ends or is interrupted.

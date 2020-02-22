@@ -6,7 +6,7 @@
  *
  */
 
-package frc.robot.commands;
+package frc.robot.commands.AutoCommands;
 
 import java.io.IOException;
 import java.util.ArrayList;

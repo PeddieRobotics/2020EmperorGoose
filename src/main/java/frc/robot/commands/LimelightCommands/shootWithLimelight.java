@@ -13,7 +13,7 @@ import frc.robot.Framework.LookupTable;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Limelight;
 
-public class shootWithLimelight extends CommandBase {
+public class ShootWithLimelight extends CommandBase {
   
   Flywheel m_flywheel;
   Limelight m_limelight;
@@ -23,7 +23,7 @@ public class shootWithLimelight extends CommandBase {
   //Need to test and insert points here
   double[] inputs = {};
   double[] outputs = {};
-  public shootWithLimelight(Flywheel f, Limelight l) {
+  public ShootWithLimelight(Flywheel f, Limelight l) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_flywheel = f;
     m_limelight = l;

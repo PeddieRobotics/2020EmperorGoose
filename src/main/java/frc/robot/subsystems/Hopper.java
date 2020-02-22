@@ -6,27 +6,31 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Robot;
+import frc.robot.RobotContainer;
 
 public class Hopper extends SubsystemBase {
 
-  private static enum Hopper_Mode_Type {
+  private static enum HopperModeType {
     INTAKING, DISABLED, REVERSE
   }
+
+  private HopperModeType currentMode;
   
   private TalonSRX leftWallTalon, rightWallTalon, floorTalon;
   private VictorSPX leftWallVictor, rightWallVictor, floorVictor;
 
 
   public Hopper() {
+    currentMode = HopperModeType.DISABLED;
+    
     floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
 
      /**
      * changes the motors based off if the robot is comp bot or pbot
      */
-    if( Robot.isCompetitionRobot() ) { //comp robot has TalonSRX's
+    if( RobotContainer.isCompetitionRobot() ) { //comp robot has TalonSRX's
 
-      //left and right motors for the HotDog belts
+      //left and right motors for the v-belts
       leftWallTalon = new TalonSRX( Constants.HOPPER_LEFT_WALL );
       rightWallTalon = new TalonSRX( Constants.HOPPER_RIGHT_WALL );
    
@@ -52,7 +56,7 @@ public class Hopper extends SubsystemBase {
    */
   public void setMotors( TalonSRX talonMotor, VictorSPX victorMotor, double setpoint ) {
 
-    if( Robot.isCompetitionRobot() ) {
+    if( RobotContainer.isCompetitionRobot() ) {
       talonMotor.set( ControlMode.PercentOutput, setpoint );
     } else {
       victorMotor.set( ControlMode.PercentOutput, setpoint );
@@ -96,23 +100,27 @@ public class Hopper extends SubsystemBase {
   public void runAll( double floorSetpoint, double leftSetpoint, double rightSetpoint ) {
     
     setRightWall( -.5 );  //currently: -0.3
-
     setLeftWall( -.5 );    //currently:  0.2
-
     setFloor( -.5 );      //currently: -0.3
+
+    currentMode = HopperModeType.INTAKING;
 
   }
   public void stopAll(){
     
     setRightWall( 0 );  //currently: -0.3
-
     setLeftWall( 0 );    //currently:  0.2
-
     setFloor( 0 );      //currently: -0.3
+
+    currentMode = HopperModeType.DISABLED;
   }
 
   @Override
   public void periodic() {
   }
+
+public boolean isIntaking() {
+  return( currentMode == HopperModeType.INTAKING );
+}
   
 }

@@ -5,21 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.HopperCommands;
+package frc.robot.commands.FlywheelCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Hood;
 
-public class UnjamHopper extends CommandBase {
-  /**
-   * Creates a new unJamHopper.
-   */
-  public UnjamHopper() {
-    // Use addRequirements() here to declare subsystem dependencies.
+public class LowerHood extends CommandBase {
+
+  private Hood m_hood;
+
+  public LowerHood(Hood hood) {
+    m_hood = hood;
+    addRequirements(hood);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_hood.lowerHood();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
