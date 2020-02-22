@@ -3,11 +3,11 @@ package frc.robot.commands.JoystickCommandGroups;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 import frc.robot.subsystems.Tower;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hopper;
-import frc.robot.commands.HopperCommands.stopHopper;
-import frc.robot.commands.TowerCommands.stopTower;
-import frc.robot.commands.FlyWheelCommands.stopFlywheel;
+import frc.robot.commands.HopperCommands.StopHopper;
+import frc.robot.commands.TowerCommands.StopTower;
+import frc.robot.commands.FlywheelCommands.StopFlywheel;
 
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -17,24 +17,24 @@ public class DisableShootingSubsystems extends ParallelCommandGroup {
   /**
    * Creates a new DisableShootingSubsystems.
    */
-  Tower m_Tower;
-  Shooter m_Shooter;
-  Hopper m_Hopper;
+  Tower m_tower;
+  Flywheel m_flywheel;
+  Hopper m_hopper;
 
   /**
    * @param rcTower Tower subsystem
    * @param rcShooter Flywheel subsystem
    * @param rcHopper Hopper subsystem
    */
-  public DisableShootingSubsystems( Tower rcTower, Shooter rcShooter, Hopper rcHopper ) {
+  public DisableShootingSubsystems( Tower rcTower, Flywheel rcFlywheel, Hopper rcHopper ) {
     
     super();
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());super();
 
-    addCommands ( new stopHopper( m_Hopper ) );
-    addCommands( new stopFlywheel( m_Shooter ) );
-    addCommands( new stopTower( m_Tower ) );
+    addCommands ( new StopHopper( m_hopper ) );
+    addCommands( new StopFlywheel( m_flywheel ) );
+    addCommands( new StopTower( m_tower ) );
 
   }
 }
