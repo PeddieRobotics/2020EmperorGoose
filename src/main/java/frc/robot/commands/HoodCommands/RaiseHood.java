@@ -5,16 +5,16 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.FlywheelCommands;
+package frc.robot.commands.HoodCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hood;
 
-public class LowerHood extends CommandBase {
+public class RaiseHood extends CommandBase {
 
   private Hood m_hood;
 
-  public LowerHood(Hood hood) {
+  public RaiseHood(Hood hood) {
     m_hood = hood;
     addRequirements(hood);
   }
@@ -22,7 +22,7 @@ public class LowerHood extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_hood.lowerHood();
+    m_hood.raiseHood();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

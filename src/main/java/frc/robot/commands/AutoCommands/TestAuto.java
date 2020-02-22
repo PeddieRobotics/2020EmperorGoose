@@ -18,6 +18,7 @@ import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Tower;
 import frc.robot.commands.FlywheelCommands.*;
+import frc.robot.commands.HoodCommands.RaiseHood;
 
 public class TestAuto extends SequentialCommandGroup {
 
