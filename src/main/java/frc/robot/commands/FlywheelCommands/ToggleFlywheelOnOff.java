@@ -23,7 +23,7 @@ public class ToggleFlywheelOnOff extends CommandBase {
   @Override
   public void initialize() {
     // Depending on whether the flywheel is on (running forwards), switch to the opposite state
-    if(m_flywheel.isShooting()){
+    if(!m_flywheel.isShooting()){
         m_flywheel.setMotors(1500);
       }
       else{

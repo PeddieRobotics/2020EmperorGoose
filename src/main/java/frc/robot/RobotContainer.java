@@ -129,14 +129,14 @@ public class RobotContainer {
   public void configureTestButtonBindings() {
     isTestMode = true;
 
-    leftButton1.whenPressed(new ToggleHoodUpDown(m_hood));
-    leftButton2.whenPressed(new ToggleIntakeUpDown(m_intake));
-    leftButton3.whenPressed(new ToggleClimberUpDown(m_climber));
-    leftButton4.whenPressed(new ToggleIntakeOnOff(m_intake));
-    leftButton5.whenPressed(new ToggleHopperOnOff(m_hopper));
-    leftButton6.whenPressed(new ToggleTowerOnOff(m_tower));
-    leftButton7.whenPressed(new ToggleFlywheelOnOff(m_flywheel));
-    leftButton8.whenPressed(new ParallelCommandGroup(new StopIntake(m_intake), new StopHopper(m_hopper),
+    leftButton1.whileHeld(new ToggleHoodUpDown(m_hood));
+    leftButton2.whileHeld(new ToggleIntakeUpDown(m_intake));
+    leftButton3.whileHeld(new ToggleClimberUpDown(m_climber));
+    leftButton4.whileHeld(new ToggleIntakeOnOff(m_intake));
+    leftButton5.whileHeld(new ToggleHopperOnOff(m_hopper));
+    leftButton6.whileHeld(new ToggleTowerOnOff(m_tower));
+    leftButton7.whileHeld(new ToggleFlywheelOnOff(m_flywheel));
+    leftButton8.whileHeld(new ParallelCommandGroup(new StopIntake(m_intake), new StopHopper(m_hopper),
                                   new StopTower(m_tower), new StopFlywheel(m_flywheel), new LowerClimber(m_climber),
                                   new LowerHood(m_hood), new RaiseIntake(m_intake)));
   }
