@@ -22,13 +22,7 @@ public class ToggleHoodUpDown extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // Depending on whether the hood is down, switch to the opposite state
-    if(m_hood.isHoodDown()){
-        m_hood.raiseHood();
-      }
-      else{
-        m_hood.lowerHood();
-      }
+      m_hood.raiseHood();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,6 +33,7 @@ public class ToggleHoodUpDown extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_hood.lowerHood();
   }
 
   // Returns true when the command should end.

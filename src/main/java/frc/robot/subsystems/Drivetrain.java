@@ -50,8 +50,11 @@ public class Drivetrain extends SubsystemBase {
     
     leftDriveMaster = new NEO(1);
     rightDriveMaster = new NEO(3);
-    leftDriveFollower = new NEO(2, leftDriveMaster );
-    rightDriveFollower = new NEO(4, rightDriveMaster );
+    leftDriveFollower = new NEO(2);
+    rightDriveFollower = new NEO(4);
+    leftDriveFollower.follow(leftDriveMaster);
+    rightDriveFollower.follow(rightDriveMaster);
+
 
     rightDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF + Constants.DRIVETRAIN_FF_OFFSET, 0 );
     leftDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF, 0 );
@@ -199,7 +202,7 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getSpeed() {
-    return -leftJoystick.getRawAxis(1);
+    return leftJoystick.getRawAxis(1);
   }
 
   public double getTurn() {

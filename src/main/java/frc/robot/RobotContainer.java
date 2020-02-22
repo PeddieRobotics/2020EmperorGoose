@@ -29,6 +29,7 @@ import frc.robot.commands.FlywheelCommands.ToggleFlywheelOnOff;
 import frc.robot.commands.HoodCommands.ToggleHoodUpDown;
 import frc.robot.commands.HopperCommands.StopHopper;
 import frc.robot.commands.HopperCommands.ToggleHopperOnOff;
+import frc.robot.commands.IntakeCommands.LowerIntake;
 import frc.robot.commands.IntakeCommands.RaiseIntake;
 import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.IntakeCommands.ToggleIntakeOnOff;
@@ -52,7 +53,7 @@ public class RobotContainer {
   private static boolean isCompetitionRobot = true;
   
   // If it's test mode, we may want to do a few things differently...
-  private static boolean isTestMode = false;
+  private boolean isTestMode = false;
 
   // The robot's subsystems are defined here...
   private final Drivetrain m_driveTrain;
@@ -64,13 +65,13 @@ public class RobotContainer {
   private final Climber m_climber;
   private final Limelight m_limelight;
   
-  private final TestSubsystem test;
+  // private final TestSubsystem test;
 
-  private final SendableChooser<String> chooser;
+  private SendableChooser<String> chooser;
 
   private Joystick leftDriverJoystick, rightDriverJoystick, operatorJoystick;
 
-  private JoystickButton leftButton1, leftButton2, leftButton3, leftButton4, leftButton5, leftButton6, leftButton7, leftButton8;
+  private JoystickButton leftButton1, leftButton2, leftButton3, leftButton4, leftButton5, leftButton6, leftButton7, leftButton8, leftButton9;
   private JoystickButton rightButton1, rightButton2, rightButton3, rightButton4, rightButton5, rightButton6, rightButton7, rightButton8;
   private JoystickButton operatorButton1, operatorButton2, operatorButton3, operatorButton4, operatorButton5, operatorButton6, operatorButton7, operatorButton8;
   
@@ -94,22 +95,33 @@ public class RobotContainer {
     
     // Vijay's temporary test subsystem for running new robot
     // Should be refactored/removed
-    test = new TestSubsystem();
+    // test = new TestSubsystem();
   
-    // Set default behaviors for subsystems which should start active
+    // Configure menu for SmartDashboard to select auto routines to be sent to robot
+    configureAutoRoutines();
+    
+  }
+    
+  // Set default behaviors for subsystems which should start active
+  public void configureDefaultBehaviors() {
+    // Always make the drivetrain active in any mode
     m_driveTrain.setDefaultCommand(new Drive(m_driveTrain));
+    // Don't index the tower by default in test mode
     if(!isTestMode){
       m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper));
     }
 
-    // Configure menu for SmartDashboard to select auto routines to be sent to robot
+  }
+
+  /* Use a SendableChooser to create a list of possible autonomous paths.
+  *  Each path is defined by a String naming the .csv file to use for that path.
+  */ 
+  public void configureAutoRoutines(){
     chooser = new SendableChooser<String>();
     chooser.addOption("turn 12 move 12s","testPath");
     chooser.addOption("real 10s","real10");
     chooser.addOption("real 20s","real20");
-    
   }
-
 
   /**
    * Use this method to define your button->command mappings.  Buttons can be created by
@@ -126,19 +138,25 @@ public class RobotContainer {
 
   }
 
-  public void configureTestButtonBindings() {
-    isTestMode = true;
+  public void setTestMode(boolean mode){
+    isTestMode = mode;
+  }
 
-    leftButton1.whileHeld(new ToggleHoodUpDown(m_hood));
-    leftButton2.whileHeld(new ToggleIntakeUpDown(m_intake));
-    leftButton3.whileHeld(new ToggleClimberUpDown(m_climber));
-    leftButton4.whileHeld(new ToggleIntakeOnOff(m_intake));
-    leftButton5.whileHeld(new ToggleHopperOnOff(m_hopper));
-    leftButton6.whileHeld(new ToggleTowerOnOff(m_tower));
-    leftButton7.whileHeld(new ToggleFlywheelOnOff(m_flywheel));
-    leftButton8.whileHeld(new ParallelCommandGroup(new StopIntake(m_intake), new StopHopper(m_hopper),
-                                  new StopTower(m_tower), new StopFlywheel(m_flywheel), new LowerClimber(m_climber),
-                                  new LowerHood(m_hood), new RaiseIntake(m_intake)));
+  public boolean getTestMode(){
+    return isTestMode;
+  }
+
+  public void configureTestButtonBindings() {
+  
+    leftButton1.toggleWhenPressed(new ToggleHoodUpDown(m_hood));
+    leftButton2.toggleWhenPressed(new ToggleIntakeUpDown(m_intake));
+    leftButton3.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
+    leftButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
+    leftButton5.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
+    leftButton6.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
+    leftButton7.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
+    leftButton8.toggleWhenPressed(new LowerIntake(m_intake));
+    leftButton9.toggleWhenPressed(new RaiseIntake(m_intake));
   }
 
   private void initializeJoysticks() {
@@ -155,6 +173,7 @@ public class RobotContainer {
     leftButton6 = new JoystickButton(leftDriverJoystick, 6);
     leftButton7 = new JoystickButton(leftDriverJoystick, 7);
     leftButton8 = new JoystickButton(leftDriverJoystick, 8);
+    leftButton9 = new JoystickButton(leftDriverJoystick, 9);
 
     rightButton1 = new JoystickButton(rightDriverJoystick, 1);
     rightButton2 = new JoystickButton(rightDriverJoystick, 2);

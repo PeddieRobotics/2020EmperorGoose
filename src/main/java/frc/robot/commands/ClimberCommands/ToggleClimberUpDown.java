@@ -21,13 +21,7 @@ public class ToggleClimberUpDown extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // Depending on whether the climber is extended up, switch to the opposite state
-    if(m_climber.isClimberUp()){
-        m_climber.lowerClimber();
-      }
-      else{
-        m_climber.raiseClimber();
-      }
+    m_climber.raiseClimber();    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -38,6 +32,7 @@ public class ToggleClimberUpDown extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_climber.lowerClimber();
   }
 
   // Returns true when the command should end.

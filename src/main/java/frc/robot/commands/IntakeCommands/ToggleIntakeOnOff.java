@@ -22,14 +22,8 @@ public class ToggleIntakeOnOff extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    // Depending on whether the intake motor is on, switch to the opposite state
-    if(m_intake.isIntaking()){
-      m_intake.stopIntake();
-    }
-    else{
-      m_intake.startIntake();
-    }
+  public void initialize() {  
+    m_intake.startIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,6 +34,7 @@ public class ToggleIntakeOnOff extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_intake.stopIntake();
   }
 
   // Returns true when the command should end.

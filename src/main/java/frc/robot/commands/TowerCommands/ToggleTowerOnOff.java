@@ -22,16 +22,8 @@ public class ToggleTowerOnOff extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // Depending on whether the tower motors are on, switch to the opposite state
-    // Should not be actively indexing either way
-    if(m_tower.isRunningForward()){
-        m_tower.runMotors(0.0);
-        m_tower.setCurrentMode(Tower.TowerModeType.DISABLED);
-    }
-    else{
-        m_tower.runMotors(0.5);
-        m_tower.setCurrentMode(Tower.TowerModeType.FORWARD);
-    }
+    m_tower.runMotors(0.5);
+    m_tower.setCurrentMode(Tower.TowerModeType.FORWARD);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,6 +34,8 @@ public class ToggleTowerOnOff extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_tower.runMotors(0.0);
+    m_tower.setCurrentMode(Tower.TowerModeType.DISABLED);
   }
 
   // Returns true when the command should end.

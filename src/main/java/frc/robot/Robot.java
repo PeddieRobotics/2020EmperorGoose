@@ -39,13 +39,16 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     m_RobotContainer.configureButtonBindings();
     m_RobotContainer.setCoastMode();
+    m_RobotContainer.configureDefaultBehaviors();
   }
 
   public void teleopPeriodic() {
   }
 
   public void testInit() {
+    m_RobotContainer.setTestMode(true);
     m_RobotContainer.configureTestButtonBindings();
+    m_RobotContainer.configureDefaultBehaviors();
   }
 
   public void testPeriodic() {

@@ -23,13 +23,7 @@ public class ToggleIntakeUpDown extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // Depending on whether the intake motor is on, switch to the opposite state
-    if(m_intake.isIntakeDown()){
-      m_intake.raiseIntake();
-    }
-    else{
-      m_intake.lowerIntake();
-    }
+    m_intake.raiseIntake();    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -40,6 +34,7 @@ public class ToggleIntakeUpDown extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_intake.lowerIntake();
   }
 
   // Returns true when the command should end.

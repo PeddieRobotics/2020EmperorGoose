@@ -22,13 +22,7 @@ public class ToggleFlywheelOnOff extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // Depending on whether the flywheel is on (running forwards), switch to the opposite state
-    if(!m_flywheel.isShooting()){
-        m_flywheel.setMotors(1500);
-      }
-      else{
-        m_flywheel.disable();
-      }
+    m_flywheel.setMotors(1500);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,6 +33,7 @@ public class ToggleFlywheelOnOff extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_flywheel.disable();
   }
 
   // Returns true when the command should end.
