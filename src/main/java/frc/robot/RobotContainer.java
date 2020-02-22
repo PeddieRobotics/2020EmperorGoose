@@ -54,7 +54,7 @@ public class RobotContainer {
   // If it's test mode, we may want to do a few things differently...
   private static boolean isTestMode = false;
 
-  // The robot's subsystems and commands are defined here...
+  // The robot's subsystems are defined here...
   private final Drivetrain m_driveTrain;
   private final Tower m_tower;
   private final Hopper m_hopper;
@@ -129,14 +129,14 @@ public class RobotContainer {
   public void configureTestButtonBindings() {
     isTestMode = true;
 
-    leftButton1.toggleWhenPressed(new ToggleHoodUpDown(m_hood));
-    leftButton2.toggleWhenPressed(new ToggleIntakeUpDown(m_intake));
-    leftButton3.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
-    leftButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
-    leftButton5.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
-    leftButton6.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
-    leftButton7.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
-    leftButton8.toggleWhenPressed(new ParallelCommandGroup(new StopIntake(m_intake), new StopHopper(m_hopper),
+    leftButton1.whenPressed(new ToggleHoodUpDown(m_hood));
+    leftButton2.whenPressed(new ToggleIntakeUpDown(m_intake));
+    leftButton3.whenPressed(new ToggleClimberUpDown(m_climber));
+    leftButton4.whenPressed(new ToggleIntakeOnOff(m_intake));
+    leftButton5.whenPressed(new ToggleHopperOnOff(m_hopper));
+    leftButton6.whenPressed(new ToggleTowerOnOff(m_tower));
+    leftButton7.whenPressed(new ToggleFlywheelOnOff(m_flywheel));
+    leftButton8.whenPressed(new ParallelCommandGroup(new StopIntake(m_intake), new StopHopper(m_hopper),
                                   new StopTower(m_tower), new StopFlywheel(m_flywheel), new LowerClimber(m_climber),
                                   new LowerHood(m_hood), new RaiseIntake(m_intake)));
   }
