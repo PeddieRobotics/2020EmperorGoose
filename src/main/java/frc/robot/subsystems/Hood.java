@@ -1,9 +1,7 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
+/**
+ * Hood refers to a very simple subsystem with a pneumatically-powered hood for the 
+ * flywheel for the Shooter.
+ */
 
 package frc.robot.subsystems;
 
@@ -12,23 +10,33 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Hood extends SubsystemBase {
-  /**
-   * Creates a new Hood.
-   */
-  Solenoid hoodSolenoid;
+  
+  private Solenoid hoodSolenoid;
+  private boolean isDown;
 
   public Hood() {
 
-    hoodSolenoid = new Solenoid(Constants.SOLENOID_HOOD);
+     isDown = true;
+     hoodSolenoid = new Solenoid(Constants.SOLENOID_HOOD);
 
   }
 
-  public void setUp(boolean isUp){
+  public boolean isHoodDown(){
+    
+    return isDown;
+  }
 
-    hoodSolenoid.set( isUp ); //set solenoid up if isUp is true, down if false
+  public void raiseHood(){
 
+    hoodSolenoid.set(true); //set solenoid up if isUp is true, down if false
+    isDown = false;
   }
   
+  public void lowerHood(){
+
+    hoodSolenoid.set(false); //set solenoid up if isUp is true, down if false
+    isDown = true;
+  }
 
   @Override
   public void periodic() {

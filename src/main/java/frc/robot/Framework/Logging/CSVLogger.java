@@ -5,14 +5,16 @@ import java.util.ArrayList;
 
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
  
 public class CSVLogger{
     public ArrayList<String> headersForLoggedVariables = new ArrayList<String>();
     public ArrayList<String> variableValueList = new ArrayList<String>();
     public ArrayList<String[]> loggedVariableList = new ArrayList<String[]>();
-    public ArrayList<Supplier<Object>> variablesBeingRecorded = new ArrayList<Supplier<Object>>();
+    public ArrayList<Supplier<Double>> variablesBeingRecorded = new ArrayList<Supplier<Double>>();
     static CSVLogger instance;
     boolean sendDataOverDS = false; 
     boolean currentClearState = false;
@@ -22,7 +24,7 @@ public class CSVLogger{
 
     public CSVLogger(){
         runner = new Notifier(this::run);
-        runner.startPeriodic(20);//run at 50hz, we want our own notifier because if the server crashed we dont wanna crash our whole robot
+        runner.startPeriodic(.02);//run at 50hz, we want our own notifier because if the server crashed we dont wanna crash our whole robot
                 
         ourServer = new CSVServer();
     }
@@ -51,18 +53,26 @@ public class CSVLogger{
             //if the value is not a parsable value(e.g. it is not a double, then dont add as a variable)
         }
     }
-    public void addVariablesToRecored(Supplier<Object> variable){
+    public void addVariablesToRecored(Supplier<Double> variable){
         variablesBeingRecorded.add(variable);
 
     }
     public void updateVariablesThatWeAreRecording(){
         String[] currVarList = new String[variablesBeingRecorded.size()];
-        for(int i =0; i < variablesBeingRecorded.size();i++){
-            Supplier<Object> variableObject= variablesBeingRecorded.get(i);
-            String variableValue = variableObject.get().toString();
-            currVarList[i] = variableValue;
+        if(!RobotState.isDisabled()){
+            for(int i =0; i < variablesBeingRecorded.size();i++){
+                Supplier<Double> variableObject= variablesBeingRecorded.get(i);
+            
+                String variableValue = variableObject.get().toString();//thanks antonio
+                if(variableValue.equals("NaN")){
+                    currVarList[i]= ""+0;
+                }else{
+                    DriverStation.reportError("this is what " + variableValue, false);
+                    currVarList[i] = variableValue;
+                }
+            }
+            loggedVariableList.add(currVarList);
         }
-        loggedVariableList.add(currVarList);
     }
     /**
      * Use this method if you wanna send data to the driverstation
@@ -89,7 +99,8 @@ public class CSVLogger{
         loggedVariableList.set(0,headerList);
         loggedVariableList.add(variableList);
         try {
-			ourServer.sendDataAccrossNetwork(loggedVariableList);
+            ourServer.sendDataAccrossNetwork(loggedVariableList);
+            DriverStation.reportError("server sending data", false);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

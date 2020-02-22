@@ -11,8 +11,29 @@ public class NEOPIDWithSmartDashboard extends SmartDashboardSubsystem{
     public NEOPIDWithSmartDashboard(int slot){
         super("PID " + slot);
         neo = new NEO(slot);
-        neo.addPIDController(neo.defaultP,0);
+        neo.addPIDController(neo.defaultP,3);
+        
+        neo.currentPIDController().changeCurrentPID(3);
+
         slotID = "" + slot;
+        addVariable(new Double(neo.defaultP), "p "+ slot);
+        
+        addVariable(new Double(neo.defaultI), "d "+ slot);
+        
+        addVariable(new Double(neo.defaultD), "i "+ slot);
+        
+        addVariable(new Double(neo.defaultFF), "ff "+ slot);
+        
+        addVariable(new Double(neo.defaultArbFF), "arbFF "+ slot);
+
+        addVariable(new Double(0),"setpoint "+slot);
+    }
+    public NEOPIDWithSmartDashboard(NEO neo){
+        super("PID "+neo.getDeviceID());
+        neo.addPIDController(neo.defaultP,3);
+        neo.currentPIDController().changeCurrentPID(3);
+        slotID = "" + neo.getDeviceID();
+        int slot = neo.getDeviceID();
         addVariable(new Double(neo.defaultP), "p "+ slot);
         
         addVariable(new Double(neo.defaultI), "d "+ slot);
@@ -34,14 +55,26 @@ public class NEOPIDWithSmartDashboard extends SmartDashboardSubsystem{
     @Override
     public void periodic(){
         manageVariables();
-        if(currentP != getDouble("p "+slotID)){DriverStation.reportError("hey", false); neo.setP(getDouble("p " + slotID)); currentP = getDouble("p "+slotID);}
-        if(currentD!= getDouble("d "+slotID)){ DriverStation.reportError("hey", false);neo.setD(getDouble("d " + slotID)); currentD = getDouble("d "+slotID);}
-        if(currentI != getDouble("i "+slotID)){DriverStation.reportError("hey", false); neo.setI(getDouble("i " + slotID)); currentI = getDouble("i "+slotID);}
-        if(currentFF != getDouble("ff "+slotID)){ DriverStation.reportError("hey", false);neo.setFF(getDouble("ff " + slotID)); currentFF = getDouble("ff "+slotID);}
-        if(currentArbFF != getDouble("arbFF "+slotID)){DriverStation.reportError("hey", false); neo.setArbFF(getDouble("arbFF " + slotID)); currentArbFF = getDouble("arbFF "+slotID);}
-        if(currentSetpoint != getDouble("setpoint "+slotID)){ DriverStation.reportError("hey", false);neo.setSmartVelocity(getDouble("setpoint " + slotID)); currentSetpoint = getDouble("setpoint "+slotID);}
-        SmartDashboard.putNumber("currentVelocity " + slotID, neo.getVelocity());
+        double pidP = getDouble("p "+slotID);
+        double pidD = getDouble("d "+slotID);
+        double pidI = getDouble("i "+slotID);
+        double pidFF = getDouble("ff "+slotID);
+        double pidArbFF = getDouble("arbFF "+slotID);
+        double pidSetpoint = getDouble("setpoint "+slotID);
         
+        //update our setpoints, dont update unless changed or we will casue issues because updating burn flashed params at 50hz is not possible
+        if(currentP != pidP){DriverStation.reportError("hey", false); neo.setP(pidP); currentP = pidP;}
+        if(currentD!= pidD){ DriverStation.reportError("hey", false);neo.setD(pidD); currentD = pidD;}
+        if(currentI != pidI){DriverStation.reportError("hey", false); neo.setI(pidI); currentI = pidI;}
+        if(currentFF !=pidFF){ DriverStation.reportError("hey", false);neo.setFF(pidFF); currentFF = pidFF;}
+        if(currentArbFF != pidArbFF){DriverStation.reportError("hey", false); neo.setArbFF(pidArbFF); currentArbFF = pidArbFF;}
+        if(currentSetpoint !=pidSetpoint){ DriverStation.reportError("hey", false);neo.setSmartVelocity(pidSetpoint);currentSetpoint=pidSetpoint;}
+        
+        if(!(neo==null)){
+            
+            SmartDashboard.putNumber("currentVelocity " + slotID, neo.getVelocity());
+        
+        }
     }
 
 }

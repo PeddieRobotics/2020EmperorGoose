@@ -7,7 +7,9 @@ public class SmartDashBoardMasterTuner extends SmartDashboardSubsystem{
         super("Master Tuner Program");
       
     }
-    public void addMotor(){}
+    public void addMotor(){
+        
+    }
    
     @Override
     public void periodic(){

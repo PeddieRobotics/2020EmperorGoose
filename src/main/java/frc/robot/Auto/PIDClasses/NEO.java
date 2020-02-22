@@ -28,14 +28,16 @@ public class NEO extends CANSparkMax{
     public final ControlType defaultControlType = ControlType.kSmartVelocity;
     CANEncoder motorEncoder;
     public boolean hasCreatedAPID = false;
+    private int deviceID;
     public NEO(int deviceID) {
-        
         super(deviceID, MotorType.kBrushless);
+        
+        this.deviceID = deviceID;
         restoreFactoryDefaults();
         setIdleMode(IdleMode.kCoast);
         m_pidController = new NEOPIDController(this);//get us la pid controler 
         motorEncoder = getEncoder();
-        changeControlFramePeriod(1);
+        changeControlFramePeriod(20);
         // TODO Auto-generated constructor stub
     }
     public NEO(int deviceID, NEO master){
@@ -45,11 +47,15 @@ public class NEO extends CANSparkMax{
         m_pidController= new NEOPIDController(this);
         motorEncoder = getEncoder();
         changeControlFramePeriod(100);
+        NEOController.getInstance().addNEO(this);
     }
     /**
      * Changes the motors to break mode, this means if one tries to move them when they are not recieving a 
      * command they wont move 
      */
+    public int getDeviceID(){
+        return deviceID;
+    }
     public void setBrake(){
         setIdleMode(IdleMode.kBrake);
     }
@@ -163,6 +169,9 @@ public class NEO extends CANSparkMax{
         if(!hasCreatedAPID){
             addPIDController(defaultP,0);//if no PID create a pid on zero
         }
+    }
+    public NEOPIDController currentPIDController(){
+        return m_pidController;
     }
     public void changePIDController(int slot){
         

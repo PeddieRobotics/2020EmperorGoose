@@ -85,20 +85,15 @@ public class CSVClient{
        
         
         FileWriter fileWriter = null;
-        FileWriter defaultWriter = null;
                  
         try {
             fileWriter = new FileWriter("D:\\MyProfile\\Documents\\NetBeansProjects\\GraphsForCSV\\"+fileName);
             filename = fileName;
-             defaultWriter = new FileWriter("DefaultGraph.csv");//create a default and a logged graph 
-             defaultWriter.append("\n");
-            //Add a new line separator after the header
+            
             fileWriter.append("\n");
              
             //Write ur report to csv
             for (Report reportss : report) {
-                reportss.returnCsvReport(defaultWriter);
-                defaultWriter.append("\n");
                 reportss.returnCsvReport(fileWriter);
                 fileWriter.append("\n");
             }

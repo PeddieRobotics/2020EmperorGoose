@@ -7,9 +7,6 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,13 +15,21 @@ import frc.robot.Auto.PIDClasses.NEO;
 
 public class Tower extends SubsystemBase {
 
+  public static enum TowerModeType {
+    INDEXING, FORWARD, DISABLED, REVERSE
+  }
+
+  private TowerModeType currentMode;
+
   private NEO topMotor, bottomMotor;
   private final AnalogInput m_topSensor0, m_topSensor1, m_bottomSensor2, m_bottomSensor3;
   
   public Tower() {
 
-    topMotor = new NEO( Constants.TOWER_TOP );
-    bottomMotor = new NEO( Constants.TOWER_BOTTOM );
+    currentMode = TowerModeType.DISABLED;
+
+    topMotor = new NEO( Constants.TOWER_BOTTOM );
+    bottomMotor = new NEO( Constants.TOWER_TOP );
 
     topMotor.setBrake();
     bottomMotor.setBrake();
@@ -73,19 +78,25 @@ public class Tower extends SubsystemBase {
     bottomMotor.set( -speed );
 
   }
+  
+  public boolean isRunningForward(){
+    return (currentMode == TowerModeType.FORWARD);
+  }
+
+  public void setCurrentMode(TowerModeType mode){
+    currentMode = mode;
+  }
 
   /**
    * does the base of the tower sense a ball inside it?
    * @return boolean of whether there is a ball at the base of the tower or not
    */
   public boolean senses_ball_Bottom() {
-
     if ( m_bottomSensor2.getVoltage() < 3 || m_bottomSensor3.getVoltage() < 3 ) {
       return true;
     } else {
       return false;
     }
-
   }
 
   /**
@@ -106,7 +117,7 @@ public class Tower extends SubsystemBase {
    */
   public boolean senses_ball_Top() {
 
-    if ( m_topSensor0.getVoltage() < 3 || m_topSensor1.getVoltage() < 3 ) {
+    if ( m_topSensor0.getVoltage() < 3 ) {
       return true;
     } else {
       return false;

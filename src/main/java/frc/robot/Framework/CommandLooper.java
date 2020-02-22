@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.Vector;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 
 
 public class CommandLooper{
@@ -17,7 +19,9 @@ public class CommandLooper{
     Notifier runner;//this will run all the commands
     Vector<Command> listOfCommands;//vector is just thread safe arrayLis
     HashMap<Integer,ArrayList<Command>> listOfSmartCommands;//for convience all keys will be in num
+    ArrayList<Set<Subsystem>> commandRequirementList;
     ArrayList<Integer> runTimesForSmartCommands;
+   
     boolean hasBeenScheduled;
     int m_Hz;
     public CommandLooper(){
@@ -27,6 +31,7 @@ public class CommandLooper{
         listOfCommands = new Vector<Command>();//initialize stuff
         runTimesForSmartCommands = new ArrayList<Integer>();
         listOfSmartCommands = new HashMap<Integer, ArrayList<Command>>();
+
     }
     /**
      * Everything should be run through this!(to make life easier)
@@ -81,6 +86,7 @@ public class CommandLooper{
         m_Hz= 1000/periodMs;
         runner.startPeriodic((double)periodMs/(double)1000);//convert from ms-> seconds
         //use doubles to make sure we get accurate decimal 
+        
     }//freq(100) 20
 
     //

@@ -1,105 +1,126 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
-package frc.robot;
-
-import java.util.ArrayList;
-
-import com.team319.trajectory.Path;
-
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Framework.CommandLooper;
-import frc.robot.commands.Drive;
-import frc.robot.commands.PathFollower;
-import frc.robot.commands.testCommandForStuff;
-import frc.robot.commands.IntakeCommands.toggleIntakeState;
-import frc.robot.commands.IntakeCommands.stopIntake;
-import frc.robot.commands.JoystickCommandGroups.DisableShootingSubsystems;
-import frc.robot.commands.JoystickCommandGroups.toggleIntakeUpAndDown;
-import frc.robot.commands.TowerCommands.indexPowerCells;
-import frc.robot.commands.TowerCommands.stopTower;
-import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.TestSubsytem;
-import frc.robot.subsystems.Tower;
-
 /**
+ * FRC 5895 (Peddie School Robotics)
+ * Initializes and configures all controls.
+ * Also initializes all subsystems for the robots.
+ * 
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
  * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 
+package frc.robot;
+
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Framework.CommandLooper;
+import frc.robot.commands.AutoCommands.FollowPath;
+import frc.robot.commands.ClimberCommands.LowerClimber;
+import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
+import frc.robot.commands.DriveCommands.Drive;
+import frc.robot.commands.HoodCommands.LowerHood;
+import frc.robot.commands.FlywheelCommands.StopFlywheel;
+import frc.robot.commands.FlywheelCommands.ToggleFlywheelOnOff;
+import frc.robot.commands.HoodCommands.ToggleHoodUpDown;
+import frc.robot.commands.HopperCommands.StopHopper;
+import frc.robot.commands.HopperCommands.ToggleHopperOnOff;
+import frc.robot.commands.IntakeCommands.LowerIntake;
+import frc.robot.commands.IntakeCommands.RaiseIntake;
+import frc.robot.commands.IntakeCommands.StopIntake;
+import frc.robot.commands.IntakeCommands.ToggleIntakeOnOff;
+import frc.robot.commands.IntakeCommands.ToggleIntakeUpDown;
+import frc.robot.commands.JoystickCommands.ShootFlywheel;
+import frc.robot.commands.TowerCommands.IndexPowerCells;
+import frc.robot.commands.TowerCommands.StopTower;
+import frc.robot.commands.TowerCommands.ToggleTowerOnOff;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.TestSubsystem;
+import frc.robot.subsystems.Tower;
 
 public class RobotContainer {
-  Notifier runPathFaster;
-  // The robot's subsystems and commands are defined here...
+  // Default to code for competition robot, but can switch this boolean here to run practice robot
+  private static boolean isCompetitionRobot = true;
   
-  private PathFollower follow10;
-  private final Drivetrain m_driveTrain = new Drivetrain();
-  Joystick left ;
-  JoystickButton leftTrigger; 
-  SendableChooser<Path> chooser = new SendableChooser<Path>(); 
-  SendableChooser<String> path2  = new SendableChooser<String>();
-  //TestSubsytem test = new TestSubsytem();
-  Tower m_Tower = new Tower();
-  Hopper m_Hopper = new Hopper();
-  Shooter m_Shooter = new Shooter();
-  Intake m_Intake = new Intake(); 
-  Joystick leftJoystick;
-  Joystick rightJoystick;
+  // If it's test mode, we may want to do a few things differently...
+  private boolean isTestMode = false;
 
-  JoystickButton left1, left2, left3, left4;
-  JoystickButton right1, right2, right3, right4;
+  // The robot's subsystems are defined here...
+  private final Drivetrain m_driveTrain;
+  private final Tower m_tower;
+  private final Hopper m_hopper;
+  private final Flywheel m_flywheel;
+  private final Intake m_intake;
+  private final Hood m_hood;
+  private final Climber m_climber;
+  private final Limelight m_limelight;
+  
+  // private final TestSubsystem test;
 
+  private SendableChooser<String> chooser;
+
+  private Joystick leftDriverJoystick, rightDriverJoystick, operatorJoystick;
+
+  private JoystickButton leftButton1, leftButton2, leftButton3, leftButton4, leftButton5, leftButton6, leftButton7, leftButton8, leftButton9;
+  private JoystickButton rightButton1, rightButton2, rightButton3, rightButton4, rightButton5, rightButton6, rightButton7, rightButton8;
+  private JoystickButton operatorButton1, operatorButton2, operatorButton3, operatorButton4, operatorButton5, operatorButton6, operatorButton7, operatorButton8;
+  
   public RobotContainer() {
 
+    // Set up the command looper to manage command scheduling
     CommandLooper.getInstance().startAndSetPeriodic(5);
-    m_Tower.setDefaultCommand(new indexPowerCells(m_Tower, m_Hopper));
-    
-    leftJoystick = new Joystick(0);
-    rightJoystick = new Joystick(1);
 
-    left1 = new JoystickButton(leftJoystick, 1);
-    left2 = new JoystickButton(leftJoystick, 2);
-    left3 = new JoystickButton(leftJoystick, 3);
-    left4 = new JoystickButton(leftJoystick, 4);
+    // Set up driver and operator joysticks, along with all of their buttons
+    initializeJoysticks();
 
-    right1 = new JoystickButton(rightJoystick, 1);
-    right2 = new JoystickButton(rightJoystick, 2);
-    right3 = new JoystickButton(rightJoystick, 3);
-    right4 = new JoystickButton(rightJoystick, 4);
-   
-    // chooser.addOption("real 30", realThirty);
-    //  SmartDashboard.putData("path 1",chooser);
-    //  SmartDashboard.putData("path 2",path2);
-    // path2.addOption("turn 12 move 12s","testPath");
+    // Initialize all subsystems
+    m_driveTrain = new Drivetrain(leftDriverJoystick, rightDriverJoystick);
+    m_tower = new Tower();
+    m_hopper = new Hopper();
+    m_flywheel = new Flywheel();
+    m_intake = new Intake(); 
+    m_hood = new Hood();
+    m_climber = new Climber();
+    m_limelight = new Limelight();
     
-    // path2.addOption("real 10s","real10");
+    // Vijay's temporary test subsystem for running new robot
+    // Should be refactored/removed
+    // test = new TestSubsystem();
+  
+    // Configure menu for SmartDashboard to select auto routines to be sent to robot
+    configureAutoRoutines();
     
-    //path2.addOption("real 20s","real20");
+  }
     
-    //Configure the button bindings
-    
-    m_driveTrain.setDefaultCommand( new Drive( m_driveTrain, this ) );
-    configureButtonBindings();
+  // Set default behaviors for subsystems which should start active
+  public void configureDefaultBehaviors() {
+    // Always make the drivetrain active in any mode
+    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain));
+    // Don't index the tower by default in test mode
+    if(!isTestMode){
+      m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper));
+    }
+
+  }
+
+  /* Use a SendableChooser to create a list of possible autonomous paths.
+  *  Each path is defined by a String naming the .csv file to use for that path.
+  */ 
+  public void configureAutoRoutines(){
+    chooser = new SendableChooser<String>();
+    chooser.addOption("turn 12 move 12s","testPath");
+    chooser.addOption("real 10s","real10");
+    chooser.addOption("real 20s","real20");
   }
 
   /**
@@ -108,15 +129,71 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
-  private void configureButtonBindings() {
+  public void configureButtonBindings() {
+    // leftButton1.toggleWhenPressed(new toggleIntakeState(m_Intake));
+    leftButton2.whileActiveContinuous(new ShootFlywheel(m_tower, m_flywheel, m_hopper, 1300));
+    // final PathFollower pathFollower = new PathFollower(m_driveTrain,path2.getSelected(),true);
+    // CommandLooper.getInstance().addCommand(new testAuto(m_hopper, m_tower, m_shooter,follow2));
+    //rightButton2.whenActive(new buttonAim(m_driveTrain, m_limelight));
 
-    left1.toggleWhenPressed( new toggleIntakeState( m_Intake ) );
-    left2.whenPressed( new stopIntake( m_Intake ) );
-
-    right2.whenPressed( new DisableShootingSubsystems( m_Tower, m_Shooter, m_Hopper ) );
-    
   }
 
+  public void setTestMode(boolean mode){
+    isTestMode = mode;
+  }
+
+  public boolean getTestMode(){
+    return isTestMode;
+  }
+
+  public void configureTestButtonBindings() {
+  
+    leftButton1.toggleWhenPressed(new ToggleHoodUpDown(m_hood));
+    leftButton2.toggleWhenPressed(new ToggleIntakeUpDown(m_intake));
+    leftButton3.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
+    leftButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
+    leftButton5.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
+    leftButton6.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
+    leftButton7.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
+    leftButton8.toggleWhenPressed(new LowerIntake(m_intake));
+    leftButton9.toggleWhenPressed(new RaiseIntake(m_intake));
+  }
+
+  private void initializeJoysticks() {
+  
+    leftDriverJoystick = new Joystick(0);
+    rightDriverJoystick = new Joystick(1);
+    operatorJoystick = new Joystick(2);
+
+    leftButton1 = new JoystickButton(leftDriverJoystick, 1);
+    leftButton2 = new JoystickButton(leftDriverJoystick, 2);
+    leftButton3 = new JoystickButton(leftDriverJoystick, 3);
+    leftButton4 = new JoystickButton(leftDriverJoystick, 4);
+    leftButton5 = new JoystickButton(leftDriverJoystick, 5);
+    leftButton6 = new JoystickButton(leftDriverJoystick, 6);
+    leftButton7 = new JoystickButton(leftDriverJoystick, 7);
+    leftButton8 = new JoystickButton(leftDriverJoystick, 8);
+    leftButton9 = new JoystickButton(leftDriverJoystick, 9);
+
+    rightButton1 = new JoystickButton(rightDriverJoystick, 1);
+    rightButton2 = new JoystickButton(rightDriverJoystick, 2);
+    rightButton3 = new JoystickButton(rightDriverJoystick, 3);
+    rightButton4 = new JoystickButton(rightDriverJoystick, 4);
+    rightButton5 = new JoystickButton(rightDriverJoystick, 5);
+    rightButton6 = new JoystickButton(rightDriverJoystick, 6);
+    rightButton7 = new JoystickButton(rightDriverJoystick, 7);
+    rightButton8 = new JoystickButton(rightDriverJoystick, 8);
+
+    operatorButton1 = new JoystickButton(operatorJoystick, 1);
+    operatorButton2 = new JoystickButton(operatorJoystick, 2);
+    operatorButton3 = new JoystickButton(operatorJoystick, 3);
+    operatorButton4 = new JoystickButton(operatorJoystick, 4);
+    operatorButton5 = new JoystickButton(operatorJoystick, 5);
+    operatorButton6 = new JoystickButton(operatorJoystick, 6);
+    operatorButton7 = new JoystickButton(operatorJoystick, 7);
+    operatorButton8 = new JoystickButton(operatorJoystick, 8);
+
+  }
   
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -124,25 +201,22 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    final PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
-    CommandLooper.getInstance().addCommand(follow2);
-
-    return follow2;
-
+    FollowPath autoPathFromChooser = new frc.robot.commands.AutoCommands.FollowPath(m_driveTrain, chooser.getSelected(), true);
+    // CommandLooper.getInstance().addCommand(new TestAuto(m_Hopper, m_Tower, m_Shoot,m_Hood));
+    
+    return autoPathFromChooser;
   }
+
   public void setBrakeMode(){
     m_driveTrain.setBrake();
   }
+
   public void setCoastMode(){
     m_driveTrain.setCoast();
   }
-  public double getSpeed() {
-    return leftJoystick.getRawAxis(0);
-  }
-
-  public double getTurn() {
-    return rightJoystick.getRawAxis(1);
+  
+  public static boolean isCompetitionRobot(){
+    return isCompetitionRobot;
   }
   
 }

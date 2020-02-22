@@ -34,7 +34,7 @@ public class LoadCSV {
                 // use comma as separator
                 try{
                     dataFromCSV = line.split(cvsSplitBy);
-                    Double.parseDouble(dataFromCSV[1]);
+                    Double.parseDouble(dataFromCSV[0]);
                     points.add(dataFromCSV);
                     lines++;
                 }catch(Exception e){
