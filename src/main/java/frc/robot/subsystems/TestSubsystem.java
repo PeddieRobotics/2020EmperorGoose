@@ -27,7 +27,7 @@ Solenoid solenoid4;
 TalonSRX one;
 TalonSRX two;
 TalonSRX three;
-  public TestSubsytem() {
+  public TestSubsystem() {
     SmartDashboard.putNumber("onePercent",0.0);
     SmartDashboard.putNumber("twoPercent",0.0);
     SmartDashboard.putNumber("threePercent",0.0);

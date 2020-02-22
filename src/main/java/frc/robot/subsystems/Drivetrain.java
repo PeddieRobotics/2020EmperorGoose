@@ -1,76 +1,70 @@
-/*
-*Pid tuning methods tried
-* random guess: didn't work
-* double p until no oscilatoin, then double i
+/**
+ * Drivetrain.java
+ * The Drivetrain subsystem runs the motors for all
+ * wheels and deals with implementing joystick control of the robot.
+ */
 
-*/
 package frc.robot.subsystems;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
-import com.revrobotics.CANPIDController.AccelStrategy;
-import com.revrobotics.CANPIDController.ArbFFUnits;
 import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
 
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Auto.PIDClasses.NEO;
-import frc.robot.Auto.PIDClasses.NEOPIDWithSmartDashboard;
-
 
 public class Drivetrain extends SubsystemBase {
 
+  // Useful values???
+  // May be old and should be either deleted or moved (constants?)
   private static final int kTicksPerRev = 1;
   private static final double kWheelDiameter = 6.0 / 12.0 / 11.11 / Math.PI;
   private static final double kMaxVelocity = 7.5;
-
-  private static final String pathName = "output/hi5";
-  private NEO leftDriveMaster, rightDriveMaster, leftDriveFollower1, rightDriveFollower1;
-  private double leftspeed, rightspeed;
+  
+  private NEO leftDriveMaster, rightDriveMaster, leftDriveFollower, rightDriveFollower;
 
   CANPIDController m_pidController, m_pidController2;
   
-  private boolean atDistances;
-  private boolean atAngle;
+  // Keep track of the joystick controllers to get their speed and turn during ArcadeDrive.
+  private Joystick leftJoystick, rightJoystick;
 
-  public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput, maxRPM, maxVel, minVel, maxAcc, allowedErr;
-  public double kP2, kI2, kD2, kIz2, kFF2, kMaxOutput2, kMinOutput2, maxRPM2, maxVel2, minVel2, maxAcc2, allowedErr2;
-
+  // For the gyro
   public int smartMotionSlot = 0;
   private final ADIS16470_IMU imu;
 
-  private double leftNyoom;
-  private double rightNyoom;
+  /* Value between -1.0 and 1.0 (units?) that were last given to left and right master
+  CANSparkMax motor controllers during teleop (ArcadeDrive).
+  */
+  private double leftDriveInput;
+  private double rightDriveInput;
 
-  public Drivetrain() {
+  public Drivetrain(Joystick left, Joystick right) {
 
+    leftJoystick = left;
+    rightJoystick = right;
+
+    // Set up the gyro
     imu = new ADIS16470_IMU();
     
     leftDriveMaster = new NEO(1);
     rightDriveMaster = new NEO(3);
-    leftDriveFollower1=new NEO(2, leftDriveMaster );
-    rightDriveFollower1 = new NEO(4, rightDriveMaster );
+    leftDriveFollower = new NEO(2, leftDriveMaster );
+    rightDriveFollower = new NEO(4, rightDriveMaster );
 
     rightDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF + Constants.DRIVETRAIN_FF_OFFSET, 0 );
     leftDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF, 0 );
-    //NEOPIDWithSmartDashboard leftDriveMaster = new NEOPIDWithSmartDashboard(1);
-   
-    //  NEOPIDWithSmartDashboard rightDriveMaster = new NEOPIDWithSmartDashboard(2);
     
+    // NEOPIDWithSmartDashboard leftDriveMaster = new NEOPIDWithSmartDashboard(1);
+    // NEOPIDWithSmartDashboard rightDriveMaster = new NEOPIDWithSmartDashboard(2);
     // NEOPIDWithSmartDashboard leftDriveFollower1 = new NEOPIDWithSmartDashboard(3);
-    
     // NEOPIDWithSmartDashboard rightDriveFollower2 = new NEOPIDWithSmartDashboard(4);
   }
 
   /**
-   * 
-   * @return Returns the angle in degrees
+   * Query the gyro for the robot's heading.
+   * @return The robot's current angle in degrees
    */
   public double returnAngle() {
 
@@ -79,7 +73,9 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * 
+   * Set the left and right wheel velocity (in RPM) using the
+   * acceleration and heading information to inform
+   * the calculation. 
    * @param left_velocity the velocity to send to the left motor in rpm
    * @param right_velocity the velocity to send to the right motor in rpm
    * @param heading the heading to send(arbitrary units)
@@ -99,7 +95,7 @@ public class Drivetrain extends SubsystemBase {
 
   /**
    * 
-   * @return Velocity of the left Drive master
+   * @return velocity of the left drive master
    */
   public double returnLeftVelocity() {
 
@@ -108,7 +104,7 @@ public class Drivetrain extends SubsystemBase {
   }
   /**
    * 
-   * @return Velocity of the right drive master
+   * @return velocity of the right drive master
    */
   public double returnRightVelocity() {
 
@@ -143,8 +139,8 @@ public class Drivetrain extends SubsystemBase {
     leftDriveMaster.setIdleMode(IdleMode.kBrake);
     rightDriveMaster.setIdleMode(IdleMode.kBrake);
 
-    leftDriveFollower1.setIdleMode(IdleMode.kBrake);
-    rightDriveFollower1.setIdleMode(IdleMode.kBrake);
+    leftDriveFollower.setIdleMode(IdleMode.kBrake);
+    rightDriveFollower.setIdleMode(IdleMode.kBrake);
 
   }
   public void setCoast() {
@@ -152,11 +148,11 @@ public class Drivetrain extends SubsystemBase {
     leftDriveMaster.setIdleMode(IdleMode.kCoast);
     rightDriveMaster.setIdleMode(IdleMode.kCoast);
 
-    leftDriveFollower1.setIdleMode(IdleMode.kCoast);
-    rightDriveFollower1.setIdleMode(IdleMode.kCoast);
+    leftDriveFollower.setIdleMode(IdleMode.kCoast);
+    rightDriveFollower.setIdleMode(IdleMode.kCoast);
   }
-  public void arcadeDrive( double speed, double turn ) {
 
+  public void arcadeDrive( double speed, double turn ) {
     
     double deadband = 0.08;
 
@@ -167,11 +163,11 @@ public class Drivetrain extends SubsystemBase {
       turn = 0;
     }
 
-    leftNyoom = ( speed - turn );
-    rightNyoom = ( -speed - turn );
+    leftDriveInput = ( speed - turn );
+    rightDriveInput = ( -speed - turn );
     
-    leftDriveMaster.set( leftNyoom );
-    rightDriveMaster.set( rightNyoom );
+    leftDriveMaster.set( leftDriveInput );
+    rightDriveMaster.set( rightDriveInput );
     
   }
 
@@ -200,6 +196,14 @@ public class Drivetrain extends SubsystemBase {
 
     imu.calibrate();
 
+  }
+
+  public double getSpeed() {
+    return -leftJoystick.getRawAxis(1);
+  }
+
+  public double getTurn() {
+    return rightJoystick.getRawAxis(0);
   }
 
 }

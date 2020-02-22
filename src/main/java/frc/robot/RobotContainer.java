@@ -60,23 +60,6 @@ public class RobotContainer {
     // Set up the command looper to manage command scheduling
     CommandLooper.getInstance().startAndSetPeriodic(5);
 
-    // Initialize all subsystems
-    m_driveTrain = new Drivetrain();
-    m_tower = new Tower();
-    m_hopper = new Hopper();
-    m_shooter = new Shooter();
-    m_intake = new Intake(); 
-    m_hood = new Hood();
-    m_limelight = new Limelight();
-    
-    // Vijay's temporary test subsystem for running new robot
-    // Should be refactored/removed
-    test = new TestSubsystem();
-  
-    // Set default behaviors for subsystems which should start active
-    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain));
-    m_tower.setDefaultCommand(new indexPowerCells(m_tower, m_hopper));
-    
     // Configure driver and operator joysticks
     leftDriverJoystick = new Joystick(0);
     rightDriverJoystick = new Joystick(1);
@@ -101,6 +84,24 @@ public class RobotContainer {
     specify the commands that should be associated with each button press.
     */
     configureButtonBindings();
+
+    // Initialize all subsystems
+    m_driveTrain = new Drivetrain(leftDriverJoystick, rightDriverJoystick);
+    m_tower = new Tower();
+    m_hopper = new Hopper();
+    m_shooter = new Shooter();
+    m_intake = new Intake(); 
+    m_hood = new Hood();
+    m_limelight = new Limelight();
+    
+    // Vijay's temporary test subsystem for running new robot
+    // Should be refactored/removed
+    test = new TestSubsystem();
+  
+    // Set default behaviors for subsystems which should start active
+    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain));
+    m_tower.setDefaultCommand(new indexPowerCells(m_tower, m_hopper));
+    
 
     // Configure menu for SmartDashboard to select auto routines to be sent to robot
     chooser = new SendableChooser<String>();
@@ -144,14 +145,6 @@ public class RobotContainer {
 
   public void setCoastMode(){
     m_driveTrain.setCoast();
-  }
-
-  public double getSpeed() {
-    return -leftDriverJoystick.getRawAxis(1);
-  }
-
-  public double getTurn() {
-    return rightDriverJoystick.getRawAxis(0);
   }
   
 }
