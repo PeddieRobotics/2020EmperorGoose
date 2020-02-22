@@ -1,26 +1,26 @@
+/**
+ * Peddie 5895 FIRST Robotics
+ * Drive.java
+ * ArcadeDrive (joystick drive) command for the robot's drivetrain.
+ */
+
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.RobotContainer;
 
-
 public class Drive extends CommandBase {
-  /**
-   * Creates a new ArcadeDrive.
-   */
-  private Drivetrain drive;
+  
+  private Drivetrain m_drivetrain;
 
-  private RobotContainer rContainer;
+  private boolean isNormalizedDrive;
 
-  private boolean normalizedDrive;
+  public Drive( Drivetrain driveTrain ) {
 
-  public Drive(Drivetrain driveTrain, RobotContainer robotContainer) {
-
-    drive = driveTrain;
-    rContainer = robotContainer;
+    m_drivetrain = driveTrain;
     addRequirements(driveTrain);
-    normalizedDrive = false; //WE ARE DRIVING NORMALIZED
+    isNormalizedDrive = false;
     
   }
 
@@ -33,18 +33,18 @@ public class Drive extends CommandBase {
   @Override
   public void execute() {
 
-    double speedInput = rContainer.getSpeed();
-    double turnInput = rContainer.getTurn();
+    double speedInput = m_drivetrain.getSpeed();
+    double turnInput = m_drivetrain.getTurn();
 
     /**
      * if we decide to drive normalized 
      * meaning normalizedDrive = true,
      * drive normalized. otherwise, usual 
      */
-    if( normalizedDrive ){
+    if( isNormalizedDrive ){
       NormalizedDrive( speedInput, turnInput );
     } else {
-      drive.arcadeDrive( speedInput, turnInput );
+      m_drivetrain.arcadeDrive( speedInput, turnInput );
     }
 
   }
@@ -70,7 +70,7 @@ public class Drive extends CommandBase {
     	speed = speed / saturatedInput;
 		  turn = turn / saturatedInput;
 
-    drive.arcadeDrive( speed, turn );
+    m_drivetrain.arcadeDrive( speed, turn );
 
 
   }

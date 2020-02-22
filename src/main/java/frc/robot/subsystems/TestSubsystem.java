@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Auto.PIDClasses.NEOPIDWithSmartDashboard;
 import frc.robot.Auto.PIDClasses.TalonSRXWithSmartDashboard;
 
-public class TestSubsytem extends SubsystemBase {
+public class TestSubsystem extends SubsystemBase {
   /**
    * Creates a new TestSubsytem.
    */

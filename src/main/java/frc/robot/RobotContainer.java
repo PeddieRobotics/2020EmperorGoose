@@ -1,13 +1,16 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
+/**
+ * Peddie 5895 FIRST Robotics
+ * RobotContainer.java
+ * Initializes and configures all controls.
+ * Also initializes all subsystems for the robots.
+ * 
+ * This class is where the bulk of the robot should be declared.  Since Command-based is a
+ * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+ * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
+ * (including subsystems, commands, and button mappings) should be declared here.
+ */
 
 package frc.robot;
-
-import java.util.ArrayList;
 
 import com.team319.trajectory.Path;
 
@@ -16,102 +19,95 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.Drive;
-import frc.robot.commands.PathFollower;
-import frc.robot.commands.testCommandForStuff;
-import frc.robot.commands.AutoCommandGroups.testAuto;
-import frc.robot.commands.FlyWheelCommands.putHoodUp;
-import frc.robot.commands.FlyWheelCommands.runFlywheel;
-import frc.robot.commands.FlyWheelCommands.startFlywheel;
-import frc.robot.commands.HopperCommands.stopHopper;
-import frc.robot.commands.IntakeCommands.toggleIntakeState;
-import frc.robot.commands.JoystickCommandGroups.shootFlyWheel;
-import frc.robot.commands.JoystickCommandGroups.toggleIntakeUpAndDown;
-import frc.robot.commands.LimelightCommands.buttonAim;
+import frc.robot.commands.FollowPath;
+import frc.robot.commands.JoystickCommands.shootFlyWheel;
 import frc.robot.commands.TowerCommands.indexPowerCells;
-import frc.robot.commands.TowerCommands.runAllSystems;
-import frc.robot.commands.TowerCommands.stopTower;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.TestSubsytem;
+import frc.robot.subsystems.TestSubsystem;
 import frc.robot.subsystems.Tower;
-import frc.robot.commands.*;
-
-/**
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
- */
 
 public class RobotContainer {
-  Notifier runPathFaster;
   // The robot's subsystems and commands are defined here...
+  private final Drivetrain m_driveTrain;
+  private final Tower m_tower;
+  private final Hopper m_hopper;
+  private final Shooter m_shooter;
+  private final Intake m_intake;
+  private final Hood m_hood;
+  private final Limelight m_limelight;
   
-  private PathFollower follow10;
-  private final Drivetrain m_driveTrain = new Drivetrain();
+  private final TestSubsystem test;
 
-  JoystickButton leftTrigger; 
-  SendableChooser<Path> chooser = new SendableChooser<Path>(); 
-  SendableChooser<String> path2  = new SendableChooser<String>();
-  TestSubsytem test = new TestSubsytem();
-   Tower m_Tower = new Tower();
-  Hopper m_Hopper = new Hopper();
-  Shooter m_Shoot = new Shooter();
-  Intake m_Intake = new Intake(); 
- Hood m_Hood = new Hood();
-  Limelight m_limelight = new Limelight();
-  Joystick leftJoystick;
-  Joystick rightJoystick;
+  private final SendableChooser<String> chooser;
 
-  JoystickButton left1, left2, left3, left4;
-  JoystickButton right1, right2, right3, right4;
+  private final Joystick leftDriverJoystick, rightDriverJoystick, operatorJoystick;
+
+  private final JoystickButton leftButton1, leftButton2, leftButton3, leftButton4;
+  private final JoystickButton rightButton1, rightButton2, rightButton3, rightButton4;
+  private final JoystickButton operatorButton1, operatorButton2, operatorButton3, operatorButton4;
 
   public RobotContainer() {
 
-  CommandLooper.getInstance().startAndSetPeriodic(5);
-    m_Tower.setDefaultCommand(new indexPowerCells(m_Tower, m_Hopper));
-    
-    leftJoystick = new Joystick(0);
-    rightJoystick = new Joystick(1);
+    // Set up the command looper to manage command scheduling
+    CommandLooper.getInstance().startAndSetPeriodic(5);
 
-    left1 = new JoystickButton(leftJoystick, 1);
-    left2 = new JoystickButton(leftJoystick, 2);
-    left3 = new JoystickButton(leftJoystick, 3);
-    left4 = new JoystickButton(leftJoystick, 4);
-/*
-    right1 = new JoystickButton(rightJoystick, 1);
-    right2 = new JoystickButton(rightJoystick, 2);
-    right3 = new JoystickButton(rightJoystick, 3);
-    right4 = new JoystickButton(rightJoystick, 4);
-   */
-   // chooser.addOption("real 30", realThirty);
-  //  SmartDashboard.putData("path 1",chooser);
-  //  SmartDashboard.putData("path 2",path2);
-    path2.addOption("turn 12 move 12s","testPath");
+    // Initialize all subsystems
+    m_driveTrain = new Drivetrain();
+    m_tower = new Tower();
+    m_hopper = new Hopper();
+    m_shooter = new Shooter();
+    m_intake = new Intake(); 
+    m_hood = new Hood();
+    m_limelight = new Limelight();
     
-    path2.addOption("real 10s","real10");
+    // Vijay's temporary test subsystem for running new robot
+    // Should be refactored/removed
+    test = new TestSubsystem();
+  
+    // Set default behaviors for subsystems which should start active
+    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain));
+    m_tower.setDefaultCommand(new indexPowerCells(m_tower, m_hopper));
     
-    path2.addOption("real 20s","real20");
-    
-    //Configure the button bindings
-    
-    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain,this));
+    // Configure driver and operator joysticks
+    leftDriverJoystick = new Joystick(0);
+    rightDriverJoystick = new Joystick(1);
+    operatorJoystick = new Joystick(2);
+
+    leftButton1 = new JoystickButton(leftDriverJoystick, 1);
+    leftButton2 = new JoystickButton(leftDriverJoystick, 2);
+    leftButton3 = new JoystickButton(leftDriverJoystick, 3);
+    leftButton4 = new JoystickButton(leftDriverJoystick, 4);
+
+    rightButton1 = new JoystickButton(rightDriverJoystick, 1);
+    rightButton2 = new JoystickButton(rightDriverJoystick, 2);
+    rightButton3 = new JoystickButton(rightDriverJoystick, 3);
+    rightButton4 = new JoystickButton(rightDriverJoystick, 4);
+
+    operatorButton1 = new JoystickButton(operatorJoystick, 1);
+    operatorButton2 = new JoystickButton(operatorJoystick, 2);
+    operatorButton3 = new JoystickButton(operatorJoystick, 3);
+    operatorButton4 = new JoystickButton(operatorJoystick, 4);
+
+    /* Now that all joysticks and buttons have been initialized,
+    specify the commands that should be associated with each button press.
+    */
     configureButtonBindings();
 
+    // Configure menu for SmartDashboard to select auto routines to be sent to robot
+    chooser = new SendableChooser<String>();
+    chooser.addOption("turn 12 move 12s","testPath");
+    chooser.addOption("real 10s","real10");
+    chooser.addOption("real 20s","real20");
+    
   }
 
   /**
@@ -121,13 +117,11 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-  //   left1.toggleWhenPressed(new toggleIntakeState(m_Intake));
-      left2.whileActiveContinuous(new shootFlyWheel(m_Tower, m_Shoot, m_Hopper));
-     // final PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
-   // CommandLooper.getInstance().addCommand(new testAuto(m_Hopper, m_Tower, m_Shoot,follow2));
-    
-    //right2.whenActive(new buttonAim(m_driveTrain, m_limelight));
-    
+    // leftButton1.toggleWhenPressed(new toggleIntakeState(m_Intake));
+    leftButton2.whileActiveContinuous(new shootFlyWheel(m_tower, m_shooter, m_hopper));
+    // final PathFollower pathFollower = new PathFollower(m_driveTrain,path2.getSelected(),true);
+    // CommandLooper.getInstance().addCommand(new testAuto(m_hopper, m_tower, m_shooter,follow2));
+    //rightButton2.whenActive(new buttonAim(m_driveTrain, m_limelight));
 
   }
 
@@ -138,25 +132,26 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    final PathFollower follow2 = new PathFollower(m_driveTrain,path2.getSelected(),true);
- //   CommandLooper.getInstance().addCommand(new testAuto(m_Hopper, m_Tower, m_Shoot,m_Hood));
+    FollowPath autoCommandFromChooser = new FollowPath(m_driveTrain, chooser.getSelected(), true);
+    // CommandLooper.getInstance().addCommand(new testAuto(m_Hopper, m_Tower, m_Shoot,m_Hood));
     
-    return null;
-
+    return autoCommandFromChooser;
   }
+
   public void setBrakeMode(){
     m_driveTrain.setBrake();
   }
+
   public void setCoastMode(){
     m_driveTrain.setCoast();
   }
+
   public double getSpeed() {
-    return -leftJoystick.getRawAxis(1);
+    return -leftDriverJoystick.getRawAxis(1);
   }
 
   public double getTurn() {
-    return rightJoystick.getRawAxis(0);
+    return rightDriverJoystick.getRawAxis(0);
   }
   
 }
