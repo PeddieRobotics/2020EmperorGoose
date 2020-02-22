@@ -40,16 +40,11 @@ public class runTowerBasedOffFlyWheel extends CommandBase {
     DriverStation.reportError("running",false);
     if(Math.abs(m_Shooter.getAvgVelocity()-400)<1400){
       m_Tower.runMotors(.5);
-      m_Hopper.setLeftWall(SmartDashboard.getNumber("onePercent",0.0));
-    
-      m_Hopper.setRightWall(SmartDashboard.getNumber("twoPercent",0.0));
-      
-      m_Hopper.setFloor(SmartDashboard.getNumber("threePercent",0.0));
-      
+      m_Hopper.runAll(0, 0, 0); 
     }  
     else {
       m_Tower.runMotors(0);
-      m_Hopper.runAll(0,0,0);
+      m_Hopper.stopAll();
     }
 
   }

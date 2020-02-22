@@ -41,48 +41,42 @@ public class indexPowerCells extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Hopper.setLeftWall(SmartDashboard.getNumber("onePercent",0.0));
-    
-    m_Hopper.setRightWall(SmartDashboard.getNumber("twoPercent",0.0));
-    
-    m_Hopper.setFloor(SmartDashboard.getNumber("threePercent",0.0));
-    
+  
     
     m_Tower.printSensorVolts();
     if(!m_Tower.senses_ball_Top()){
       m_Tower.runMotors(0.5);
       //DriverStation.reportError("no balls running all", false);
-      //m_Hopper.runAll(-0.3,0.5,-0.3);
+      m_Hopper.runAll(-0.3,0.5,-0.3);
     }
     
     else if(m_Tower.senses_ball_Top()&&!m_Tower.senses_ball_Bottom()&&!reversing){
     
       reversing = true;
       
-      //m_Hopper.runAll(-0.3,0.5,-0.3);.
+      m_Hopper.runAll(-0.3,0.5,-0.3);
       //DriverStation.reportError("no balls running all", false);
       ballTimeCount = 0;
     
     }
-    else if(reversing&&ballTimeCount<6){
+    else if(reversing&&ballTimeCount<10){
       ballTimeCount++;
       
     //  DriverStation.reportError("no balls running all", false);
       m_Tower.runTopMotor(-0.5);
       m_Tower.runBottomMotor(0);
-    //  m_Hopper.runAll(0, 0, 0);
+      m_Hopper.runAll(0, 0, 0);
     }
     else if(!m_Tower.senses_ball_Bottom()){
       m_Tower.runBottomMotor(0.5);
       
     //  DriverStation.reportError("no balls running all", false);
-      //m_Hopper.runAll(-0.3, 0.5,-0.3);
+      m_Hopper.runAll(-0.3, 0.5,-0.3);
     }
     else{
       m_Tower.runMotors(0.0);
       
-     
-     // m_Hopper.runAll(0.0, 0.0, 0.0);
+      m_Hopper.stopAll();
     }
   
     // if it has seen a ball and it hasn't been 2 seconds, do nothing

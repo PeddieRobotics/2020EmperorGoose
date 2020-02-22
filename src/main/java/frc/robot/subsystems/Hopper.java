@@ -95,11 +95,11 @@ public class Hopper extends SubsystemBase {
 
   public void runAll( double floorSetpoint, double leftSetpoint, double rightSetpoint ) {
     
-    setRightWall( -.3 );  //currently: -0.3
+    setRightWall( -.5 );  //currently: -0.3
 
-    setLeftWall( .5 );    //currently:  0.2
+    setLeftWall( -.5 );    //currently:  0.2
 
-    setFloor( -.3 );      //currently: -0.3
+    setFloor( -.5 );      //currently: -0.3
 
   }
   public void stopAll(){

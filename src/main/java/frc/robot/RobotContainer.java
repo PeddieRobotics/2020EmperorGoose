@@ -63,7 +63,7 @@ public class RobotContainer {
   
   private PathFollower follow10;
   private final Drivetrain m_driveTrain = new Drivetrain();
-  Joystick left ;
+
   JoystickButton leftTrigger; 
   SendableChooser<Path> chooser = new SendableChooser<Path>(); 
   SendableChooser<String> path2  = new SendableChooser<String>();
@@ -86,7 +86,7 @@ public class RobotContainer {
     m_Tower.setDefaultCommand(new indexPowerCells(m_Tower, m_Hopper));
     
     leftJoystick = new Joystick(0);
-    //rightJoystick = new Joystick(1);
+    rightJoystick = new Joystick(1);
 
     left1 = new JoystickButton(leftJoystick, 1);
     left2 = new JoystickButton(leftJoystick, 2);
@@ -109,7 +109,7 @@ public class RobotContainer {
     
     //Configure the button bindings
     
-    //m_driveTrain.setDefaultCommand(new Drive(m_driveTrain,this));
+    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain,this));
     configureButtonBindings();
 
   }
