@@ -51,10 +51,10 @@ public class FollowPath extends CommandBase {
       return value;
     }
   }
-
+  
   private int currentLine = 0;
-  private double feetPerSecondToRpm = ((120 * 10.666667) / Math.PI);
-  private double RpmToFeetPerSecond = (Math.PI / (120 * 10.666667));
+  private double feetPerSecondToRpm =(60.0*10.6666)/(Math.PI*(6.25/12.0));
+  private double RpmToFeetPerSecond = (Math.PI*(6.25/12.0))/(60.0*10.6666);
   private double startTime = 0.0;
   private double endTime = 0.0;
   private Drivetrain m_drivetrain;
@@ -66,7 +66,7 @@ public class FollowPath extends CommandBase {
   ArrayList<String[]> points;
   boolean resetGyro = false;
   boolean areReportingValues = false;
-
+  boolean isReversed = false;
   /**
    * 
    * @param drivetrain      we need to make the drive train move so we are using
@@ -81,8 +81,9 @@ public class FollowPath extends CommandBase {
    *                        to keep the same angle
    * @param reportValues tells DriveTrain whether or not we want to report the CSV it recorded or not
    */
-  public FollowPath(Drivetrain drivetrain, String fname, boolean resetGyroOnInit, boolean reportValues) {
+  public FollowPath(Drivetrain drivetrain, String fname, boolean resetGyroOnInit, boolean reportValues, boolean isReversed) {
     LoadPath loader = new LoadPath();
+    this.isReversed = isReversed;
     areReportingValues = reportValues;
     /**
      * How files work on rio
@@ -118,13 +119,6 @@ public class FollowPath extends CommandBase {
     if (resetGyro) {
       m_drivetrain.calibrateIMU();
     }
-    //takes .15 seconds to calibrate the gyro so we will sleep thread for that duration
-    try {
-      Thread.sleep(15);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -149,8 +143,13 @@ public class FollowPath extends CommandBase {
     //SmartDashboard.putNumber("Path left velocity", leftVelocity);
     
     //heading for now 
-    m_drivetrain.setVelocity(leftVelocity,rightVelocity, heading, leftAcc,rightAcc);
-    String[] currentVels = new String[6];
+    if(!isReversed){
+          m_drivetrain.setVelocity(leftVelocity,rightVelocity, heading, leftAcc,rightAcc);
+    }
+    if(isReversed){
+      m_drivetrain.setVelocity(-leftVelocity,-rightVelocity,heading,-leftAcc,-rightAcc);
+    }
+          String[] currentVels = new String[6];
 
     currentVels[0] = "" + rightVelocity*RpmToFeetPerSecond;
     currentVels[1] = "" + -m_drivetrain.returnRightVelocity()*RpmToFeetPerSecond;
@@ -178,12 +177,14 @@ public class FollowPath extends CommandBase {
   public void end(final boolean interrupted) {
     m_drivetrain.arcadeDrive(0, 0);
     m_drivetrain.setBrake();
+    m_drivetrain.run();
     endTime = System.currentTimeMillis();
     String timeDiff = Double.toString(endTime - startTime);
     /**
      * Report values only if you need to tune
      */
     if(areReportingValues){
+      DriverStation.reportError("sending data",false);
       try {
         points.add(m_drivetrain.getPIDVariables());
         serv.sendDataAccrossNetwork(points);
@@ -192,6 +193,7 @@ public class FollowPath extends CommandBase {
         e.printStackTrace();
       }
     }else{
+      DriverStation.reportError("not sending values",false);
       points = null;//free memory? 
     }
     left = null;// we don't really need to have large files hanging around

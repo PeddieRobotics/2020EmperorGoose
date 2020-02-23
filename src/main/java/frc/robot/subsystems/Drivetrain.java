@@ -11,6 +11,7 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Auto.PIDClasses.NEO;
@@ -37,9 +38,10 @@ public class Drivetrain extends SubsystemBase {
   /* Value between -1.0 and 1.0 (units?) that were last given to left and right master
   CANSparkMax motor controllers during teleop (ArcadeDrive).
   */
+  double startTick = 0;
   private double leftDriveInputSpeed, leftDriveInputTurn, rightDriveInputSpeed, rightDriveInputTurn;
   public Drivetrain(Joystick left, Joystick right) {
-
+    
     leftJoystick = left;
     rightJoystick = right;
 
@@ -61,6 +63,7 @@ public class Drivetrain extends SubsystemBase {
     // NEOPIDWithSmartDashboard rightDriveMaster = new NEOPIDWithSmartDashboard(2);
     // NEOPIDWithSmartDashboard leftDriveFollower1 = new NEOPIDWithSmartDashboard(3);
     // NEOPIDWithSmartDashboard rightDriveFollower2 = new NEOPIDWithSmartDashboard(4);
+    startTick = leftDriveMaster.getEncoder().getPosition();
   }
 
   /**
@@ -89,8 +92,8 @@ public class Drivetrain extends SubsystemBase {
     leftDriveMaster.setArbFF( -0.05 + ( -leftAccel * Constants.DRIVETRAIN_ACC ) ); //0.05 is the deadband
     rightDriveMaster.setArbFF( 0.05 + ( rightAccel * Constants.DRIVETRAIN_ACC ) );
 
-    leftDriveMaster.setVelocity( -left_velocity + heading );
-    rightDriveMaster.setVelocity( right_velocity + heading );
+    leftDriveMaster.setSmartVelocity( -left_velocity + heading );
+    rightDriveMaster.setSmartVelocity( right_velocity + heading );
 
   }
 
@@ -185,6 +188,8 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+    double tickDiff = leftDriveMaster.getEncoder().getPosition()-startTick;
+    SmartDashboard.putNumber("tick diff", tickDiff);
   }
 
   /**
@@ -225,7 +230,7 @@ public class Drivetrain extends SubsystemBase {
     leftDriveMaster.set(leftDriveInputSpeed+leftDriveInputTurn);
    
     rightDriveMaster.set(rightDriveInputSpeed+rightDriveInputTurn);
-    
+
     setSpeed(0);//reset vars
     setTurn(0);
   

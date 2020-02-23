@@ -89,7 +89,7 @@ public class Flywheel extends SubsystemBase {
       currentMode = FlywheelModeType.DISABLED;
     }
 
-    flyWheelBackward.set(setpoint);
+    flyWheelBackward.set(-setpoint);
     flyWheelForward.set(setpoint);
   }
 

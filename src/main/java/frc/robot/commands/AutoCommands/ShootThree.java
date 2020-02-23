@@ -22,10 +22,11 @@ import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Tower;
 import frc.robot.commands.FlywheelCommands.*;
 
-public class TestAuto extends SequentialCommandGroup {
+public class ShootThree extends SequentialCommandGroup {
 
-  public TestAuto(Hopper hopper, Tower tower, Flywheel flywheel, Drivetrain driveTrain, double rpm) {
-    super(new ParallelRaceGroup(new ShootFlywheel(tower, flywheel, hopper, rpm), new shootCounter(tower,3)), new driveOffLine(driveTrain));
+  public ShootThree(Hopper hopper, Tower tower, Flywheel flywheel, Drivetrain driveTrain, double rpm) {
+    
+    super(new ParallelRaceGroup(new ShootFlywheel(tower, flywheel, hopper, rpm), new shootCounter(tower,5)));
     
   }
 }

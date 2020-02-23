@@ -16,13 +16,15 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.AutoCommands.FollowPath;
-import frc.robot.commands.AutoCommands.TestAuto;
+import frc.robot.commands.AutoCommands.ShootThree;
 import frc.robot.commands.ClimberCommands.LowerClimber;
 import frc.robot.commands.ClimberCommands.RaiseClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
@@ -109,7 +111,7 @@ public class RobotContainer {
   // Set default behaviors for subsystems which should start active
   public void configureDefaultBehaviors() {
     // Always make the drivetrain active in any mode
-    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain, true));
+    //m_driveTrain.setDefaultCommand(new Drive(m_driveTrain, true));
     // Don't index the tower by default in test mode
     if(!isTestMode){
       m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper,m_intake));
@@ -125,6 +127,7 @@ public class RobotContainer {
     chooser.addOption("turn 12 move 12s","testPath");
     chooser.addOption("real 10s","real10");
     chooser.addOption("real 20s","real20");
+    SmartDashboard.putData(chooser);
   }
 
   /**
@@ -149,7 +152,7 @@ public class RobotContainer {
       new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, 2500)));
       leftButton4.whileActiveOnce(new LowerClimber(m_climber));
       //center and shoot
-      rightButton2.whileActiveContinuous(new ParallelCommandGroup(new Centering(m_limelight, m_driveTrain, 0,false),
+      rightButton2.whileActiveContinuous(new ParallelCommandGroup(
        new ShootFlywheel(m_tower, m_flywheel, m_hopper,m_driveTrain, 3350)));
 
       //drive onto the center line
@@ -243,10 +246,14 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    //FollowPath autoPathFromChooser = new frc.robot.commands.AutoCommands.FollowPath(m_driveTrain, chooser.getSelected(), true, true);
+    FollowPath autoPathFromChooser = new frc.robot.commands.AutoCommands.FollowPath(m_driveTrain, chooser.getSelected(), true, false, false);
     DriverStation.reportError("being scheduled",false);
-    TestAuto test = new TestAuto(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350);
-    return test;
+ 
+    CommandLooper.getInstance().addCommand(new SequentialCommandGroup(autoPathFromChooser, 
+ 
+    new FollowPath(m_driveTrain,"run10",false,false,true), 
+    new ShootThree(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350)));
+    return null;
 
   }
 
