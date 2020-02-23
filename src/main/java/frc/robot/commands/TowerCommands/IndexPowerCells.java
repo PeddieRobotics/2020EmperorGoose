@@ -58,9 +58,8 @@ public class IndexPowerCells extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_tower.runMotors(0.0);
+    m_tower.stopAll();
     m_hopper.stopAll();
-    m_tower.setCurrentMode(Tower.TowerModeType.DISABLED);
     DriverStation.reportError("ending", false);
   }
   // Returns true when the command should end.

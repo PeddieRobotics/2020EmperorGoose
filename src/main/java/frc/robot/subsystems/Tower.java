@@ -17,7 +17,7 @@ import frc.robot.Framework.MovingAverage;
 public class Tower extends SubsystemBase {
 
   public static enum TowerModeType {
-    INDEXING, FORWARD, DISABLED, REVERSE
+    INDEXING, DISABLED, REVERSE
   }
 
   private TowerModeType currentMode;
@@ -25,8 +25,7 @@ public class Tower extends SubsystemBase {
   private NEO topMotor, bottomMotor;
   private final AnalogInput m_topSensor0, m_topSensor1, m_bottomSensor2, m_bottomSensor3;
   
-  
-  MovingAverage bottom3Avg, bottom2Avg, top1Avg, top0Avg;
+  private MovingAverage bottom3Avg, bottom2Avg, top1Avg, top0Avg;
 
   public Tower() {
 
@@ -84,16 +83,17 @@ public class Tower extends SubsystemBase {
 
     topMotor.set( speed );
     bottomMotor.set( -speed );
-
-  }
-  
-  public boolean isRunningForward(){
-    return (currentMode == TowerModeType.FORWARD);
-  }
-
-  public void setCurrentMode(TowerModeType mode){
-    currentMode = mode;
-  }
+    
+    if(speed > 0.0){
+      currentMode = TowerModeType.INDEXING;
+    }
+    else if(speed == 0.0){
+      currentMode = TowerModeType.DISABLED;
+    }
+    else{
+      currentMode = TowerModeType.REVERSE;
+    }
+     }
 
   /**
    * does the base of the tower sense a ball inside it?
@@ -141,6 +141,11 @@ public class Tower extends SubsystemBase {
     } else {
       return false;
     }
+  }
+
+  public void stopAll(){
+    runMotors(0.0);
+  }
 
   }
 
