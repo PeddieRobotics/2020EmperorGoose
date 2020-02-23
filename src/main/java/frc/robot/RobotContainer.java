@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -86,8 +87,7 @@ public class RobotContainer {
     m_tower = new Tower();
     m_hopper = new Hopper();
     m_flywheel = new Flywheel();
-    m_intake = new Intake(); 
-
+    m_intake = new Intake();
     m_climber = new Climber();
     m_limelight = new Limelight();
     
@@ -97,6 +97,7 @@ public class RobotContainer {
   
     // Configure menu for SmartDashboard to select auto routines to be sent to robot
     configureAutoRoutines();
+    configureSmartDashboard();
     
   }
     
@@ -136,6 +137,12 @@ public class RobotContainer {
     // CommandLooper.getInstance().addCommand(new testAuto(m_hopper, m_tower, m_shooter,follow2));
     //rightButton2.whenActive(new buttonAim(m_driveTrain, m_limelight));
 
+  }
+
+  public void configureSmartDashboard()
+  {
+    SmartDashboard.putNumber("Flywheel Setpoint", m_flywheel.getSpeed());
+    
   }
 
   public void setTestMode(boolean mode){

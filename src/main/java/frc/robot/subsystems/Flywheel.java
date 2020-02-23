@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Auto.PIDClasses.NEO;
@@ -23,6 +24,7 @@ public class Flywheel extends SubsystemBase {
     currentMode = FlywheelModeType.DISABLED;
 
     m_setpoint = 0.0;
+
     hSolenoid=new Solenoid(Constants.SOLENOID_HOOD);
     avgOfFlyWheelSpeeds = new MovingAverage(10);
     flyWheelForward = new NEO( Constants.FLYWHEEL_1 );
@@ -105,5 +107,18 @@ public class Flywheel extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public void updateSetpoint(double setpoint){
+    m_setpoint = setpoint;
+  }
+
+  public void setpointWithSmartDashboard(double defaultSetpoint){
+    m_setpoint = SmartDashboard.getNumber("Flywheel Setpoint", defaultSetpoint);
+    if(m_setpoint < 999 || m_setpoint > 5000)
+        m_setpoint = defaultSetpoint;
+    
+    SmartDashboard.putNumber("Flywheel Setpoint", m_setpoint);
+    
   }
 }

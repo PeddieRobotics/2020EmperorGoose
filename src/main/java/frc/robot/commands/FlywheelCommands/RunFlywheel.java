@@ -29,12 +29,14 @@ public class RunFlywheel extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_flywheel.updateSetpoint(speed);
     //avgOfSpeed.clearInitialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_flywheel.setpointWithSmartDashboard(speed);
     m_flywheel.setMotors(3350);
     m_flywheel.setHood(true);
   }
