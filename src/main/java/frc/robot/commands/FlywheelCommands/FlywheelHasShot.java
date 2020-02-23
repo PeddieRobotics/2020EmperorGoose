@@ -36,10 +36,10 @@ public class FlywheelHasShot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(lastState == true&&!m_tower.senses_ball_Top()){
+    if(lastState == true&&!m_tower.senses_ball_Top1()){
       currentBallsShot++;
     }
-    lastState= m_tower.senses_ball_Top();
+    lastState= m_tower.senses_ball_Top1();
 
   }
 

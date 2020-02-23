@@ -23,10 +23,8 @@ import frc.robot.commands.AutoCommands.FollowPath;
 import frc.robot.commands.ClimberCommands.LowerClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
 import frc.robot.commands.DriveCommands.Drive;
-import frc.robot.commands.HoodCommands.LowerHood;
-import frc.robot.commands.FlywheelCommands.StopFlywheel;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheelOnOff;
-import frc.robot.commands.HoodCommands.ToggleHoodUpDown;
+import frc.robot.commands.FlywheelCommands.shootLayup;
 import frc.robot.commands.HopperCommands.StopHopper;
 import frc.robot.commands.HopperCommands.ToggleHopperOnOff;
 import frc.robot.commands.IntakeCommands.LowerIntake;
@@ -35,13 +33,14 @@ import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.IntakeCommands.ToggleIntakeOnOff;
 import frc.robot.commands.IntakeCommands.ToggleIntakeUpDown;
 import frc.robot.commands.JoystickCommands.ShootFlywheel;
+import frc.robot.commands.LimelightCommands.Centering;
 import frc.robot.commands.TowerCommands.IndexPowerCells;
+import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
 import frc.robot.commands.TowerCommands.StopTower;
 import frc.robot.commands.TowerCommands.ToggleTowerOnOff;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
-import frc.robot.subsystems.Hood;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
@@ -61,7 +60,6 @@ public class RobotContainer {
   private final Hopper m_hopper;
   private final Flywheel m_flywheel;
   private final Intake m_intake;
-  private final Hood m_hood;
   private final Climber m_climber;
   private final Limelight m_limelight;
   
@@ -89,7 +87,7 @@ public class RobotContainer {
     m_hopper = new Hopper();
     m_flywheel = new Flywheel();
     m_intake = new Intake(); 
-    m_hood = new Hood();
+
     m_climber = new Climber();
     m_limelight = new Limelight();
     
@@ -130,9 +128,11 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   public void configureButtonBindings() {
-    // leftButton1.toggleWhenPressed(new toggleIntakeState(m_Intake));
-    leftButton2.whileActiveContinuous(new ShootFlywheel(m_tower, m_flywheel, m_hopper, 1300));
-    // final PathFollower pathFollower = new PathFollower(m_driveTrain,path2.getSelected(),true);
+     leftButton1.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
+      leftButton2.whileActiveContinuous(new ShootFlywheel(m_tower, m_flywheel, m_hopper,  3350));
+      leftButton3.whenPressed(new ParallelCommandGroup( new shootLayup(m_flywheel), new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, 2500)));
+      //leftButton4.toggleWhenPressed(new Centering(m_limelight,m_driveTrain,0));
+      // final PathFollower pathFollower = new PathFollower(m_driveTrain,path2.getSelected(),true);
     // CommandLooper.getInstance().addCommand(new testAuto(m_hopper, m_tower, m_shooter,follow2));
     //rightButton2.whenActive(new buttonAim(m_driveTrain, m_limelight));
 
@@ -148,7 +148,6 @@ public class RobotContainer {
 
   public void configureTestButtonBindings() {
   
-    leftButton1.toggleWhenPressed(new ToggleHoodUpDown(m_hood));
     leftButton2.toggleWhenPressed(new ToggleIntakeUpDown(m_intake));
     leftButton3.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
     leftButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));

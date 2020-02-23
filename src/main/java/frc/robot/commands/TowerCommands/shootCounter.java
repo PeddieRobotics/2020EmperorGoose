@@ -5,29 +5,41 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.HoodCommands;
+package frc.robot.commands.TowerCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Tower;
 
-public class LowerHood extends CommandBase {
-
-  private Hood m_hood;
-
-  public LowerHood(Hood hood) {
-    m_hood = hood;
-    addRequirements(hood);
+public class shootCounter extends CommandBase {
+  /**
+   * Creates a new shootCounter.
+   */
+  boolean currentTopState; 
+  boolean lastTopState;
+   Tower m_tower;
+  int amountOfShotsWeWant = 0;
+  int counter;
+   public shootCounter(Tower tower, int shotCount) {
+    m_tower = tower;
+    counter = 0;
+    amountOfShotsWeWant = shotCount;
+    addRequirements(tower);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_hood.lowerHood();
+    lastTopState = m_tower.senses_ball_Top0();
+    currentTopState = m_tower.senses_ball_Top0();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(currentTopState!=lastTopState){
+      counter ++;
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -38,6 +50,7 @@ public class LowerHood extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    
+    return (counter > amountOfShotsWeWant);
   }
 }

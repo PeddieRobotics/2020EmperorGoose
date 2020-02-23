@@ -21,7 +21,7 @@ public class StartHopper extends CommandBase {
   }
   @Override
   public void initialize() {
-    m_hopper.runAll(-0.32, -0.2, -0.5);  
+    m_hopper.runAll();  
   }
 
   // Called every time the scheduler runs while the command is scheduled.

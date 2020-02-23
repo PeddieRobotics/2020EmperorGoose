@@ -64,7 +64,7 @@ public class Intake extends SubsystemBase {
    * start intake
    */
   public void startIntake() {
-
+    intakeSolenoid.set(true);
     currentMode = IntakeModeType.INTAKING;
     setIntakeMotor( .8 ); 
   }
@@ -73,7 +73,7 @@ public class Intake extends SubsystemBase {
    * stop intake
    */
   public void stopIntake() {
-
+    intakeSolenoid.set(false);
     currentMode = IntakeModeType.DISABLED;
     setIntakeMotor( 0 );
   }

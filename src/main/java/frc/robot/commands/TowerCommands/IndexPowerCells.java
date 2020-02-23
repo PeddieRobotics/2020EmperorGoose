@@ -31,38 +31,24 @@ public class IndexPowerCells extends CommandBase {
   public void execute() {
     
     m_tower.printSensorVolts();
-    if(!m_tower.senses_ball_Top()){
-      m_tower.runMotors(0.5);
-      //DriverStation.reportError("no balls running all", false);
-      m_hopper.runAll(-0.3,0.5,-0.3);
+    if(!m_tower.senses_ball_Top1()){
+      DriverStation.reportError("running all",false);
+      m_tower.runMotors(.8);
+      m_hopper.runAll();
     }
-    
-    else if(m_tower.senses_ball_Top() && !m_tower.senses_ball_Bottom()&&!reversing){
-    
-      reversing = true;
-      
-      m_hopper.runAll(-0.3,0.5,-0.3);
-      //DriverStation.reportError("no balls running all", false);
-      ballTimeCount = 0;
-    
-    }
-    else if(reversing&&ballTimeCount<10){
-      ballTimeCount++;
-      
-    //  DriverStation.reportError("no balls running all", false);
-      m_tower.runTopMotor(-0.5);
-      m_tower.runBottomMotor(0);
-      m_hopper.runAll(0, 0, 0);
+    else if(m_tower.senses_ball_Top0()){
+      DriverStation.reportError("sense top, reversing",false);
+      m_tower.runMotors(-.15);
+      m_hopper.stopAll();
     }
     else if(!m_tower.senses_ball_Bottom()){
-      m_tower.runBottomMotor(0.5);
-      
-    //  DriverStation.reportError("no balls running all", false);
-      m_hopper.runAll(-0.3, 0.5,-0.3);
+      m_tower.runBottomMotor(0.8);
+      DriverStation.reportError("running bottom", false);
+      m_hopper.runAll();
     }
     else{
+      DriverStation.reportError("noting hon all, stopping", false);
       m_tower.runMotors(0.0);
-      
       m_hopper.stopAll();
     }
   

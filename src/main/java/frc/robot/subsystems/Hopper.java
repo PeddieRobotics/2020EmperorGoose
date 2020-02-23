@@ -97,7 +97,7 @@ public class Hopper extends SubsystemBase {
  * @param rightSetpoint set the right wall to this speed
  */
 
-  public void runAll( double floorSetpoint, double leftSetpoint, double rightSetpoint ) {
+  public void runAll() {
     
     setRightWall( -.5 );  //currently: -0.3
     setLeftWall( -.5 );    //currently:  0.2

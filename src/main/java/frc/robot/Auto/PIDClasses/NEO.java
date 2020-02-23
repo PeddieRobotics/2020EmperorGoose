@@ -31,11 +31,11 @@ public class NEO extends CANSparkMax{
     private int deviceID;
     public NEO(int deviceID) {
         super(deviceID, MotorType.kBrushless);
-        
+        m_pidController = new NEOPIDController(this);
         this.deviceID = deviceID;
         restoreFactoryDefaults();
-        setIdleMode(IdleMode.kCoast);
-        m_pidController = new NEOPIDController(this);//get us la pid controler 
+        setSmartCurrentLimit(40);
+        setIdleMode(IdleMode.kCoast);//et us la pid controler 
         motorEncoder = getEncoder();
         changeControlFramePeriod(20);
         // TODO Auto-generated constructor stub
@@ -47,7 +47,7 @@ public class NEO extends CANSparkMax{
         m_pidController= new NEOPIDController(this);
         motorEncoder = getEncoder();
         changeControlFramePeriod(100);
-        NEOController.getInstance().addNEO(this);
+        follow(master);
     }
     /**
      * Changes the motors to break mode, this means if one tries to move them when they are not recieving a 

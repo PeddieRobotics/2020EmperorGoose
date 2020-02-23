@@ -5,35 +5,40 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.HoodCommands;
+package frc.robot.commands.FlywheelCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Hood;
+import frc.robot.subsystems.Flywheel;
 
-public class ToggleHoodUpDown extends CommandBase {
-
-  private Hood m_hood;
-
-  public ToggleHoodUpDown(Hood hood) {
-    m_hood = hood;
-    addRequirements(hood);
+public class shootLayup extends CommandBase {
+  /**
+   * Creates a new shootLayup.
+   */
+  Flywheel m_flywheel;
+  public shootLayup(Flywheel flywheel) {
+    m_flywheel = flywheel;
+    addRequirements(m_flywheel);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      m_hood.raiseHood();
+    m_flywheel.setHood(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
+    m_flywheel.setMotors(2500);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_hood.lowerHood();
+    m_flywheel.setHood(false);
+    m_flywheel.setMotorPercentOutput(0);
   }
 
   // Returns true when the command should end.

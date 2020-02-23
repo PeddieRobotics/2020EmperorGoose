@@ -8,7 +8,9 @@
 package frc.robot.commands.JoystickCommands;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.FlywheelCommands.RunFlywheel;
 import frc.robot.commands.FlywheelCommands.StartFlywheel;
 import frc.robot.commands.HopperCommands.StopHopper;
@@ -21,7 +23,7 @@ import frc.robot.subsystems.Tower;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
-public class ShootFlywheel extends ParallelCommandGroup {
+public class ShootFlywheel extends SequentialCommandGroup {
 
   private Tower m_tower;
   private Flywheel m_flywheel;
@@ -32,11 +34,13 @@ public class ShootFlywheel extends ParallelCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     
-    super(new RunFlywheel(flywheel, rpm), new RunTowerBasedOffFlyWheel(hopper, tower, flywheel));
+    super(new ParallelCommandGroup(new RunFlywheel(flywheel, rpm), 
+    new RunTowerBasedOffFlyWheel(hopper, tower, flywheel,rpm)), 
+    new ParallelRaceGroup( new WaitCommand(1), new RunFlywheel(flywheel,rpm)));
 
-    m_tower = tower;
-    m_flywheel = flywheel;
-    m_hopper = hopper;
+      m_tower = tower;
+      m_flywheel = flywheel;
+      m_hopper = hopper;
   
   }
 }

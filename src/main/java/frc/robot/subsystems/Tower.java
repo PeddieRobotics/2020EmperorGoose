@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Auto.PIDClasses.NEO;
+import frc.robot.Framework.MovingAverage;
 
 public class Tower extends SubsystemBase {
 
@@ -24,15 +25,22 @@ public class Tower extends SubsystemBase {
   private NEO topMotor, bottomMotor;
   private final AnalogInput m_topSensor0, m_topSensor1, m_bottomSensor2, m_bottomSensor3;
   
+  
+  MovingAverage bottom3Avg, bottom2Avg, top1Avg, top0Avg;
+
   public Tower() {
 
     currentMode = TowerModeType.DISABLED;
 
     topMotor = new NEO( Constants.TOWER_BOTTOM );
     bottomMotor = new NEO( Constants.TOWER_TOP );
-
     topMotor.setBrake();
     bottomMotor.setBrake();
+    bottom3Avg = new MovingAverage(5);
+    
+    bottom2Avg = new MovingAverage(5);
+    top1Avg = new MovingAverage(5);
+    top0Avg = new MovingAverage(5);
 
     m_topSensor0 = new AnalogInput(0);
     m_topSensor1 = new AnalogInput(1);
@@ -92,7 +100,9 @@ public class Tower extends SubsystemBase {
    * @return boolean of whether there is a ball at the base of the tower or not
    */
   public boolean senses_ball_Bottom() {
-    if ( m_bottomSensor2.getVoltage() < 3 || m_bottomSensor3.getVoltage() < 3 ) {
+    bottom2Avg.add(m_bottomSensor2.getVoltage());
+    bottom3Avg.add(m_bottomSensor3.getVoltage());
+    if ( bottom2Avg.get()< 3 || bottom3Avg.get() < 3 ) {
       return true;
     } else {
       return false;
@@ -115,9 +125,18 @@ public class Tower extends SubsystemBase {
    * does the top of the tower sense a ball inside it?
    * @return boolean of whether there is a ball at the top of the tower or not
    */
-  public boolean senses_ball_Top() {
+  public boolean senses_ball_Top0() {
+    top0Avg.add(m_topSensor0.getVoltage());
+    if ( top0Avg.get() < 1.3 ) {
+      return true;
+    } else {
+      return false;
+    }
 
-    if ( m_topSensor0.getVoltage() < 3 ) {
+  }
+  public boolean senses_ball_Top1() {
+    top1Avg.add(m_topSensor1.getVoltage());
+    if ( top1Avg.get() < 3.3 ) {
       return true;
     } else {
       return false;

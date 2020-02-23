@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Auto.PIDClasses.NEO;
@@ -17,12 +18,12 @@ public class Flywheel extends SubsystemBase {
   private NEO flyWheelForward, flyWheelBackward;
   private double m_setpoint;
   private MovingAverage avgOfFlyWheelSpeeds;
-
+  Solenoid hSolenoid;
   public Flywheel() {
     currentMode = FlywheelModeType.DISABLED;
 
     m_setpoint = 0.0;
-
+    hSolenoid=new Solenoid(Constants.SOLENOID_HOOD);
     avgOfFlyWheelSpeeds = new MovingAverage(10);
     flyWheelForward = new NEO( Constants.FLYWHEEL_1 );
     flyWheelBackward = new NEO( Constants.FLYWHEEL_2 );
@@ -32,7 +33,7 @@ public class Flywheel extends SubsystemBase {
     
     CSVLogger.getInstance().addStringToHeader("velocity");
     CSVLogger.getInstance().addVariablesToRecored(this::getAvgVelocity);
- 
+    
   } 
 
   /**
@@ -49,6 +50,7 @@ public class Flywheel extends SubsystemBase {
     else{
       currentMode = FlywheelModeType.REVERSE;
     }
+    
 
     m_setpoint = setpoint;
   
@@ -58,6 +60,12 @@ public class Flywheel extends SubsystemBase {
   
     avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
 
+  }
+
+  public void setHood(boolean isUp){
+   
+    hSolenoid.set(isUp);
+  
   }
 
   public double getSpeed(){
