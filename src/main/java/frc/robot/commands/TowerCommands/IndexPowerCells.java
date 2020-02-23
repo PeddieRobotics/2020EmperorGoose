@@ -24,8 +24,8 @@ public class IndexPowerCells extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_tower.setCurrentMode(Tower.TowerModeType.INDEXING);
   }
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {

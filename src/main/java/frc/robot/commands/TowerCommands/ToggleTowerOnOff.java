@@ -23,7 +23,6 @@ public class ToggleTowerOnOff extends CommandBase {
   @Override
   public void initialize() {
     m_tower.runMotors(0.5);
-    m_tower.setCurrentMode(Tower.TowerModeType.FORWARD);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -34,8 +33,7 @@ public class ToggleTowerOnOff extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_tower.runMotors(0.0);
-    m_tower.setCurrentMode(Tower.TowerModeType.DISABLED);
+    m_tower.stopAll();
   }
 
   // Returns true when the command should end.

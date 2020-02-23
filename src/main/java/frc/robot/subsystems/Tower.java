@@ -147,6 +147,4 @@ public class Tower extends SubsystemBase {
     runMotors(0.0);
   }
 
-  }
-
 }
