@@ -30,14 +30,15 @@ public class StartFlywheel extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_flywheel.updateSetpoint(2000);
     avgOfSpeed.clearInitialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  
-    m_flywheel.setMotors(3350);
+    m_flywheel.setpointWithSmartDashboard(2000);
+    m_flywheel.runMotors();
     avgOfSpeed.add(m_flywheel.getSpeed());
     SmartDashboard.putNumber("avg of speed", avgOfSpeed.get());
     SmartDashboard.putNumber("avg value",avgOfSpeed.get());

@@ -36,10 +36,10 @@ public class Intake extends SubsystemBase {
      */
     if( RobotContainer.isCompetitionRobot() ) { //comp robot has TalonSRX's
       //left and right motors for the v-belts
-      intakeMotorTalon = new TalonSRX( Constants.HOPPER_LEFT_WALL );
+      intakeMotorTalon = new TalonSRX( Constants.INTAKE_MOTOR );
      
     } else {  //pbot has VictorSPX's
-      intakeMotorVictor = new VictorSPX( Constants.HOPPER_RIGHT_WALL );
+      intakeMotorVictor = new VictorSPX( Constants.INTAKE_MOTOR );
     }
 
   }

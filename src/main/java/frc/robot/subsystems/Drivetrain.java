@@ -67,6 +67,7 @@ public class Drivetrain extends SubsystemBase {
     // NEOPIDWithSmartDashboard rightDriveFollower2 = new NEOPIDWithSmartDashboard(4);
   
     diffDrive = new DifferentialDrive(leftDriveMaster, rightDriveMaster);
+    diffDrive.setDeadband(0.05);
   }
 
   /**
@@ -161,7 +162,7 @@ public class Drivetrain extends SubsystemBase {
 
   public void arcadeDrive( double speed, double turn, boolean squareInputs) {
     
-    diffDrive.arcadeDrive(speed, turn, squareInputs);
+    diffDrive.arcadeDrive(speed, -turn, false);
 
     /*double deadband = 0.08;
 
@@ -176,8 +177,7 @@ public class Drivetrain extends SubsystemBase {
     rightDriveInput = ( -speed - turn );
     
     leftDriveMaster.set( leftDriveInput );
-    rightDriveMaster.set( rightDriveInput );
-    */
+    rightDriveMaster.set( rightDriveInput );*/
     
   }
 

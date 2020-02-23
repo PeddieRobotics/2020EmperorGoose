@@ -46,24 +46,10 @@ public class Flywheel extends SubsystemBase {
    * sets shooter motors
    * @param setpoint shooter speed
    */
-  public void setMotors( double setpoint ) {
-    if(setpoint > 0.0){
-      currentMode = FlywheelModeType.SHOOTING;
-    }
-    else if(setpoint == 0.0){
-      currentMode = FlywheelModeType.DISABLED;
-    }
-    else{
-      currentMode = FlywheelModeType.REVERSE;
-    }
-    
-
-    m_setpoint = setpoint;
+  public void runMotors() {
   
-    flyWheelBackward.setVelocity(-setpoint);
-
-    flyWheelForward.setVelocity(setpoint);
-  
+    flyWheelBackward.setVelocity(-m_setpoint);
+    flyWheelForward.setVelocity(m_setpoint);
     avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
 
   }
@@ -87,6 +73,8 @@ public class Flywheel extends SubsystemBase {
   }
   
   public void setMotorPercentOutput(double setpoint){
+    m_setpoint = 0.0;
+    
     if(setpoint > 0.0){
       currentMode = FlywheelModeType.SHOOTING;
     }

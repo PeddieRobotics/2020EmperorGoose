@@ -137,7 +137,7 @@ public class RobotContainer {
    */
   public void configureButtonBindings() {
     leftTrigger.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
-    leftButton2.whenHeld(new UnjamTower(m_tower, m_hopper, 0.3));
+    leftButton2.whenHeld(new UnjamTower(m_tower, m_hopper, 0.5));
     leftButton3.whenPressed(new RaiseClimber(m_climber));
     leftButton4.whenPressed(new LowerClimber(m_climber));
 
@@ -167,7 +167,6 @@ public class RobotContainer {
   public void configureSmartDashboard()
   {
     SmartDashboard.putNumber("Flywheel Setpoint", m_flywheel.getSpeed());
-    
   }
 
   public void setTestMode(boolean mode){

@@ -33,6 +33,7 @@ public class ShootLayup extends CommandBase {
   @Override
   public void execute() {
     m_flywheel.setpointWithSmartDashboard(speed);
+    m_flywheel.runMotors();
   }
 
   // Called once the command ends or is interrupted.
