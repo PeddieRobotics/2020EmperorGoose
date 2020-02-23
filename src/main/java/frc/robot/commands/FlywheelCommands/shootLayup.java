@@ -27,6 +27,7 @@ public class ShootLayup extends CommandBase {
   @Override
   public void initialize() {
     m_flywheel.setHood(false);
+    m_flywheel.updateSetpoint(speed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

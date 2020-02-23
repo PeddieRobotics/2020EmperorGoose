@@ -141,17 +141,17 @@ public class RobotContainer {
     leftButton3.whenPressed(new RaiseClimber(m_climber));
     leftButton4.whenPressed(new LowerClimber(m_climber));
 
-    rightTrigger.whenPressed(new ParallelCommandGroup(
+    rightTrigger.whenHeld(new ParallelCommandGroup(
                             new ShootLayup(m_flywheel, Constants.RPM_LAYUP), 
                             new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, Constants.RPM_LAYUP)));
-    rightButton2.whileActiveContinuous(new ParallelCommandGroup(
+    rightButton3.whileActiveContinuous(new ParallelCommandGroup(
                                       new ShootFromFar(m_flywheel, Constants.RPM_FAR),
                                       new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, Constants.RPM_FAR),
                                       new Centering(m_limelight,m_driveTrain,0)));
-    rightButton3.whileActiveContinuous(new ParallelCommandGroup(
+    rightButton2.whenHeld(new ParallelCommandGroup(
                                       new ShootFromFar(m_flywheel, Constants.RPM_FAR),
                                       new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, Constants.RPM_FAR)));
-    rightButton4.whileActiveContinuous(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
+    rightButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
 
     opTrigger.toggleWhenPressed(new ToggleHoodUpDown(m_flywheel));
     opButton2.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
