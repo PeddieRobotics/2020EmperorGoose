@@ -23,12 +23,19 @@ public class Centering extends CommandBase {
   boolean txNavSame = false;
   int center = 0;
   boolean centered = false;
-  MovingAverage average = new MovingAverage(10);
+  MovingAverage average = new MovingAverage(5);
   boolean m_isContinous;
+  /**
+   * @param isContinous this basically means are we running this command in a chain of commands or just to center the drivetrain
+   * for ex. in auto we would want it to be continous but in tele we would want it to be not continous
+   */
   public Centering(Limelight limelight, Drivetrain drivetrain, int centers, boolean isContinous) {
     m_driveTrain = drivetrain;
     m_isContinous = isContinous;
-
+    SmartDashboard.putNumber("p value", 0.0);
+    SmartDashboard.putNumber("error",0.0);
+    SmartDashboard.putNumber("deadband", 0.0);
+      
     limes= limelight;
     center = centers;
     //addRequirements(drivetrain);
@@ -62,18 +69,21 @@ public class Centering extends CommandBase {
     SmartDashboard.putBoolean("centered", centered);
     if(limes.hasTarget()){
       
-      double p = SmartDashboard.getNumber("p value", 0.0);
-      double error1 = SmartDashboard.getNumber("error",0.0);
+      double p = 0.015;
+      double error1 = 2.5;
       double deadband = SmartDashboard.getNumber("deadband", 0.0);
       SmartDashboard.putNumber("average", average.get());
       tx = limes.getTx();
       average.add(Math.abs(Math.abs(tx)-center));
       if(average.get()>error1 || average.get()==0){
-        m_driveTrain.addToTurn(-keepArbSign(center,tx)*Math.max(deadband,p*Math.abs(tx-center)));
+        m_driveTrain.addToTurn(keepArbSign(center,tx)*Math.max(deadband,p*Math.abs(tx-center)));
         SmartDashboard.putNumber("Turn", -keepArbSign(center,tx)*Math.max(deadband,p*Math.abs(tx-center)));
       }
-      else{
-        centered = true;
+      else if(average.get()<error1){
+        m_driveTrain.addToTurn(0.04);
+      }else if(average.get()<1.5){
+        m_driveTrain.setTurn(0);
+        //do nothing
       }
     }else{
      // m_driveTrain.setSpeed(0.0);
@@ -91,10 +101,11 @@ public class Centering extends CommandBase {
   public void end(boolean interrupted) {
     SmartDashboard.putBoolean("executing", false);
     m_driveTrain.arcadeDrive(0,0);
+    m_driveTrain.setSpeed(0);
+    m_driveTrain.setTurn(0);
     m_driveTrain.run();
     txNavSame = false;
     centered = false;
-    limes.ledMode("off");
   }
 
   // Returns true when the command should end.

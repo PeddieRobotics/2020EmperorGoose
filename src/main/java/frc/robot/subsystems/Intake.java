@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -30,6 +31,10 @@ public class Intake extends SubsystemBase {
     
     intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
     intakeMotorTalon= new TalonSRX(9);
+    intakeMotorTalon.configContinuousCurrentLimit(20,0);
+    intakeMotorTalon.configPeakCurrentDuration(100, 0);   
+    intakeMotorTalon.enableCurrentLimit(true);
+    intakeMotorTalon.configPeakCurrentLimit(30, 0);
   }
 
   public void setIntakeMotor(double setpoint){
@@ -56,7 +61,7 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-  
+    SmartDashboard.putNumber("intake current",intakeMotorTalon.getOutputCurrent());
     // This method will be called once per scheduler run
   }
 

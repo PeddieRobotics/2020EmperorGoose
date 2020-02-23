@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Auto.PIDClasses.NEO;
@@ -30,7 +31,8 @@ public class Flywheel extends SubsystemBase {
 
     flyWheelForward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
     flyWheelBackward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
-    
+    flyWheelForward.setSmartCurrentLimit(40);
+    flyWheelBackward.setSmartCurrentLimit(40);
     CSVLogger.getInstance().addStringToHeader("velocity");
     CSVLogger.getInstance().addVariablesToRecored(this::getAvgVelocity);
     
@@ -104,6 +106,7 @@ public class Flywheel extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("fly wheel motor current", flyWheelForward.getOutputCurrent());
     // This method will be called once per scheduler run
   }
 }

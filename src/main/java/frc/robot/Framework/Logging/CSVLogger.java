@@ -67,8 +67,7 @@ public class CSVLogger{
                 if(variableValue.equals("NaN")){
                     currVarList[i]= ""+0;
                 }else{
-                    DriverStation.reportError("this is what " + variableValue, false);
-                    currVarList[i] = variableValue;
+                     currVarList[i] = variableValue;
                 }
             }
             loggedVariableList.add(currVarList);

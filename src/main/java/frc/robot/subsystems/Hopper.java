@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -24,8 +25,8 @@ public class Hopper extends SubsystemBase {
     currentMode = HopperModeType.DISABLED;
     
     floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
-    floorTalon.configPeakCurrentLimit(30, 0);
-    floorTalon.configContinuousCurrentLimit(20,0);
+    floorTalon.configPeakCurrentLimit(10, 0);
+    floorTalon.configContinuousCurrentLimit(10,0);
     floorTalon.configPeakCurrentDuration(100, 0);  
     floorTalon.enableCurrentLimit(true);
      /**
@@ -37,13 +38,13 @@ public class Hopper extends SubsystemBase {
       leftWallTalon = new TalonSRX( Constants.HOPPER_LEFT_WALL );
       rightWallTalon = new TalonSRX( Constants.HOPPER_RIGHT_WALL );
 
-      rightWallTalon.configContinuousCurrentLimit(20,0);
+      rightWallTalon.configContinuousCurrentLimit(10,0);
       rightWallTalon.configPeakCurrentDuration(100, 0);   
       rightWallTalon.enableCurrentLimit(true);
-      rightWallTalon.configPeakCurrentLimit(30, 0);
-      leftWallTalon.configContinuousCurrentLimit(20,0);
+      rightWallTalon.configPeakCurrentLimit(10, 0);
+      leftWallTalon.configContinuousCurrentLimit(10,0);
       leftWallTalon.configPeakCurrentDuration(100, 0); 
-      leftWallTalon.configPeakCurrentLimit(30, 0); 
+      leftWallTalon.configPeakCurrentLimit(10, 0); 
       leftWallTalon.enableCurrentLimit(true);
     
     } else {  //pbot has VictorSPX's
@@ -129,6 +130,10 @@ public class Hopper extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("current for lw" ,leftWallTalon.getOutputCurrent());
+    
+    SmartDashboard.putNumber("current for rw" , rightWallTalon.getOutputCurrent());
+    SmartDashboard.putNumber("current for hf" , floorTalon.getOutputCurrent());
   }
 
 public boolean isIntaking() {

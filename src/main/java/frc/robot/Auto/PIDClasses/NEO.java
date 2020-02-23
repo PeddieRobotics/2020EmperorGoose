@@ -34,7 +34,7 @@ public class NEO extends CANSparkMax{
         m_pidController = new NEOPIDController(this);
         this.deviceID = deviceID;
         restoreFactoryDefaults();
-        setSmartCurrentLimit(40);
+        setSmartCurrentLimit(50);
         setIdleMode(IdleMode.kCoast);//et us la pid controler 
         motorEncoder = getEncoder();
         changeControlFramePeriod(20);
@@ -42,7 +42,8 @@ public class NEO extends CANSparkMax{
     }
     public NEO(int deviceID, NEO master){
         super(deviceID, MotorType.kBrushless);
-        restoreFactoryDefaults();
+        restoreFactoryDefaults()    ;
+        setSmartCurrentLimit(40);
         setIdleMode(IdleMode.kCoast);
         m_pidController= new NEOPIDController(this);
         motorEncoder = getEncoder();

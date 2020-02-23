@@ -8,12 +8,18 @@
 package frc.robot.commands.DriveCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Drivetrain;
 
 public class TurnToTarget extends CommandBase {
   /**
    * Creates a new TurnToTarget.
    */
-  public TurnToTarget() {
+  Drivetrain m_drivetrain;
+  double goalAngle = 0;
+  double headingErrorToRpmConstant = 5;
+  public TurnToTarget(Drivetrain drivetrain, double angle) {
+    m_drivetrain = drivetrain;
+    addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -25,6 +31,7 @@ public class TurnToTarget extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_drivetrain.setVelocity(0, 0, headingErrorToRpmConstant*(goalAngle - m_drivetrain.returnAngle()), 0, 0);
   }
 
   // Called once the command ends or is interrupted.

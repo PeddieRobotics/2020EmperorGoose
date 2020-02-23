@@ -110,7 +110,7 @@ public class RobotContainer {
     m_driveTrain.setDefaultCommand(new Drive(m_driveTrain, true));
     // Don't index the tower by default in test mode
     if(!isTestMode){
-      m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper));
+      //m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper));
     }
    
   }
@@ -133,21 +133,29 @@ public class RobotContainer {
    */
   public void configureButtonBindings() {
       
+      //flip intake up and down(w/ hopper stopping)
       leftButton1.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
       
+      //send data collected to the driver station
       leftButton5.toggleWhenPressed(new SendDataToDS());// send data if needed to 
       
+      //center drive train w/ lime light
       leftButton2.whileActiveContinuous(new Centering(m_limelight, m_driveTrain, 0,false));
       
-      leftButton3.whenPressed(new ParallelCommandGroup( new shootLayup(m_flywheel), new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, 2500)));
+      //shoot layup and run flywheel at 2500 rpm
+      leftButton3.whileActiveContinuous(new ParallelCommandGroup( new shootLayup(m_flywheel), 
+      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, 2500)));
       
-      rightButton1.whileActiveContinuous(new ParallelCommandGroup(new Centering(m_limelight,m_driveTrain,0,false), 
+      //center and shoot
+      rightButton2.whileActiveContinuous(new ParallelCommandGroup(new Centering(m_limelight, m_driveTrain, 0,false),
        new ShootFlywheel(m_tower, m_flywheel, m_hopper,m_driveTrain, 3350)));
 
+      //drive onto the center line
       rightButton2.whileActiveContinuous(new SequentialCommandGroup( new ResetGyro(m_driveTrain), 
       new Centering(m_limelight,m_driveTrain,0,true), new Centering(m_limelight,m_driveTrain,20,true),
       new Centering(m_limelight,m_driveTrain,0,true)));
 
+      //climbing
       rightButton4.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
       
       //leftButton4.toggleWhenPressed(new Centering(m_limelight,m_driveTrain,0));

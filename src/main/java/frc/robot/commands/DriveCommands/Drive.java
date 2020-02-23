@@ -45,9 +45,7 @@ public class Drive extends CommandBase {
     } else {
       m_drivetrain.arcadeDrive( speedInput, turnInput );
     }
-    if(isRunningDrivetrainRun){
-      m_drivetrain.run();
-    }
+    m_drivetrain.run();
 
   }
 
@@ -71,9 +69,9 @@ public class Drive extends CommandBase {
 		  //such that (throttle + turn) always has a range [-1, 1]
     	speed = speed / saturatedInput;
 		  turn = turn / saturatedInput;
-
-    m_drivetrain.arcadeDrive( speed, turn );
-
+    
+      m_drivetrain.arcadeDrive( speed, turn );
+      m_drivetrain.run();
 
   }
 

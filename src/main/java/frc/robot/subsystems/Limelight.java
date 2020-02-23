@@ -18,18 +18,31 @@ public class Limelight extends SubsystemBase {
   /**
    * Creates a new Limelight.
    */
-  LookupTable  thorToVelocitySetpoint;
-  double[] thorInputs = {};//make sure to go in increasing order, so from 1->100 vs 100->1
+  LookupTable thorToVelocitySetpoint;
+  double[] thorInputs = {};// make sure to go in increasing order, so from 1->100 vs 100->1
   double[] velocityOutputs = {};
-  NetworkTable limes = NetworkTableInstance.getDefault().getTable("limelight"); 
+  NetworkTable limes = NetworkTableInstance.getDefault().getTable("limelight");
   NetworkTableEntry tx = limes.getEntry("tx");
   NetworkTableEntry ty = limes.getEntry("ty");
   NetworkTableEntry thor = limes.getEntry("thor");
   NetworkTableEntry tvert = limes.getEntry("tvert");
+
   public Limelight() {
-    thorToVelocitySetpoint = new LookupTable(thorInputs, velocityOutputs);
+    try {
+      thorToVelocitySetpoint = new LookupTable(thorInputs, velocityOutputs);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    ledMode("on");
   }
   
+  public double velocityCalculatedFromTHOR(){
+    if(hasTarget()){
+      return thorToVelocitySetpoint.get(getThor());
+    }
+    return 0; 
+  }
   //Tvert is the vertical sidelength of the rough bounding box (0 - 320 pixels)
   public double getTvert(){
     return tvert.getDouble(0.0);

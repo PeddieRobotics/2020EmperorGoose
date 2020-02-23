@@ -225,6 +225,7 @@ public class Drivetrain extends SubsystemBase {
     leftDriveMaster.set(leftDriveInputSpeed+leftDriveInputTurn);
    
     rightDriveMaster.set(rightDriveInputSpeed+rightDriveInputTurn);
+    
     setSpeed(0);//reset vars
     setTurn(0);
   
