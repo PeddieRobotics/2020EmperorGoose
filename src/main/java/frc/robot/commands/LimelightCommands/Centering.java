@@ -80,7 +80,7 @@ public class Centering extends CommandBase {
         SmartDashboard.putNumber("Turn", -keepArbSign(center,tx)*Math.max(deadband,p*Math.abs(tx-center)));
       }
       else if(average.get()<error1){
-        m_driveTrain.addToTurn(0.04);
+        m_driveTrain.addToTurn(0.05);
       }else if(average.get()<1.5){
         m_driveTrain.setTurn(0);
         //do nothing

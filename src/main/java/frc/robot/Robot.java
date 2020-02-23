@@ -30,14 +30,16 @@ public class Robot extends TimedRobot {
   }
   
   public void autonomousInit() {
-    m_RobotContainer.getAutonomousCommand();
+    CommandScheduler.getInstance().schedule(m_RobotContainer.getAutonomousCommand());
   }
 
   public void autonomousPeriodic() {
+    CommandScheduler.getInstance().run();
+    m_RobotContainer.setBrakeMode();
   }
   
   public void teleopInit() {
-    
+    m_RobotContainer.setCoastMode();
     m_RobotContainer.configureButtonBindings();
     m_RobotContainer.setCoastMode();
     m_RobotContainer.configureDefaultBehaviors();

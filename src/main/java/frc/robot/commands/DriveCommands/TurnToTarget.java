@@ -16,6 +16,7 @@ public class TurnToTarget extends CommandBase {
    */
   Drivetrain m_drivetrain;
   double goalAngle = 0;
+
   double headingErrorToRpmConstant = 5;
   public TurnToTarget(Drivetrain drivetrain, double angle) {
     m_drivetrain = drivetrain;
@@ -26,11 +27,13 @@ public class TurnToTarget extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    goalAngle = m_drivetrain.returnAngle() + goalAngle;// add current angle to where we want to be
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //use the velocity pid
     m_drivetrain.setVelocity(0, 0, headingErrorToRpmConstant*(goalAngle - m_drivetrain.returnAngle()), 0, 0);
   }
 

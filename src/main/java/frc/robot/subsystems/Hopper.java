@@ -130,10 +130,6 @@ public class Hopper extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("current for lw" ,leftWallTalon.getOutputCurrent());
-    
-    SmartDashboard.putNumber("current for rw" , rightWallTalon.getOutputCurrent());
-    SmartDashboard.putNumber("current for hf" , floorTalon.getOutputCurrent());
   }
 
 public boolean isIntaking() {

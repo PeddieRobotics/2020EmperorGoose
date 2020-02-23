@@ -5,57 +5,50 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.LimelightCommands;
+package frc.robot.commands.DriveCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
-import frc.robot.subsystems.Limelight;
 
-public class ButtonAim extends CommandBase {
+public class driveOffLine extends CommandBase {
   /**
-   * Creates a new buttonAim.
+   * Creates a new driveOffLine.
    */
-  Limelight m_limelight;
-  Drivetrain m_drivetrain;
-  double tx;
-  double heading_error;
-  double Kp = -0.1;
-  double min_command = 0.05;
-  double steering_adjust;
-
-  public ButtonAim(Drivetrain d, Limelight l) {
-    m_limelight = l;
-    m_drivetrain = d;
-    addRequirements(d);
+  Drivetrain m_driveTrain;
+  double startTime =0;
+  public driveOffLine(Drivetrain driveTrain) {
+    m_driveTrain = driveTrain;
+    addRequirements(driveTrain);  
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    tx = m_limelight.getTx();
-    heading_error = -tx;
+    // just drive for 2 seconds 
+    m_driveTrain.arcadeDrive(.2, 0);
+    m_driveTrain.run();
 
-    if(tx > 1.0)
-      steering_adjust = Kp * heading_error -  min_command;
-    else if(tx < 1.0)
-      steering_adjust = Kp*heading_error + min_command;
-    m_drivetrain.arcadeDrive(-steering_adjust, steering_adjust);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_driveTrain.setSpeed(0);
+    m_driveTrain.setTurn(0);
+    m_driveTrain.run();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return (Timer.getFPGATimestamp()-startTime>1);
   }
 }

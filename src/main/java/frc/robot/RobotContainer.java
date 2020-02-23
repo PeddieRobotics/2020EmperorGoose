@@ -11,6 +11,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -23,6 +24,7 @@ import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.AutoCommands.FollowPath;
 import frc.robot.commands.AutoCommands.TestAuto;
 import frc.robot.commands.ClimberCommands.LowerClimber;
+import frc.robot.commands.ClimberCommands.RaiseClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
 import frc.robot.commands.DriveCommands.Drive;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheelOnOff;
@@ -110,7 +112,7 @@ public class RobotContainer {
     m_driveTrain.setDefaultCommand(new Drive(m_driveTrain, true));
     // Don't index the tower by default in test mode
     if(!isTestMode){
-      //m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper));
+      m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper,m_intake));
     }
    
   }
@@ -145,18 +147,19 @@ public class RobotContainer {
       //shoot layup and run flywheel at 2500 rpm
       leftButton3.whileActiveContinuous(new ParallelCommandGroup( new shootLayup(m_flywheel), 
       new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, 2500)));
-      
+      leftButton4.whileActiveOnce(new LowerClimber(m_climber));
       //center and shoot
       rightButton2.whileActiveContinuous(new ParallelCommandGroup(new Centering(m_limelight, m_driveTrain, 0,false),
        new ShootFlywheel(m_tower, m_flywheel, m_hopper,m_driveTrain, 3350)));
 
       //drive onto the center line
-      rightButton2.whileActiveContinuous(new SequentialCommandGroup( new ResetGyro(m_driveTrain), 
+      rightButton3.whileActiveContinuous(new SequentialCommandGroup( new ResetGyro(m_driveTrain), 
       new Centering(m_limelight,m_driveTrain,0,true), new Centering(m_limelight,m_driveTrain,20,true),
       new Centering(m_limelight,m_driveTrain,0,true)));
 
       //climbing
-      rightButton4.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
+
+      rightButton4.toggleWhenPressed(new RaiseClimber(m_climber));
       
       //leftButton4.toggleWhenPressed(new Centering(m_limelight,m_driveTrain,0));
       // final PathFollower pathFollower = new PathFollower(m_driveTrain,path2.getSelected(),true);
@@ -240,11 +243,10 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    FollowPath autoPathFromChooser = new frc.robot.commands.AutoCommands.FollowPath(m_driveTrain, chooser.getSelected(), true);
-    
-    CommandLooper.getInstance().addCommand(new TestAuto(m_hopper, m_tower, m_flywheel, 3350));
-    
-    return autoPathFromChooser;
+    //FollowPath autoPathFromChooser = new frc.robot.commands.AutoCommands.FollowPath(m_driveTrain, chooser.getSelected(), true, true);
+    DriverStation.reportError("being scheduled",false);
+    TestAuto test = new TestAuto(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350);
+    return test;
 
   }
 

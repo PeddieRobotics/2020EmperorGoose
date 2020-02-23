@@ -5,19 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 package frc.robot.commands.TowerCommands;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Tower;
 public class IndexPowerCells extends CommandBase {
   
   private Tower m_tower;
   private Hopper m_hopper; 
+  private Intake m_intake;
   private boolean reversing = false;
   private int ballTimeCount = 0;
-  public IndexPowerCells(Tower tower, Hopper hopper) {
+  public IndexPowerCells(Tower tower, Hopper hopper, Intake intake) {
     m_hopper = hopper;
     m_tower = tower;
+    m_intake = intake;
     addRequirements(hopper);
     addRequirements(tower);
   }
@@ -29,29 +33,29 @@ public class IndexPowerCells extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    m_tower.printSensorVolts();
-    if(!m_tower.senses_ball_Top1()){
-      DriverStation.reportError("running all",false);
-      m_tower.runMotors(.8);
-      m_hopper.runAll();
+      if(m_intake.isIntaking()){
+        m_tower.printSensorVolts();
+        if(!m_tower.senses_ball_Top1()){
+          DriverStation.reportError("running all",false);
+          m_tower.runMotors(.8);
+          m_hopper.runAll();
+        }
+        else if(m_tower.senses_ball_Top0()){
+          DriverStation.reportError("sense top, reversing",false);
+          m_tower.runMotors(-.15);
+          m_hopper.stopAll();
+        }
+        else if(!m_tower.senses_ball_Bottom()){
+          m_tower.runBottomMotor(0.8);
+          DriverStation.reportError("running bottom", false);
+          m_hopper.runAll();
+        }
+        else{
+          DriverStation.reportError("noting hon all, stopping", false);
+          m_tower.runMotors(0.0);
+          m_hopper.stopAll();
+        }
     }
-    else if(m_tower.senses_ball_Top0()){
-      DriverStation.reportError("sense top, reversing",false);
-      m_tower.runMotors(-.15);
-      m_hopper.stopAll();
-    }
-    else if(!m_tower.senses_ball_Bottom()){
-      m_tower.runBottomMotor(0.8);
-      DriverStation.reportError("running bottom", false);
-      m_hopper.runAll();
-    }
-    else{
-      DriverStation.reportError("noting hon all, stopping", false);
-      m_tower.runMotors(0.0);
-      m_hopper.stopAll();
-    }
-  
     // if it has seen a ball and it hasn't been 2 seconds, do nothing
     
   }
