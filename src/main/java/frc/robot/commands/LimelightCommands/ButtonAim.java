@@ -45,7 +45,7 @@ public class ButtonAim extends CommandBase {
       steering_adjust = Kp * heading_error -  min_command;
     else if(tx < 1.0)
       steering_adjust = Kp*heading_error + min_command;
-    m_drivetrain.arcadeDrive(-steering_adjust, steering_adjust);
+    m_drivetrain.arcadeDrive(-steering_adjust, steering_adjust, true);
   }
 
   // Called once the command ends or is interrupted.

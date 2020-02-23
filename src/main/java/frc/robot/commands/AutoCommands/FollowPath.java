@@ -137,7 +137,7 @@ public class FollowPath extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(final boolean interrupted) {
-    m_drivetrain.arcadeDrive(0, 0);
+    m_drivetrain.arcadeDrive(0, 0, false);
     m_drivetrain.setBrake();
     endTime = System.currentTimeMillis();
     String timeDiff = Double.toString(endTime - startTime);

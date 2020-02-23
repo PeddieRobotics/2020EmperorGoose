@@ -11,6 +11,7 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Auto.PIDClasses.NEO;
@@ -25,8 +26,10 @@ public class Drivetrain extends SubsystemBase {
   
   private NEO leftDriveMaster, rightDriveMaster, leftDriveFollower, rightDriveFollower;
 
-  CANPIDController m_pidController, m_pidController2;
+  private CANPIDController m_pidController, m_pidController2;
   
+  private DifferentialDrive diffDrive;
+
   // Keep track of the joystick controllers to get their speed and turn during ArcadeDrive.
   private Joystick leftJoystick, rightJoystick;
 
@@ -55,7 +58,6 @@ public class Drivetrain extends SubsystemBase {
     leftDriveFollower.follow(leftDriveMaster);
     rightDriveFollower.follow(rightDriveMaster);
 
-
     rightDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF + Constants.DRIVETRAIN_FF_OFFSET, 0 );
     leftDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF, 0 );
     
@@ -63,6 +65,8 @@ public class Drivetrain extends SubsystemBase {
     // NEOPIDWithSmartDashboard rightDriveMaster = new NEOPIDWithSmartDashboard(2);
     // NEOPIDWithSmartDashboard leftDriveFollower1 = new NEOPIDWithSmartDashboard(3);
     // NEOPIDWithSmartDashboard rightDriveFollower2 = new NEOPIDWithSmartDashboard(4);
+  
+    diffDrive = new DifferentialDrive(leftDriveMaster, rightDriveMaster);
   }
 
   /**
@@ -155,9 +159,11 @@ public class Drivetrain extends SubsystemBase {
     rightDriveFollower.setIdleMode(IdleMode.kCoast);
   }
 
-  public void arcadeDrive( double speed, double turn ) {
+  public void arcadeDrive( double speed, double turn, boolean squareInputs) {
     
-    double deadband = 0.08;
+    diffDrive.arcadeDrive(speed, turn, squareInputs);
+
+    /*double deadband = 0.08;
 
     if( Math.abs( speed ) < deadband ) {
       speed = 0;
@@ -171,6 +177,7 @@ public class Drivetrain extends SubsystemBase {
     
     leftDriveMaster.set( leftDriveInput );
     rightDriveMaster.set( rightDriveInput );
+    */
     
   }
 
