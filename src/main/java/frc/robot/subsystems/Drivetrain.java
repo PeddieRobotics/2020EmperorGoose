@@ -37,9 +37,7 @@ public class Drivetrain extends SubsystemBase {
   /* Value between -1.0 and 1.0 (units?) that were last given to left and right master
   CANSparkMax motor controllers during teleop (ArcadeDrive).
   */
-  private double leftDriveInput;
-  private double rightDriveInput;
-
+  private double leftDriveInputSpeed, leftDriveInputTurn, rightDriveInputSpeed, rightDriveInputTurn;
   public Drivetrain(Joystick left, Joystick right) {
 
     leftJoystick = left;
@@ -47,7 +45,7 @@ public class Drivetrain extends SubsystemBase {
 
     // Set up the gyro
     imu = new ADIS16470_IMU();
-    
+   
     leftDriveMaster = new NEO(1);
     rightDriveMaster = new NEO(3);
     leftDriveFollower = new NEO(2);
@@ -154,7 +152,22 @@ public class Drivetrain extends SubsystemBase {
     leftDriveFollower.setIdleMode(IdleMode.kCoast);
     rightDriveFollower.setIdleMode(IdleMode.kCoast);
   }
-
+  public void setTurn(double turn){
+    leftDriveInputTurn = -turn;
+    rightDriveInputTurn = -turn;
+  }
+  public void setSpeed(double speed){
+    leftDriveInputSpeed = speed;
+    rightDriveInputSpeed = -speed;
+  }
+  public void addToSpeed(double speed){
+    leftDriveInputSpeed += speed;
+    rightDriveInputSpeed-=speed;
+  }
+  public void addToTurn(double turn){
+    leftDriveInputTurn -= turn;
+    rightDriveInputTurn -= turn;
+  }
   public void arcadeDrive( double speed, double turn ) {
     
     double deadband = 0.08;
@@ -166,12 +179,8 @@ public class Drivetrain extends SubsystemBase {
       turn = 0;
     }
 
-    leftDriveInput = ( speed - turn );
-    rightDriveInput = ( -speed - turn );
-    
-    leftDriveMaster.set( leftDriveInput );
-    rightDriveMaster.set( rightDriveInput );
-    
+    addToSpeed(speed);
+    addToTurn(turn);
   }
 
   @Override
@@ -208,5 +217,19 @@ public class Drivetrain extends SubsystemBase {
   public double getTurn() {
     return rightJoystick.getRawAxis(0);
   }
+  /**
+   * We set the left and right motors to the inputs, then reset them so that they don't add up too much
+   */
+  public void run(){
+    
+    leftDriveMaster.set(leftDriveInputSpeed+leftDriveInputTurn);
+   
+    rightDriveMaster.set(rightDriveInputSpeed+rightDriveInputTurn);
+    setSpeed(0);//reset vars
+    setTurn(0);
+  
+  }
+  //new arcade drive refractoring
+
 
 }

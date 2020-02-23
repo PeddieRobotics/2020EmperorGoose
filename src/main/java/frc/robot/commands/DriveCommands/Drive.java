@@ -14,9 +14,9 @@ public class Drive extends CommandBase {
   private Drivetrain m_drivetrain;
 
   private boolean isNormalizedDrive;
-
-  public Drive( Drivetrain driveTrain ) {
-
+  private boolean isRunningDrivetrainRun;
+  public Drive( Drivetrain driveTrain, boolean needsToRunRun ) {
+    isRunningDrivetrainRun = needsToRunRun;
     m_drivetrain = driveTrain;
     addRequirements(driveTrain);
     isNormalizedDrive = false;
@@ -44,6 +44,9 @@ public class Drive extends CommandBase {
       NormalizedDrive( speedInput, turnInput );
     } else {
       m_drivetrain.arcadeDrive( speedInput, turnInput );
+    }
+    if(isRunningDrivetrainRun){
+      m_drivetrain.run();
     }
 
   }

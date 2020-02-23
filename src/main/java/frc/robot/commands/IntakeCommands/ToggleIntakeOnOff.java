@@ -8,27 +8,36 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Tower;
 
 public class ToggleIntakeOnOff extends CommandBase {
 
   private Intake m_intake;
-
-  public ToggleIntakeOnOff(Intake intake) {
+  Tower m_tower;
+  Hopper m_hopper;
+  public ToggleIntakeOnOff(Intake intake, Tower tower, Hopper hopper) {
     m_intake = intake;
+    m_hopper = hopper;
+    m_tower = tower;
     addRequirements(intake);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {  
+  public void initialize() {
+    m_tower.runMotors(0);
+    m_hopper.runAll();  
     m_intake.startIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+  
   }
 
   // Called once the command ends or is interrupted.

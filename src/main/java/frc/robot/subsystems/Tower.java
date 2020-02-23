@@ -34,10 +34,14 @@ public class Tower extends SubsystemBase {
 
     topMotor = new NEO( Constants.TOWER_BOTTOM );
     bottomMotor = new NEO( Constants.TOWER_TOP );
+
+    topMotor.setSmartCurrentLimit(20);
+    bottomMotor.setSmartCurrentLimit(20);
+    
     topMotor.setBrake();
     bottomMotor.setBrake();
-    bottom3Avg = new MovingAverage(5);
     
+    bottom3Avg = new MovingAverage(5);
     bottom2Avg = new MovingAverage(5);
     top1Avg = new MovingAverage(5);
     top0Avg = new MovingAverage(5);
@@ -46,6 +50,7 @@ public class Tower extends SubsystemBase {
     m_topSensor1 = new AnalogInput(1);
     m_bottomSensor2 = new AnalogInput(2);
     m_bottomSensor3 = new AnalogInput(3);
+
 
   }
 
@@ -61,7 +66,7 @@ public class Tower extends SubsystemBase {
   public void runTopMotor( double speed ) {
 
     topMotor.set( speed );
-    bottomMotor.set(0);
+//    bottomMotor.set(0);
 
   }
 
@@ -71,7 +76,7 @@ public class Tower extends SubsystemBase {
    */
   public void runBottomMotor( double speed ) {
 
-    topMotor.set(0);
+    //topMotor.set(0);
     bottomMotor.set( -speed );
 
   }

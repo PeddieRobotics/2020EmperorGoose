@@ -12,17 +12,22 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Framework.LookupTable;
 
 public class Limelight extends SubsystemBase {
   /**
    * Creates a new Limelight.
    */
+  LookupTable  thorToVelocitySetpoint;
+  double[] thorInputs = {};//make sure to go in increasing order, so from 1->100 vs 100->1
+  double[] velocityOutputs = {};
   NetworkTable limes = NetworkTableInstance.getDefault().getTable("limelight"); 
   NetworkTableEntry tx = limes.getEntry("tx");
   NetworkTableEntry ty = limes.getEntry("ty");
   NetworkTableEntry thor = limes.getEntry("thor");
   NetworkTableEntry tvert = limes.getEntry("tvert");
   public Limelight() {
+    thorToVelocitySetpoint = new LookupTable(thorInputs, velocityOutputs);
   }
   
   //Tvert is the vertical sidelength of the rough bounding box (0 - 320 pixels)

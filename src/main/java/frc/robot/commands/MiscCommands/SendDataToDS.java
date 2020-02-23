@@ -11,11 +11,11 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Framework.Logging.CSVLogger;
 
-public class SendStuffToDS extends CommandBase {
+public class SendDataToDS extends CommandBase {
   /**
    * Creates a new sendStuffToDS.
    */
-  public SendStuffToDS() {
+  public SendDataToDS() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

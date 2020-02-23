@@ -17,9 +17,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.AutoCommands.FollowPath;
+import frc.robot.commands.AutoCommands.TestAuto;
 import frc.robot.commands.ClimberCommands.LowerClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
 import frc.robot.commands.DriveCommands.Drive;
@@ -34,6 +36,8 @@ import frc.robot.commands.IntakeCommands.ToggleIntakeOnOff;
 import frc.robot.commands.IntakeCommands.ToggleIntakeUpDown;
 import frc.robot.commands.JoystickCommands.ShootFlywheel;
 import frc.robot.commands.LimelightCommands.Centering;
+import frc.robot.commands.LimelightCommands.ResetGyro;
+import frc.robot.commands.MiscCommands.SendDataToDS;
 import frc.robot.commands.TowerCommands.IndexPowerCells;
 import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
 import frc.robot.commands.TowerCommands.StopTower;
@@ -103,12 +107,12 @@ public class RobotContainer {
   // Set default behaviors for subsystems which should start active
   public void configureDefaultBehaviors() {
     // Always make the drivetrain active in any mode
-    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain));
+    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain, true));
     // Don't index the tower by default in test mode
     if(!isTestMode){
       m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper));
     }
-
+   
   }
 
   /* Use a SendableChooser to create a list of possible autonomous paths.
@@ -128,14 +132,42 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   public void configureButtonBindings() {
-     leftButton1.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
-      leftButton2.whileActiveContinuous(new ShootFlywheel(m_tower, m_flywheel, m_hopper,  3350));
+      
+      leftButton1.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
+      
+      leftButton5.toggleWhenPressed(new SendDataToDS());// send data if needed to 
+      
+      leftButton2.whileActiveContinuous(new Centering(m_limelight, m_driveTrain, 0,false));
+      
       leftButton3.whenPressed(new ParallelCommandGroup( new shootLayup(m_flywheel), new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, 2500)));
+      
+      rightButton1.whileActiveContinuous(new ParallelCommandGroup(new Centering(m_limelight,m_driveTrain,0,false), 
+       new ShootFlywheel(m_tower, m_flywheel, m_hopper,m_driveTrain, 3350)));
+
+      rightButton2.whileActiveContinuous(new SequentialCommandGroup( new ResetGyro(m_driveTrain), 
+      new Centering(m_limelight,m_driveTrain,0,true), new Centering(m_limelight,m_driveTrain,20,true),
+      new Centering(m_limelight,m_driveTrain,0,true)));
+
+      rightButton4.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
+      
       //leftButton4.toggleWhenPressed(new Centering(m_limelight,m_driveTrain,0));
       // final PathFollower pathFollower = new PathFollower(m_driveTrain,path2.getSelected(),true);
     // CommandLooper.getInstance().addCommand(new testAuto(m_hopper, m_tower, m_shooter,follow2));
     //rightButton2.whenActive(new buttonAim(m_driveTrain, m_limelight));
+    /**
+      sophia's button bindings -> change to this impl eventually
+      leftTrigger.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
+     //left2.toggleWhenPressed( ); ?
+     //left3.toggleWhenPressed( ); ?
+     left4.toggleWhenPressed(new LowerIntake(m_intake));
 
+     //rightTrigger.whileHeld( ); -> will be shooting, while held (not implemented yet in master)
+     right2.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
+     right3.whileHeld(new RaiseHood(m_hood));
+     right4.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
+
+     opTrigger.toggleWhenPressed(new RaiseIntake(m_intake));
+     */
   }
 
   public void setTestMode(boolean mode){
@@ -150,7 +182,7 @@ public class RobotContainer {
   
     leftButton2.toggleWhenPressed(new ToggleIntakeUpDown(m_intake));
     leftButton3.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
-    leftButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
+    //leftButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
     leftButton5.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
     leftButton6.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
     leftButton7.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
@@ -201,9 +233,11 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     FollowPath autoPathFromChooser = new frc.robot.commands.AutoCommands.FollowPath(m_driveTrain, chooser.getSelected(), true);
-    // CommandLooper.getInstance().addCommand(new TestAuto(m_Hopper, m_Tower, m_Shoot,m_Hood));
+    
+    CommandLooper.getInstance().addCommand(new TestAuto(m_hopper, m_tower, m_flywheel, 3350));
     
     return autoPathFromChooser;
+
   }
 
   public void setBrakeMode(){

@@ -19,21 +19,23 @@ public class Centering extends CommandBase {
    * Creates a new centerArbWithTx.
    */
   Limelight limes;
-  Drivetrain trains;
+  Drivetrain m_driveTrain;
   boolean txNavSame = false;
   int center = 0;
   boolean centered = false;
   MovingAverage average = new MovingAverage(10);
+  boolean m_isContinous;
+  public Centering(Limelight limelight, Drivetrain drivetrain, int centers, boolean isContinous) {
+    m_driveTrain = drivetrain;
+    m_isContinous = isContinous;
 
-  public Centering(Limelight limelight, Drivetrain drivetrain, int centers) {
-    trains = drivetrain;
     limes= limelight;
     center = centers;
-    addRequirements(trains);
+    //addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
   public int side(int center){
-   if(trains.returnAngle()>0){
+   if(m_driveTrain.returnAngle()>0){
      return -center;
    }
   return center;
@@ -43,7 +45,7 @@ public class Centering extends CommandBase {
   public void initialize() {
    center = side(center); 
    limes.ledMode("on");
-   average.clear();
+   average.clearInitialize();
   }
   public int keepArbSign(int center, double input){
     if(input>center){
@@ -59,7 +61,7 @@ public class Centering extends CommandBase {
     SmartDashboard.putNumber("center", center);
     SmartDashboard.putBoolean("centered", centered);
     if(limes.hasTarget()){
-      //trains.run();
+      
       double p = SmartDashboard.getNumber("p value", 0.0);
       double error1 = SmartDashboard.getNumber("error",0.0);
       double deadband = SmartDashboard.getNumber("deadband", 0.0);
@@ -67,28 +69,29 @@ public class Centering extends CommandBase {
       tx = limes.getTx();
       average.add(Math.abs(Math.abs(tx)-center));
       if(average.get()>error1 || average.get()==0){
-        //trains.setTurn(-keepArbSign(center,tx)*Math.max(deadband,p*Math.abs(tx-center)));
+        m_driveTrain.addToTurn(-keepArbSign(center,tx)*Math.max(deadband,p*Math.abs(tx-center)));
         SmartDashboard.putNumber("Turn", -keepArbSign(center,tx)*Math.max(deadband,p*Math.abs(tx-center)));
       }
       else{
         centered = true;
       }
     }else{
-      //trains.setSpeed(0);
-      //trains.setTurn(0);
+     // m_driveTrain.setSpeed(0.0);
+     // m_driveTrain.setTurn(0.0);
+     //do nothing let reg. arcade drive run
     }  
-    if(Math.abs(trains.returnAngle()-center)<1&&Math.abs(tx-center)<1){
+    if(Math.abs(m_driveTrain.returnAngle()-center)<1&&Math.abs(tx-center)<1){
       txNavSame = true;
     }  
+    //m_driveTrain.run(); in theory arcade drive should call this
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     SmartDashboard.putBoolean("executing", false);
-    //trains.setSpeed(0);
-   // trains.setTurn(0);
-    //trains.run();
+    m_driveTrain.arcadeDrive(0,0);
+    m_driveTrain.run();
     txNavSame = false;
     centered = false;
     limes.ledMode("off");
@@ -97,10 +100,14 @@ public class Centering extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(center!=0){
-      return txNavSame; 
+    if(m_isContinous){
+      if(center!=0){
+        return txNavSame; 
+      }else{
+        return centered; 
+      }
     }else{
-      return centered; 
+      return false;
     }
   }
 }

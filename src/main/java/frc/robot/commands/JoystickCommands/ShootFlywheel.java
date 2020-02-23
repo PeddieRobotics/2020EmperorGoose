@@ -17,6 +17,7 @@ import frc.robot.commands.HopperCommands.StopHopper;
 import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
 import frc.robot.commands.TowerCommands.StopTower;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Tower;
 
@@ -28,7 +29,21 @@ public class ShootFlywheel extends SequentialCommandGroup {
   private Tower m_tower;
   private Flywheel m_flywheel;
   private Hopper m_hopper;
-
+  Drivetrain m_driveTrain;
+  public ShootFlywheel(Tower tower, Flywheel flywheel, Hopper hopper, Drivetrain driveTrain, double rpm) {
+    
+    // Add your commands in the super() call, e.g.
+    // super(new FooCommand(), new BarCommand());
+    
+    super(new ParallelCommandGroup(new RunFlywheel(flywheel, rpm), 
+    new RunTowerBasedOffFlyWheel(hopper, tower, flywheel,rpm)), 
+    new ParallelRaceGroup( new WaitCommand(1), new RunFlywheel(flywheel,rpm)));
+      driveTrain = m_driveTrain;
+      m_tower = tower;
+      m_flywheel = flywheel;
+      m_hopper = hopper;
+  
+  }
   public ShootFlywheel(Tower tower, Flywheel flywheel, Hopper hopper, double rpm) {
     
     // Add your commands in the super() call, e.g.
@@ -37,7 +52,6 @@ public class ShootFlywheel extends SequentialCommandGroup {
     super(new ParallelCommandGroup(new RunFlywheel(flywheel, rpm), 
     new RunTowerBasedOffFlyWheel(hopper, tower, flywheel,rpm)), 
     new ParallelRaceGroup( new WaitCommand(1), new RunFlywheel(flywheel,rpm)));
-
       m_tower = tower;
       m_flywheel = flywheel;
       m_hopper = hopper;

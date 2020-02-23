@@ -4,47 +4,51 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-package frc.robot.commands.ClimberCommands;
 
-import java.sql.Time;
+package frc.robot.commands.LimelightCommands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.Drivetrain;
 
-public class ToggleClimberUpDown extends CommandBase {
-
-  private Climber m_climber;
-  double startTime = 0;
-  double endTime = 0;
-  public ToggleClimberUpDown(Climber climber) {
-    m_climber = climber;
-    addRequirements(climber);
+public class ResetGyro extends CommandBase {
+  Drivetrain train; 
+  boolean finish = false;
+  double waitTime = 0; 
+  /**
+   * Creates a new ResetGyro.
+   */
+  public ResetGyro(Drivetrain drivetrain) {
+    train = drivetrain;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = Timer.getFPGATimestamp();
+    finish = false;
+    waitTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(Timer.getFPGATimestamp()-startTime>1){
-      m_climber.raiseClimber();    
+    train.resetADIS();
+    //callibration takes .15 seconds
+    if(Timer.getFPGATimestamp()-waitTime>.15){
+      finish = true;
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_climber.lowerClimber();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if(finish)return true;
+    else return false;
   }
 }
