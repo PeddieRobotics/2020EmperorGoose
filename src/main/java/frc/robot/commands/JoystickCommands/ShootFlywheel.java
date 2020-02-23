@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.FlywheelCommands.RunFlywheel;
+import frc.robot.commands.FlywheelCommands.ShootFromFar;;
 import frc.robot.commands.FlywheelCommands.StartFlywheel;
 import frc.robot.commands.HopperCommands.StopHopper;
 import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
@@ -34,9 +34,9 @@ public class ShootFlywheel extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     
-    super(new ParallelCommandGroup(new RunFlywheel(flywheel, rpm), 
+    super(new ParallelCommandGroup(new ShootFromFar(flywheel, rpm), 
     new RunTowerBasedOffFlyWheel(hopper, tower, flywheel,rpm)), 
-    new ParallelRaceGroup( new WaitCommand(1), new RunFlywheel(flywheel,rpm)));
+    new ParallelRaceGroup( new WaitCommand(1), new ShootFromFar(flywheel,rpm)));
 
       m_tower = tower;
       m_flywheel = flywheel;

@@ -53,6 +53,19 @@ public class Tower extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  public void reverse(double percent){
+    double topMotorSpeed = topMotor.get();
+    double bottomMotorSpeed = topMotor.get();
+    runTopMotor(-percent*topMotorSpeed);
+    runBottomMotor(-percent*bottomMotorSpeed);
+
+    currentMode = TowerModeType.REVERSE;
+  }
+
+  public double getBottomMotorSpeed(){
+    return bottomMotor.get();
+  }
+
   /**
    * runs the top motor
    * @param speed speed of motor

@@ -10,12 +10,14 @@ package frc.robot.commands.FlywheelCommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Flywheel;
 
-public class shootLayup extends CommandBase {
-  /**
-   * Creates a new shootLayup.
-   */
-  Flywheel m_flywheel;
-  public shootLayup(Flywheel flywheel) {
+public class ShootLayup extends CommandBase {
+  
+  private Flywheel m_flywheel;
+
+  private double speed;
+
+  public ShootLayup(Flywheel flywheel, double rpm) {
+    speed = rpm;
     m_flywheel = flywheel;
     addRequirements(m_flywheel);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -30,8 +32,7 @@ public class shootLayup extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    m_flywheel.setMotors(2500);
+    m_flywheel.setpointWithSmartDashboard(speed);
   }
 
   // Called once the command ends or is interrupted.

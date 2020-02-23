@@ -5,24 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.TowerCommands;
+package frc.robot.commands.FlywheelCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Tower;
+import frc.robot.subsystems.Flywheel;
 
-public class StartTower extends CommandBase {
-  
-  private Tower m_tower;
+public class ToggleHoodUpDown extends CommandBase {
 
-  public StartTower(Tower tower) {
-    m_tower = tower;
-    addRequirements(tower);
+  private Flywheel m_flywheel;
+
+  public ToggleHoodUpDown(Flywheel flywheel) {
+    m_flywheel = flywheel;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_tower.runMotors(0.5);
+    m_flywheel.setHood(true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,11 +32,12 @@ public class StartTower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_flywheel.setHood(false);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

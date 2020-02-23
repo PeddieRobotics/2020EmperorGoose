@@ -20,7 +20,8 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
   private Hopper m_hopper;
   private Tower m_tower;
   private Flywheel m_flywheel;
-  double rpm;
+  private double rpm;
+
   public RunTowerBasedOffFlyWheel(Hopper hopper, Tower tower, Flywheel flywheel, double rpm) {
     this.rpm = rpm;
     m_flywheel = flywheel;

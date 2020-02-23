@@ -14,7 +14,7 @@ import frc.robot.commands.AutoCommands.FollowPath;
 import frc.robot.commands.MiscCommands.SendStuffToDS;
 import frc.robot.commands.JoystickCommands.ShootFlywheel;
 import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
-import frc.robot.commands.TowerCommands.shootCounter;
+import frc.robot.commands.TowerCommands.ShootCounter;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Tower;
@@ -23,6 +23,6 @@ import frc.robot.commands.FlywheelCommands.*;
 public class TestAuto extends SequentialCommandGroup {
 
   public TestAuto(Hopper hopper, Tower tower, Flywheel flywheel, double rpm) {
-    new SequentialCommandGroup(new ParallelRaceGroup(new ShootFlywheel(tower, flywheel, hopper, rpm), new shootCounter(tower,3)));
+    new SequentialCommandGroup(new ParallelRaceGroup(new ShootFlywheel(tower, flywheel, hopper, rpm), new ShootCounter(tower,3)));
   }
 }

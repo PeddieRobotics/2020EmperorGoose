@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
 
@@ -21,7 +22,8 @@ public class Intake extends SubsystemBase {
   private Solenoid intakeSolenoid;
   
   private TalonSRX intakeMotorTalon;
-  // private VictorSPX intakeMotorVictor;  //both are to use if we change the intake motor. atm, not used.
+  
+  private VictorSPX intakeMotorVictor;  //both are to use if we change the intake motor. atm, not used.
 
   public Intake() {
 
@@ -29,12 +31,26 @@ public class Intake extends SubsystemBase {
     isDown = false;
     
     intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
-    intakeMotorTalon= new TalonSRX(9);
+         /**
+     * changes the motors based off if the robot is comp bot or pbot
+     */
+    if( RobotContainer.isCompetitionRobot() ) { //comp robot has TalonSRX's
+      //left and right motors for the v-belts
+      intakeMotorTalon = new TalonSRX( Constants.HOPPER_LEFT_WALL );
+     
+    } else {  //pbot has VictorSPX's
+      intakeMotorVictor = new VictorSPX( Constants.HOPPER_RIGHT_WALL );
+    }
+
   }
 
   public void setIntakeMotor(double setpoint){
-    
-    intakeMotorTalon.set(ControlMode.PercentOutput,setpoint);
+    if(RobotContainer.isCompetitionRobot()){
+      intakeMotorTalon.set(ControlMode.PercentOutput,setpoint);
+    }
+    else{
+      intakeMotorVictor.set(ControlMode.PercentOutput,setpoint);    
+    }
 
   }
   

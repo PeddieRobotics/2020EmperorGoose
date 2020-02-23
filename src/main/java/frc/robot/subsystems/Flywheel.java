@@ -16,16 +16,20 @@ public class Flywheel extends SubsystemBase {
 
   private FlywheelModeType currentMode;
 
+  private boolean isHoodUp;
+
   private NEO flyWheelForward, flyWheelBackward;
   private double m_setpoint;
   private MovingAverage avgOfFlyWheelSpeeds;
   Solenoid hSolenoid;
+
   public Flywheel() {
     currentMode = FlywheelModeType.DISABLED;
 
     m_setpoint = 0.0;
 
     hSolenoid=new Solenoid(Constants.SOLENOID_HOOD);
+
     avgOfFlyWheelSpeeds = new MovingAverage(10);
     flyWheelForward = new NEO( Constants.FLYWHEEL_1 );
     flyWheelBackward = new NEO( Constants.FLYWHEEL_2 );
@@ -67,6 +71,7 @@ public class Flywheel extends SubsystemBase {
   public void setHood(boolean isUp){
    
     hSolenoid.set(isUp);
+    isHoodUp = isUp;
   
   }
 
