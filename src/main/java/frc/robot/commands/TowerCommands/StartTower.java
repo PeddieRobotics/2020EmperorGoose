@@ -5,8 +5,6 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-// REDUNDANT COMMAND -- add m_Tower.runMotors(0) to the end() methods of the other tower commands
-
 package frc.robot.commands.TowerCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;

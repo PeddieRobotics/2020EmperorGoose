@@ -42,6 +42,7 @@ public class Robot extends TimedRobot {
   
   public void teleopInit() {
     m_RobotContainer.setCoastMode();
+
     m_RobotContainer.configureButtonBindings();
     m_RobotContainer.setCoastMode();
     m_RobotContainer.configureDefaultBehaviors();

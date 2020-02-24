@@ -43,7 +43,7 @@ public class Drive extends CommandBase {
     if( isNormalizedDrive ){
       NormalizedDrive( speedInput, turnInput );
     } else {
-      m_drivetrain.arcadeDrive( speedInput, turnInput );
+      m_drivetrain.arcadeDrive( speedInput, turnInput);
     }
     m_drivetrain.run();
 

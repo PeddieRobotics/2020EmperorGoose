@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Tower;
+
 public class IndexPowerCells extends CommandBase {
   
   private Tower m_tower;
@@ -28,8 +29,8 @@ public class IndexPowerCells extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_tower.setCurrentMode(Tower.TowerModeType.INDEXING);
   }
+  
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -62,9 +63,8 @@ public class IndexPowerCells extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_tower.runMotors(0.0);
+    m_tower.stopAll();
     m_hopper.stopAll();
-    m_tower.setCurrentMode(Tower.TowerModeType.DISABLED);
     DriverStation.reportError("ending", false);
   }
   // Returns true when the command should end.

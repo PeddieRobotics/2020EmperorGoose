@@ -5,24 +5,24 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.IntakeCommands;
+package frc.robot.commands.LimelightCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
 
-public class ToggleIntakeUpDown extends CommandBase {
+public class ToggleLight extends CommandBase {
 
-  private Intake m_intake;
+  private Limelight m_limelight;
 
-  public ToggleIntakeUpDown(Intake intake) {
-    m_intake = intake;
-    addRequirements(intake);
+  public ToggleLight(Limelight lime) {
+    m_limelight = lime;
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_intake.lowerIntake();    
+  public void initialize() {  
+    m_limelight.ledMode("off");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,7 +33,7 @@ public class ToggleIntakeUpDown extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.raiseIntake();
+    m_limelight.ledMode("on");
   }
 
   // Returns true when the command should end.

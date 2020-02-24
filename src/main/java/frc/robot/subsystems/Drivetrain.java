@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Auto.PIDClasses.NEO;
@@ -26,8 +27,10 @@ public class Drivetrain extends SubsystemBase {
   
   private NEO leftDriveMaster, rightDriveMaster, leftDriveFollower, rightDriveFollower;
 
-  CANPIDController m_pidController, m_pidController2;
+  private CANPIDController m_pidController, m_pidController2;
   
+  private DifferentialDrive diffDrive;
+
   // Keep track of the joystick controllers to get their speed and turn during ArcadeDrive.
   private Joystick leftJoystick, rightJoystick;
 
@@ -55,7 +58,6 @@ public class Drivetrain extends SubsystemBase {
     leftDriveFollower.follow(leftDriveMaster);
     rightDriveFollower.follow(rightDriveMaster);
 
-
     rightDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF + Constants.DRIVETRAIN_FF_OFFSET, 0 );
     leftDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF, 0 );
     
@@ -64,6 +66,9 @@ public class Drivetrain extends SubsystemBase {
     // NEOPIDWithSmartDashboard leftDriveFollower1 = new NEOPIDWithSmartDashboard(3);
     // NEOPIDWithSmartDashboard rightDriveFollower2 = new NEOPIDWithSmartDashboard(4);
     startTick = leftDriveMaster.getEncoder().getPosition();
+  
+    diffDrive = new DifferentialDrive(leftDriveMaster, rightDriveMaster);
+    diffDrive.setDeadband(0.05);
   }
 
   /**
@@ -173,6 +178,8 @@ public class Drivetrain extends SubsystemBase {
   }
   public void arcadeDrive( double speed, double turn ) {
     
+    //diffDrive.arcadeDrive(speed, -turn, false); we can figure this out later but rn this other impl works
+
     double deadband = 0.08;
 
     if( Math.abs( speed ) < deadband ) {

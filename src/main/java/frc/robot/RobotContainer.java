@@ -29,23 +29,24 @@ import frc.robot.commands.ClimberCommands.LowerClimber;
 import frc.robot.commands.ClimberCommands.RaiseClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
 import frc.robot.commands.DriveCommands.Drive;
+import frc.robot.commands.FlywheelCommands.RaiseHood;
+import frc.robot.commands.FlywheelCommands.RunFlywheelUntilTowerHasStopped;
+import frc.robot.commands.FlywheelCommands.ShootFromFar;
+import frc.robot.commands.FlywheelCommands.ShootLayup;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheelOnOff;
-import frc.robot.commands.FlywheelCommands.shootLayup;
-import frc.robot.commands.HopperCommands.StopHopper;
+import frc.robot.commands.FlywheelCommands.ToggleHoodUpDown;
 import frc.robot.commands.HopperCommands.ToggleHopperOnOff;
-import frc.robot.commands.IntakeCommands.LowerIntake;
-import frc.robot.commands.IntakeCommands.RaiseIntake;
 import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.IntakeCommands.ToggleIntakeOnOff;
 import frc.robot.commands.IntakeCommands.ToggleIntakeUpDown;
-import frc.robot.commands.JoystickCommands.ShootFlywheel;
 import frc.robot.commands.LimelightCommands.Centering;
-import frc.robot.commands.LimelightCommands.ResetGyro;
-import frc.robot.commands.MiscCommands.SendDataToDS;
+import frc.robot.commands.LimelightCommands.ToggleLight;
+import frc.robot.commands.MiscCommands.StopAllSubsystems;
 import frc.robot.commands.TowerCommands.IndexPowerCells;
 import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
 import frc.robot.commands.TowerCommands.StopTower;
 import frc.robot.commands.TowerCommands.ToggleTowerOnOff;
+import frc.robot.commands.TowerCommands.UnjamTower;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
@@ -54,7 +55,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.TestSubsystem;
 import frc.robot.subsystems.Tower;
-
 public class RobotContainer {
   // Default to code for competition robot, but can switch this boolean here to run practice robot
   private static boolean isCompetitionRobot = true;
@@ -75,11 +75,11 @@ public class RobotContainer {
 
   private SendableChooser<String> chooser;
 
-  private Joystick leftDriverJoystick, rightDriverJoystick, operatorJoystick;
+  private Joystick leftJoystick, rightJoystick, operatorJoystick;
 
-  private JoystickButton leftButton1, leftButton2, leftButton3, leftButton4, leftButton5, leftButton6, leftButton7, leftButton8, leftButton9;
-  private JoystickButton rightButton1, rightButton2, rightButton3, rightButton4, rightButton5, rightButton6, rightButton7, rightButton8;
-  private JoystickButton operatorButton1, operatorButton2, operatorButton3, operatorButton4, operatorButton5, operatorButton6, operatorButton7, operatorButton8;
+  private JoystickButton leftTrigger, leftButton2, leftButton3, leftButton4, leftButton5, leftButton6, leftButton7, leftButton8;
+  private JoystickButton rightTrigger, rightButton2, rightButton3, rightButton4, rightButton5, rightButton6, rightButton7, rightButton8;
+  private JoystickButton opTrigger, opButton2, opButton3, opButton4, opButton5, opButton6, opButton7, opButton8;
   
   public RobotContainer() {
 
@@ -90,12 +90,11 @@ public class RobotContainer {
     initializeJoysticks();
 
     // Initialize all subsystems
-    m_driveTrain = new Drivetrain(leftDriverJoystick, rightDriverJoystick);
+    m_driveTrain = new Drivetrain(leftJoystick, rightJoystick);
     m_tower = new Tower();
     m_hopper = new Hopper();
     m_flywheel = new Flywheel();
-    m_intake = new Intake(); 
-
+    m_intake = new Intake();
     m_climber = new Climber();
     m_limelight = new Limelight();
     
@@ -105,6 +104,7 @@ public class RobotContainer {
   
     // Configure menu for SmartDashboard to select auto routines to be sent to robot
     configureAutoRoutines();
+    configureSmartDashboard();
     
   }
     
@@ -137,7 +137,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   public void configureButtonBindings() {
-      
+      /*
       //flip intake up and down(w/ hopper stopping)
       leftButton1.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
       
@@ -183,6 +183,42 @@ public class RobotContainer {
 
      opTrigger.toggleWhenPressed(new RaiseIntake(m_intake));
      */
+
+    leftTrigger.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
+    leftButton2.whenHeld(new UnjamTower(m_tower, m_hopper, 0.5));
+    leftButton3.whenPressed(new RaiseClimber(m_climber));
+    leftButton4.whenPressed(new LowerClimber(m_climber));
+
+    rightTrigger.whileHeld(new ParallelCommandGroup(
+                            new ShootLayup(m_flywheel, Constants.RPM_LAYUP), 
+                            new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, Constants.RPM_LAYUP)));
+    rightTrigger.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
+    rightButton2.whileHeld(new ParallelCommandGroup(
+                                      new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
+                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, Constants.RPM_FAR)));
+    rightButton2.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
+    rightButton3.whileHeld(new ParallelCommandGroup(
+                                      new ShootFromFar(m_flywheel, Constants.RPM_FAR,false),
+                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, Constants.RPM_FAR),
+                                      new Centering(m_limelight,m_driveTrain,0,false)));
+    rightButton3.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
+
+    rightButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
+
+    opTrigger.toggleWhenPressed(new ToggleHoodUpDown(m_flywheel));
+    opButton2.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
+    opButton3.toggleWhenPressed(new ToggleIntakeUpDown(m_intake));
+    opButton4.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
+    opButton5.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
+    opButton6.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
+    opButton7.toggleWhenPressed(new ToggleLight(m_limelight));
+    opButton8.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
+
+  }
+
+  public void configureSmartDashboard()
+  {
+    SmartDashboard.putNumber("Flywheel Setpoint", m_flywheel.getSpeed());
   }
 
   public void setTestMode(boolean mode){
@@ -194,50 +230,49 @@ public class RobotContainer {
   }
 
   public void configureTestButtonBindings() {
-  
-    leftButton2.toggleWhenPressed(new ToggleIntakeUpDown(m_intake));
-    leftButton3.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
-    //leftButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
+
+    leftTrigger.toggleWhenPressed(new ToggleHoodUpDown(m_flywheel));
+    leftButton2.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
+    leftButton3.toggleWhenPressed(new ToggleIntakeUpDown(m_intake));
+    leftButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
     leftButton5.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
     leftButton6.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
     leftButton7.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
-    leftButton8.toggleWhenPressed(new LowerIntake(m_intake));
-    leftButton9.toggleWhenPressed(new RaiseIntake(m_intake));
+  
   }
 
   private void initializeJoysticks() {
   
-    leftDriverJoystick = new Joystick(0);
-    rightDriverJoystick = new Joystick(1);
+    leftJoystick = new Joystick(0);
+    rightJoystick = new Joystick(1);
     operatorJoystick = new Joystick(2);
 
-    leftButton1 = new JoystickButton(leftDriverJoystick, 1);
-    leftButton2 = new JoystickButton(leftDriverJoystick, 2);
-    leftButton3 = new JoystickButton(leftDriverJoystick, 3);
-    leftButton4 = new JoystickButton(leftDriverJoystick, 4);
-    leftButton5 = new JoystickButton(leftDriverJoystick, 5);
-    leftButton6 = new JoystickButton(leftDriverJoystick, 6);
-    leftButton7 = new JoystickButton(leftDriverJoystick, 7);
-    leftButton8 = new JoystickButton(leftDriverJoystick, 8);
-    leftButton9 = new JoystickButton(leftDriverJoystick, 9);
+    leftTrigger = new JoystickButton(leftJoystick, 1);
+    leftButton2 = new JoystickButton(leftJoystick, 2);
+    leftButton3 = new JoystickButton(leftJoystick, 3);
+    leftButton4 = new JoystickButton(leftJoystick, 4);
+    leftButton5 = new JoystickButton(leftJoystick, 5);
+    leftButton6 = new JoystickButton(leftJoystick, 6);
+    leftButton7 = new JoystickButton(leftJoystick, 7);
+    leftButton8 = new JoystickButton(leftJoystick, 8);
 
-    rightButton1 = new JoystickButton(rightDriverJoystick, 1);
-    rightButton2 = new JoystickButton(rightDriverJoystick, 2);
-    rightButton3 = new JoystickButton(rightDriverJoystick, 3);
-    rightButton4 = new JoystickButton(rightDriverJoystick, 4);
-    rightButton5 = new JoystickButton(rightDriverJoystick, 5);
-    rightButton6 = new JoystickButton(rightDriverJoystick, 6);
-    rightButton7 = new JoystickButton(rightDriverJoystick, 7);
-    rightButton8 = new JoystickButton(rightDriverJoystick, 8);
+    rightTrigger = new JoystickButton(rightJoystick, 1);
+    rightButton2 = new JoystickButton(rightJoystick, 2);
+    rightButton3 = new JoystickButton(rightJoystick, 3);
+    rightButton4 = new JoystickButton(rightJoystick, 4);
+    rightButton5 = new JoystickButton(rightJoystick, 5);
+    rightButton6 = new JoystickButton(rightJoystick, 6);
+    rightButton7 = new JoystickButton(rightJoystick, 7);
+    rightButton8 = new JoystickButton(rightJoystick, 8);
 
-    operatorButton1 = new JoystickButton(operatorJoystick, 1);
-    operatorButton2 = new JoystickButton(operatorJoystick, 2);
-    operatorButton3 = new JoystickButton(operatorJoystick, 3);
-    operatorButton4 = new JoystickButton(operatorJoystick, 4);
-    operatorButton5 = new JoystickButton(operatorJoystick, 5);
-    operatorButton6 = new JoystickButton(operatorJoystick, 6);
-    operatorButton7 = new JoystickButton(operatorJoystick, 7);
-    operatorButton8 = new JoystickButton(operatorJoystick, 8);
+    opTrigger = new JoystickButton(operatorJoystick, 1);
+    opButton2 = new JoystickButton(operatorJoystick, 2);
+    opButton3 = new JoystickButton(operatorJoystick, 3);
+    opButton4 = new JoystickButton(operatorJoystick, 4);
+    opButton5 = new JoystickButton(operatorJoystick, 5);
+    opButton6 = new JoystickButton(operatorJoystick, 6);
+    opButton7 = new JoystickButton(operatorJoystick, 7);
+    opButton8 = new JoystickButton(operatorJoystick, 8);
 
   }
   

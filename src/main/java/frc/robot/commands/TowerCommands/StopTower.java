@@ -22,7 +22,7 @@ public class StopTower extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_tower.runMotors(0.0);
+    m_tower.stopAll();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

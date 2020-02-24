@@ -21,16 +21,7 @@ public class ToggleHopperOnOff extends CommandBase {
   }
   @Override
   public void initialize() {
-      // Depending on whether the hopper is sending power cells to the tower, switch to the opposite state
-    if(m_hopper.isIntaking()){
-        m_hopper.setLeftWall(-.2);
-        m_hopper.setRightWall(-.5);
-        m_hopper.setFloor(-.32);
-    }
-    else{
-        m_hopper.stopAll();
-    }
-     
+    m_hopper.runAll();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,6 +32,7 @@ public class ToggleHopperOnOff extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_hopper.stopAll();
   }
 
   // Returns true when the command should end.

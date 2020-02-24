@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.commands.FlywheelCommands.RunFlywheel;
+import frc.robot.commands.FlywheelCommands.ShootFromFar;
 import frc.robot.commands.FlywheelCommands.StartFlywheel;
 import frc.robot.commands.HopperCommands.StopHopper;
 import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
@@ -34,27 +34,28 @@ public class ShootFlywheel extends SequentialCommandGroup {
     
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    
-    super(new ParallelCommandGroup(new RunFlywheel(flywheel, rpm,false), 
+    //have drive train incase we wanna stop it 
+    super(new ParallelCommandGroup(new ShootFromFar(flywheel, rpm,false), 
     new RunTowerBasedOffFlyWheel(hopper, tower, flywheel,rpm)), 
-    new ParallelRaceGroup( new WaitCommand(1), new RunFlywheel(flywheel,rpm,true)));
-      driveTrain = m_driveTrain;
+    new ParallelRaceGroup( new WaitCommand(1), new ShootFromFar(flywheel,rpm,true)));
+      m_driveTrain = driveTrain;
       m_tower = tower;
       m_flywheel = flywheel;
       m_hopper = hopper;
-  
+    addRequirements(m_flywheel);
+    addRequirements(m_hopper);
+    addRequirements(m_tower);
   }
-  public ShootFlywheel(Tower tower, Flywheel flywheel, Hopper hopper, double rpm) {
-    
-    // Add your commands in the super() call, e.g.
-    // super(new FooCommand(), new BarCommand());
-    
-    super(new ParallelCommandGroup(new RunFlywheel(flywheel, rpm,false), 
+  public ShootFlywheel(Tower tower, Flywheel flywheel, Hopper hopper, double rpm){
+    super(new ParallelCommandGroup(new ShootFromFar(flywheel, rpm,false), 
     new RunTowerBasedOffFlyWheel(hopper, tower, flywheel,rpm)), 
-    new ParallelRaceGroup( new WaitCommand(1), new RunFlywheel(flywheel,rpm,true)));
+    new ParallelRaceGroup( new WaitCommand(1), new ShootFromFar(flywheel,rpm,true)));
+      
       m_tower = tower;
       m_flywheel = flywheel;
       m_hopper = hopper;
-  
+    addRequirements(m_flywheel);
+    addRequirements(m_hopper);
+    addRequirements(m_tower);
   }
 }

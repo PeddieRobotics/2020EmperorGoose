@@ -22,12 +22,13 @@ public class ToggleFlywheelOnOff extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_flywheel.setMotors(1500);
+    m_flywheel.updateSetpoint(1500);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_flywheel.runMotors();
   }
 
   // Called once the command ends or is interrupted.

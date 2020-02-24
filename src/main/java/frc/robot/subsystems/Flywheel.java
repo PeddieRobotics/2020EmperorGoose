@@ -17,15 +17,20 @@ public class Flywheel extends SubsystemBase {
 
   private FlywheelModeType currentMode;
 
+  private boolean isHoodUp;
+
   private NEO flyWheelForward, flyWheelBackward;
   private double m_setpoint;
   private MovingAverage avgOfFlyWheelSpeeds;
   Solenoid hSolenoid;
+
   public Flywheel() {
     currentMode = FlywheelModeType.DISABLED;
 
     m_setpoint = 0.0;
+
     hSolenoid=new Solenoid(Constants.SOLENOID_HOOD);
+
     avgOfFlyWheelSpeeds = new MovingAverage(10);
     flyWheelForward = new NEO( Constants.FLYWHEEL_1 );
     flyWheelBackward = new NEO( Constants.FLYWHEEL_2 );
@@ -64,6 +69,8 @@ public class Flywheel extends SubsystemBase {
 
     flyWheelForward.setVelocity(setpoint);
   
+    flyWheelBackward.setVelocity(-m_setpoint);
+    flyWheelForward.setVelocity(m_setpoint);
     avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
 
   }
@@ -73,6 +80,7 @@ public class Flywheel extends SubsystemBase {
   public void setHood(boolean isUp){
    
     hSolenoid.set(isUp);
+    isHoodUp = isUp;
   
   }
 
@@ -88,6 +96,8 @@ public class Flywheel extends SubsystemBase {
   }
   
   public void setMotorPercentOutput(double setpoint){
+    m_setpoint = 0.0;
+
     if(setpoint > 0.0){
       currentMode = FlywheelModeType.SHOOTING;
     }
@@ -115,4 +125,23 @@ public class Flywheel extends SubsystemBase {
     SmartDashboard.putNumber("fly wheel motor current", flyWheelForward.getOutputCurrent());
     // This method will be called once per scheduler run
   }
+
+  public void updateSetpoint(double setpoint){
+    m_setpoint = setpoint;
+  }
+
+  public void setpointWithSmartDashboard(double defaultSetpoint){
+    m_setpoint = SmartDashboard.getNumber("Flywheel Setpoint", defaultSetpoint);
+    if(m_setpoint < 999 || m_setpoint > 5000)
+        m_setpoint = defaultSetpoint;    
+  }
+  public void runMotors() {
+  
+    flyWheelBackward.setVelocity(-m_setpoint);
+    flyWheelForward.setVelocity(m_setpoint);
+    avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
+
+  }
+
+
 }

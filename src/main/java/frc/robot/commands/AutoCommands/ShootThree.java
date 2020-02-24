@@ -15,7 +15,7 @@ import frc.robot.commands.AutoCommands.FollowPath;
 import frc.robot.commands.DriveCommands.driveOffLine;
 import frc.robot.commands.JoystickCommands.ShootFlywheel;
 import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
-import frc.robot.commands.TowerCommands.shootCounter;
+import frc.robot.commands.TowerCommands.ShootCounter;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
@@ -26,7 +26,7 @@ public class ShootThree extends SequentialCommandGroup {
 
   public ShootThree(Hopper hopper, Tower tower, Flywheel flywheel, Drivetrain driveTrain, double rpm) {
     
-    super(new ParallelRaceGroup(new ShootFlywheel(tower, flywheel, hopper, rpm), new shootCounter(tower,5)));
+    super(new ParallelRaceGroup(new ShootFromFar(flywheel, rpm,true), new ShootCounter(tower, 3)));
     
   }
 }

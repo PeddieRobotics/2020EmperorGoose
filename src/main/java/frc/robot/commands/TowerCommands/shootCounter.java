@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Tower;
 
-public class shootCounter extends CommandBase {
+public class ShootCounter extends CommandBase {
   /**
    * Creates a new shootCounter.
    */
@@ -20,7 +20,7 @@ public class shootCounter extends CommandBase {
    Tower m_tower;
   int amountOfShotsWeWant = 0;
   int counter;
-   public shootCounter(Tower tower, int shotCount) {
+   public ShootCounter(Tower tower, int shotCount) {
     m_tower = tower;
     counter = 0;
     

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
 
@@ -22,7 +23,8 @@ public class Intake extends SubsystemBase {
   private Solenoid intakeSolenoid;
   
   private TalonSRX intakeMotorTalon;
-  // private VictorSPX intakeMotorVictor;  //both are to use if we change the intake motor. atm, not used.
+  
+  private VictorSPX intakeMotorVictor;  //both are to use if we change the intake motor. atm, not used.
 
   public Intake() {
 
@@ -30,7 +32,7 @@ public class Intake extends SubsystemBase {
     isDown = false;
     
     intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
-    intakeMotorTalon= new TalonSRX(9);
+    intakeMotorTalon= new TalonSRX(9);//intake is a talon on both robots
     intakeMotorTalon.configContinuousCurrentLimit(20,0);
     intakeMotorTalon.configPeakCurrentDuration(100, 0);   
     intakeMotorTalon.enableCurrentLimit(true);
@@ -40,6 +42,7 @@ public class Intake extends SubsystemBase {
   public void setIntakeMotor(double setpoint){
     
     intakeMotorTalon.set(ControlMode.PercentOutput,setpoint);
+    
 
   }
   

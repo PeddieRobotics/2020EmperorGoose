@@ -5,24 +5,23 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.IntakeCommands;
+package frc.robot.commands.FlywheelCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Flywheel;
 
-public class ToggleIntakeUpDown extends CommandBase {
+public class LowerHood extends CommandBase {
 
-  private Intake m_intake;
+  private Flywheel m_flywheel;
 
-  public ToggleIntakeUpDown(Intake intake) {
-    m_intake = intake;
-    addRequirements(intake);
+  public LowerHood(Flywheel flywheel) {
+    m_flywheel = flywheel;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intake.lowerIntake();    
+    m_flywheel.setHood(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,7 +32,6 @@ public class ToggleIntakeUpDown extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_intake.raiseIntake();
   }
 
   // Returns true when the command should end.

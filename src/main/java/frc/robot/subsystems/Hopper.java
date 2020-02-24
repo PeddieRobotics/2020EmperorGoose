@@ -47,13 +47,17 @@ public class Hopper extends SubsystemBase {
       leftWallTalon.configPeakCurrentLimit(10, 0); 
       leftWallTalon.enableCurrentLimit(true);
     
+      floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
+
+   
     } else {  //pbot has VictorSPX's
 
       rightWallVictor = new VictorSPX( Constants.HOPPER_RIGHT_WALL );
       leftWallVictor = new VictorSPX( Constants.HOPPER_LEFT_WALL );
-//      floorVictor = new VictorSPX( Constants.HOPPER_FLOOR );
+//      floorVictor = new VictorSPX( Constants.HOPPER_FLOOR ); floor always talon
       
     }
+    
   }
 
   /**
@@ -81,8 +85,12 @@ public class Hopper extends SubsystemBase {
    * @param setpoint set the floor to this speed
    */
   public void setFloor( double setpoint ) {
-    floorTalon.set( ControlMode.PercentOutput, setpoint );
-  
+    if(RobotContainer.isCompetitionRobot()){
+      floorTalon.set(ControlMode.PercentOutput, setpoint);
+    }
+    else{
+      floorVictor.set(ControlMode.PercentOutput, setpoint);
+    }
 
   }
 
@@ -90,17 +98,26 @@ public class Hopper extends SubsystemBase {
    * @param setpoint set the left wall to this speed
    */
   public void setLeftWall( double setpoint ) { 
-
-    leftWallTalon.set(ControlMode.PercentOutput, setpoint);
+    if(RobotContainer.isCompetitionRobot()){
+      leftWallTalon.set(ControlMode.PercentOutput, setpoint);
+    }
+    else{
+      leftWallVictor.set(ControlMode.PercentOutput, setpoint);
+    }
 
   }
 
   /**
    * @param setpoint set th right wall to this speed
    */
-  public void setRightWall( double setpoint ) {
-    rightWallTalon.set(ControlMode.PercentOutput,setpoint);
-  }
+    public void setRightWall( double setpoint ) {
+      if(RobotContainer.isCompetitionRobot()){
+        rightWallTalon.set(ControlMode.PercentOutput, setpoint);
+      }
+      else{
+        rightWallVictor.set(ControlMode.PercentOutput, setpoint);
+      }
+    }
 
 
   /**
@@ -132,8 +149,25 @@ public class Hopper extends SubsystemBase {
   public void periodic() {
   }
 
-public boolean isIntaking() {
-  return( currentMode == HopperModeType.INTAKING );
-}
+  public boolean isIntaking() {
+    return( currentMode == HopperModeType.INTAKING );
+  }
+
+  public void reverse(double percent){
+    double leftWallPercent = 0.0;
+    double floorPercent = 0.0;
+    if(RobotContainer.isCompetitionRobot()){
+      leftWallPercent = leftWallTalon.getMotorOutputPercent();
+      floorPercent = floorTalon.getMotorOutputPercent();    
+    }
+    else{
+      leftWallPercent = leftWallVictor.getMotorOutputPercent();
+      floorPercent = floorVictor.getMotorOutputPercent();  
+    }
+    setLeftWall(-percent*leftWallPercent);
+    setFloor(-percent*floorPercent);
+
+    currentMode = HopperModeType.REVERSE;
+  }
   
 }

@@ -18,15 +18,15 @@ public class ToggleIntakeOnOff extends CommandBase {
   private Intake m_intake;
   Tower m_tower;
   Hopper m_hopper;
-  public ToggleIntakeOnOff(Intake intake, Tower tower, Hopper hopper) {
+  public ToggleIntakeOnOff(Intake intake) {
     m_intake = intake;
-    m_hopper = hopper;
-    m_tower = tower;
+    
     addRequirements(intake);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  // Called when the command is initially scheduled.
+
+// Called when the command is initially scheduled.
   @Override
   public void initialize() {
     m_tower.runMotors(0);

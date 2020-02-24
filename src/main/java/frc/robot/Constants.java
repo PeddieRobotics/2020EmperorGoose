@@ -52,4 +52,7 @@ public final class Constants {
     public static final double FLYWHEEL_FF = 0.00021;
     //PID for Flywheel
 
+    public static final double RPM_LAYUP = 2000;
+    public static final double RPM_FAR = 3350;
+
 }
