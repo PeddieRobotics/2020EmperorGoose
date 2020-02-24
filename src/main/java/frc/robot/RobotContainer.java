@@ -11,17 +11,20 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.AutoCommands.FollowPath;
+import frc.robot.commands.AutoCommands.ShootThree;
 import frc.robot.commands.ClimberCommands.LowerClimber;
 import frc.robot.commands.ClimberCommands.RaiseClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
@@ -32,8 +35,6 @@ import frc.robot.commands.FlywheelCommands.ShootFromFar;
 import frc.robot.commands.FlywheelCommands.ShootLayup;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheelOnOff;
 import frc.robot.commands.FlywheelCommands.ToggleHoodUpDown;
-import frc.robot.commands.FlywheelCommands.ShootLayup;
-import frc.robot.commands.HopperCommands.StopHopper;
 import frc.robot.commands.HopperCommands.ToggleHopperOnOff;
 import frc.robot.commands.IntakeCommands.LowerIntake;
 import frc.robot.commands.IntakeCommands.RaiseIntake;
@@ -41,7 +42,6 @@ import frc.robot.commands.IntakeCommands.StartIntake;
 import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.IntakeCommands.ToggleIntakeOnOff;
 import frc.robot.commands.IntakeCommands.ToggleIntakeUpDown;
-import frc.robot.commands.JoystickCommands.ShootFlywheel;
 import frc.robot.commands.LimelightCommands.Centering;
 import frc.robot.commands.LimelightCommands.ToggleLight;
 import frc.robot.commands.MiscCommands.StopAllSubsystems;
@@ -58,7 +58,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.TestSubsystem;
 import frc.robot.subsystems.Tower;
-
 public class RobotContainer {
   // Default to code for competition robot, but can switch this boolean here to run practice robot
   private static boolean isCompetitionRobot = true;
@@ -115,12 +114,12 @@ public class RobotContainer {
   // Set default behaviors for subsystems which should start active
   public void configureDefaultBehaviors() {
     // Always make the drivetrain active in any mode
-    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain));
+    //m_driveTrain.setDefaultCommand(new Drive(m_driveTrain, true));
     // Don't index the tower by default in test mode
     if(!isTestMode){
-      m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper));
+      m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper,m_intake));
     }
-
+   
   }
 
   /* Use a SendableChooser to create a list of possible autonomous paths.
@@ -131,6 +130,7 @@ public class RobotContainer {
     chooser.addOption("turn 12 move 12s","testPath");
     chooser.addOption("real 10s","real10");
     chooser.addOption("real 20s","real20");
+    SmartDashboard.putData(chooser);
   }
 
   /**
@@ -146,11 +146,11 @@ public class RobotContainer {
     leftButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
     
     rightTrigger.whileHeld(new ParallelCommandGroup(
-                            new ShootLayup(m_flywheel), 
+                            new ShootLayup(m_flywheel, Constants.RPM_LAYUP, false), 
                             new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightTrigger.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     rightButton2.whileHeld(new ParallelCommandGroup(
-                                      new ShootFromFar(m_flywheel),
+                                      new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
                                       new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightButton2.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     /*rightButton3.whileHeld(new ParallelCommandGroup(
@@ -238,10 +238,15 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    FollowPath autoPathFromChooser = new frc.robot.commands.AutoCommands.FollowPath(m_driveTrain, chooser.getSelected(), true);
-    // CommandLooper.getInstance().addCommand(new TestAuto(m_Hopper, m_Tower, m_Shoot,m_Hood));
-    
-    return autoPathFromChooser;
+    FollowPath autoPathFromChooser = new frc.robot.commands.AutoCommands.FollowPath(m_driveTrain, chooser.getSelected(), true, false, false);
+    DriverStation.reportError("being scheduled",false);
+ 
+    CommandLooper.getInstance().addCommand(new SequentialCommandGroup(autoPathFromChooser, 
+ 
+    new FollowPath(m_driveTrain,"run10",false,false,true), 
+    new ShootThree(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350)));
+    return null;
+
   }
 
   public void setBrakeMode(){

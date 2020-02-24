@@ -5,50 +5,32 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.TowerCommands;
+package frc.robot.commands.DriveCommands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Tower;
+import frc.robot.subsystems.Drivetrain;
 
-public class ShootCounter extends CommandBase {
+public class StopDriveTrain extends CommandBase {
   /**
-   * Creates a new shootCounter.
+   * Creates a new StopDriveTrain.
    */
-  boolean currentTopState; 
-  boolean lastTopState;
-   Tower m_tower;
-  int amountOfShotsWeWant = 0;
-  int counter;
-   public ShootCounter(Tower tower, int shotCount) {
-    m_tower = tower;
-    counter = 0;
+  Drivetrain m_driveTrain;
+  public StopDriveTrain(Drivetrain driveTrain) {
+    m_driveTrain = driveTrain;
+    addRequirements(m_driveTrain);
     
-    amountOfShotsWeWant = 2*shotCount;// 2 changes for each shot
-    addRequirements(tower);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    lastTopState = m_tower.senses_ball_Top0();
-    if(lastTopState==true){
-      amountOfShotsWeWant -=1; // sub tract one if we already have a ball chambered
-    }
-    
+    m_driveTrain.arcadeDrive(0, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //increment our changes
-    //DriverStation.reportError("running it",false);
-    if(m_tower.senses_ball_Top0()!=lastTopState){
-      counter ++;
-    }
-    DriverStation.reportError("count"+counter,false);
-    lastTopState = m_tower.senses_ball_Top0();
   }
 
   // Called once the command ends or is interrupted.
@@ -59,7 +41,6 @@ public class ShootCounter extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
-    return (counter >= amountOfShotsWeWant);
+    return false;
   }
 }

@@ -19,15 +19,17 @@ public class ShootFromFar extends CommandBase {
   private Flywheel m_flywheel;
   private double speed;
   private MovingAverage avgOfSpeed;
-
-  public ShootFromFar(Flywheel flywheel) {
+  private boolean stopFlywheelPostShot;
+  public ShootFromFar(Flywheel flywheel, double rpm, boolean shouldStopFlywheelPostShot) {
+    stopFlywheelPostShot = shouldStopFlywheelPostShot;
     m_flywheel = flywheel;
-    speed = Constants.RPM_FAR;
+    speed = rpm;
     addRequirements(flywheel);
     // Use addRequirements() here to declare subsystem dependencies.
   }
   
-  // Called when the command is initially scheduled.
+
+// Called when the command is initially scheduled.
   @Override
   public void initialize() {
     m_flywheel.updateSetpoint(speed);
@@ -49,8 +51,10 @@ public class ShootFromFar extends CommandBase {
       DriverStation.reportError("is interupted",false);
     }
 
-    DriverStation.reportError("is interupted",false);
-    m_flywheel.setMotorPercentOutput(0.0);
+    DriverStation.reportError("is interupted false",false);
+    if(stopFlywheelPostShot){
+      m_flywheel.setMotorPercentOutput(0.0);
+    }
     m_flywheel.setHood(false);
   }
 

@@ -5,61 +5,50 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.TowerCommands;
+package frc.robot.commands.DriveCommands;
 
-import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Tower;
+import frc.robot.subsystems.Drivetrain;
 
-public class ShootCounter extends CommandBase {
+public class driveOffLine extends CommandBase {
   /**
-   * Creates a new shootCounter.
+   * Creates a new driveOffLine.
    */
-  boolean currentTopState; 
-  boolean lastTopState;
-   Tower m_tower;
-  int amountOfShotsWeWant = 0;
-  int counter;
-   public ShootCounter(Tower tower, int shotCount) {
-    m_tower = tower;
-    counter = 0;
-    
-    amountOfShotsWeWant = 2*shotCount;// 2 changes for each shot
-    addRequirements(tower);
+  Drivetrain m_driveTrain;
+  double startTime =0;
+  public driveOffLine(Drivetrain driveTrain) {
+    m_driveTrain = driveTrain;
+    addRequirements(driveTrain);  
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    lastTopState = m_tower.senses_ball_Top0();
-    if(lastTopState==true){
-      amountOfShotsWeWant -=1; // sub tract one if we already have a ball chambered
-    }
-    
+    startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //increment our changes
-    //DriverStation.reportError("running it",false);
-    if(m_tower.senses_ball_Top0()!=lastTopState){
-      counter ++;
-    }
-    DriverStation.reportError("count"+counter,false);
-    lastTopState = m_tower.senses_ball_Top0();
+    // just drive for 2 seconds 
+    m_driveTrain.arcadeDrive(.2, 0);
+    m_driveTrain.run();
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_driveTrain.setSpeed(0);
+    m_driveTrain.setTurn(0);
+    m_driveTrain.run();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
-    return (counter >= amountOfShotsWeWant);
+    return (Timer.getFPGATimestamp()-startTime>1);
   }
 }

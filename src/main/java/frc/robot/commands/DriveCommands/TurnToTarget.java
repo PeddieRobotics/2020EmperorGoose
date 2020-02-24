@@ -5,50 +5,36 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.TowerCommands;
+package frc.robot.commands.DriveCommands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Tower;
+import frc.robot.subsystems.Drivetrain;
 
-public class ShootCounter extends CommandBase {
+public class TurnToTarget extends CommandBase {
   /**
-   * Creates a new shootCounter.
+   * Creates a new TurnToTarget.
    */
-  boolean currentTopState; 
-  boolean lastTopState;
-   Tower m_tower;
-  int amountOfShotsWeWant = 0;
-  int counter;
-   public ShootCounter(Tower tower, int shotCount) {
-    m_tower = tower;
-    counter = 0;
-    
-    amountOfShotsWeWant = 2*shotCount;// 2 changes for each shot
-    addRequirements(tower);
+  Drivetrain m_drivetrain;
+  double goalAngle = 0;
+
+  double headingErrorToRpmConstant = 5;
+  public TurnToTarget(Drivetrain drivetrain, double angle) {
+    m_drivetrain = drivetrain;
+    addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    lastTopState = m_tower.senses_ball_Top0();
-    if(lastTopState==true){
-      amountOfShotsWeWant -=1; // sub tract one if we already have a ball chambered
-    }
-    
+    goalAngle = m_drivetrain.returnAngle() + goalAngle;// add current angle to where we want to be
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //increment our changes
-    //DriverStation.reportError("running it",false);
-    if(m_tower.senses_ball_Top0()!=lastTopState){
-      counter ++;
-    }
-    DriverStation.reportError("count"+counter,false);
-    lastTopState = m_tower.senses_ball_Top0();
+    //use the velocity pid
+    m_drivetrain.setVelocity(0, 0, headingErrorToRpmConstant*(goalAngle - m_drivetrain.returnAngle()), 0, 0);
   }
 
   // Called once the command ends or is interrupted.
@@ -59,7 +45,6 @@ public class ShootCounter extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
-    return (counter >= amountOfShotsWeWant);
+    return false;
   }
 }

@@ -22,7 +22,8 @@ public class Report{
         this.vars = vars;
     }
     /**
-     * @return the id
+     * Basically takes a file writer and formats a string to a csv and then writes that line to the file
+     * @return returns what it wrote to the file
      */
     public String returnCsvReport(FileWriter writer){
         String reported ="";

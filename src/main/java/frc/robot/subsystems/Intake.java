@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -31,26 +32,17 @@ public class Intake extends SubsystemBase {
     isDown = false;
     
     intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
-         /**
-     * changes the motors based off if the robot is comp bot or pbot
-     */
-    if( RobotContainer.isCompetitionRobot() ) { //comp robot has TalonSRX's
-      //left and right motors for the v-belts
-      intakeMotorTalon = new TalonSRX( Constants.INTAKE_MOTOR );
-     
-    } else {  //pbot has VictorSPX's
-      intakeMotorVictor = new VictorSPX( Constants.INTAKE_MOTOR );
-    }
-
+    intakeMotorTalon= new TalonSRX(9);//intake is a talon on both robots
+    intakeMotorTalon.configContinuousCurrentLimit(20,0);
+    intakeMotorTalon.configPeakCurrentDuration(100, 0);   
+    intakeMotorTalon.enableCurrentLimit(true);
+    intakeMotorTalon.configPeakCurrentLimit(30, 0);
   }
 
   public void setIntakeMotor(double setpoint){
-    if(RobotContainer.isCompetitionRobot()){
-      intakeMotorTalon.set(ControlMode.PercentOutput,setpoint);
-    }
-    else{
-      intakeMotorVictor.set(ControlMode.PercentOutput,setpoint);    
-    }
+    
+    intakeMotorTalon.set(ControlMode.PercentOutput,setpoint);
+    
 
   }
   
@@ -72,7 +64,7 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-  
+    SmartDashboard.putNumber("intake current",intakeMotorTalon.getOutputCurrent());
     // This method will be called once per scheduler run
   }
 

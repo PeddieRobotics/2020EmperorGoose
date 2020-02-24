@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
@@ -23,6 +24,11 @@ public class Hopper extends SubsystemBase {
   public Hopper() {
     currentMode = HopperModeType.DISABLED;
     
+    floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
+    floorTalon.configPeakCurrentLimit(10, 0);
+    floorTalon.configContinuousCurrentLimit(10,0);
+    floorTalon.configPeakCurrentDuration(100, 0);  
+    floorTalon.enableCurrentLimit(true);
      /**
      * changes the motors based off if the robot is comp bot or pbot
      */
@@ -31,6 +37,16 @@ public class Hopper extends SubsystemBase {
       //left and right motors for the v-belts
       leftWallTalon = new TalonSRX( Constants.HOPPER_LEFT_WALL );
       rightWallTalon = new TalonSRX( Constants.HOPPER_RIGHT_WALL );
+
+      rightWallTalon.configContinuousCurrentLimit(10,0);
+      rightWallTalon.configPeakCurrentDuration(100, 0);   
+      rightWallTalon.enableCurrentLimit(true);
+      rightWallTalon.configPeakCurrentLimit(10, 0);
+      leftWallTalon.configContinuousCurrentLimit(10,0);
+      leftWallTalon.configPeakCurrentDuration(100, 0); 
+      leftWallTalon.configPeakCurrentLimit(10, 0); 
+      leftWallTalon.enableCurrentLimit(true);
+    
       floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
 
    
@@ -38,7 +54,8 @@ public class Hopper extends SubsystemBase {
 
       rightWallVictor = new VictorSPX( Constants.HOPPER_RIGHT_WALL );
       leftWallVictor = new VictorSPX( Constants.HOPPER_LEFT_WALL );
-      floorVictor = new VictorSPX( Constants.HOPPER_FLOOR );
+//      floorVictor = new VictorSPX( Constants.HOPPER_FLOOR ); floor always talon
+      
     }
     
   }

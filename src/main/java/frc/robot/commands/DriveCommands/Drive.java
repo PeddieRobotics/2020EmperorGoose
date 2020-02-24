@@ -14,9 +14,9 @@ public class Drive extends CommandBase {
   private Drivetrain m_drivetrain;
 
   private boolean isNormalizedDrive;
-
-  public Drive( Drivetrain driveTrain ) {
-
+  private boolean isRunningDrivetrainRun;
+  public Drive( Drivetrain driveTrain, boolean needsToRunRun ) {
+    isRunningDrivetrainRun = needsToRunRun;
     m_drivetrain = driveTrain;
     addRequirements(driveTrain);
     isNormalizedDrive = false;
@@ -43,8 +43,9 @@ public class Drive extends CommandBase {
     if( isNormalizedDrive ){
       NormalizedDrive( speedInput, turnInput );
     } else {
-      m_drivetrain.arcadeDrive( speedInput, turnInput, true );
+      m_drivetrain.arcadeDrive( speedInput, turnInput);
     }
+    m_drivetrain.run();
 
   }
 
@@ -68,9 +69,9 @@ public class Drive extends CommandBase {
 		  //such that (throttle + turn) always has a range [-1, 1]
     	speed = speed / saturatedInput;
 		  turn = turn / saturatedInput;
-
-    m_drivetrain.arcadeDrive( speed, turn, true );
-
+    
+      m_drivetrain.arcadeDrive( speed, turn );
+      m_drivetrain.run();
 
   }
 

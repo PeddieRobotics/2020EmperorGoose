@@ -11,6 +11,7 @@ import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -40,17 +41,16 @@ public class Drivetrain extends SubsystemBase {
   /* Value between -1.0 and 1.0 (units?) that were last given to left and right master
   CANSparkMax motor controllers during teleop (ArcadeDrive).
   */
-  private double leftDriveInput;
-  private double rightDriveInput;
-
+  double startTick = 0;
+  private double leftDriveInputSpeed, leftDriveInputTurn, rightDriveInputSpeed, rightDriveInputTurn;
   public Drivetrain(Joystick left, Joystick right) {
-
+    
     leftJoystick = left;
     rightJoystick = right;
 
     // Set up the gyro
     imu = new ADIS16470_IMU();
-    
+   
     leftDriveMaster = new NEO(1);
     rightDriveMaster = new NEO(3);
     leftDriveFollower = new NEO(2);
@@ -65,6 +65,7 @@ public class Drivetrain extends SubsystemBase {
     // NEOPIDWithSmartDashboard rightDriveMaster = new NEOPIDWithSmartDashboard(2);
     // NEOPIDWithSmartDashboard leftDriveFollower1 = new NEOPIDWithSmartDashboard(3);
     // NEOPIDWithSmartDashboard rightDriveFollower2 = new NEOPIDWithSmartDashboard(4);
+    startTick = leftDriveMaster.getEncoder().getPosition();
   
     diffDrive = new DifferentialDrive(leftDriveMaster, rightDriveMaster);
     diffDrive.setDeadband(0.05);
@@ -96,8 +97,8 @@ public class Drivetrain extends SubsystemBase {
     leftDriveMaster.setArbFF( -0.05 + ( -leftAccel * Constants.DRIVETRAIN_ACC ) ); //0.05 is the deadband
     rightDriveMaster.setArbFF( 0.05 + ( rightAccel * Constants.DRIVETRAIN_ACC ) );
 
-    leftDriveMaster.setVelocity( -left_velocity + heading );
-    rightDriveMaster.setVelocity( right_velocity + heading );
+    leftDriveMaster.setSmartVelocity( -left_velocity + heading );
+    rightDriveMaster.setSmartVelocity( right_velocity + heading );
 
   }
 
@@ -159,30 +160,30 @@ public class Drivetrain extends SubsystemBase {
     leftDriveFollower.setIdleMode(IdleMode.kCoast);
     rightDriveFollower.setIdleMode(IdleMode.kCoast);
   }
-
-  public void arcadeDrive( double speed, double turn, boolean squareInputs) {
-    
+  public void setTurn(double turn){
+    leftDriveInputTurn = -turn;
+    rightDriveInputTurn = -turn;
+  }
+  public void setSpeed(double speed){
+    leftDriveInputSpeed = speed;
+    rightDriveInputSpeed = -speed;
+  }
+  public void addToSpeed(double speed){
+    leftDriveInputSpeed += speed;
+    rightDriveInputSpeed-=speed;
+  }
+  public void addToTurn(double turn){
+    leftDriveInputTurn -= turn;
+    rightDriveInputTurn -= turn;
+  }
+  public void arcadeDrive( double speed, double turn ) {
     diffDrive.arcadeDrive(speed, -turn, true);
-
-    /*double deadband = 0.08;
-
-    if( Math.abs( speed ) < deadband ) {
-      speed = 0;
-    }
-    if ( Math.abs( turn ) < deadband ) {
-      turn = 0;
-    }
-
-    leftDriveInput = ( speed - turn );
-    rightDriveInput = ( -speed - turn );
-    
-    leftDriveMaster.set( leftDriveInput );
-    rightDriveMaster.set( rightDriveInput );*/
-    
   }
 
   @Override
   public void periodic() {
+    double tickDiff = leftDriveMaster.getEncoder().getPosition()-startTick;
+    SmartDashboard.putNumber("tick diff", tickDiff);
   }
 
   /**
@@ -215,5 +216,20 @@ public class Drivetrain extends SubsystemBase {
   public double getTurn() {
     return rightJoystick.getRawAxis(0);
   }
+  /**
+   * We set the left and right motors to the inputs, then reset them so that they don't add up too much
+   */
+  public void run(){
+    
+    leftDriveMaster.set(leftDriveInputSpeed+leftDriveInputTurn);
+   
+    rightDriveMaster.set(rightDriveInputSpeed+rightDriveInputTurn);
+
+    setSpeed(0);//reset vars
+    setTurn(0);
+  
+  }
+  //new arcade drive refractoring
+
 
 }

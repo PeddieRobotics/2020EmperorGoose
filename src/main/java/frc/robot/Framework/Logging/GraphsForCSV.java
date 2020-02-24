@@ -96,7 +96,7 @@ public class GraphsForCSV extends Application {
         openButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(final ActionEvent e) {
-                fileChooser.setInitialDirectory(new File("D:\\MyProfile\\Documents\\NetBeansProjects\\GraphsForCSV\\"));//CHANGE TO WHEREVER UR FILE IS 
+                fileChooser.setInitialDirectory(new File(CSVClient.staticDirectoryName()));//CHANGE TO WHEREVER UR FILE IS 
                 
                 File file = fileChooser.showOpenDialog(primaryStage);
 
@@ -113,7 +113,7 @@ public class GraphsForCSV extends Application {
 
         };
         EventHandler<ActionEvent> graphLatest = (ActionEvent e) -> {
-            graphCSVScene(primaryStage, "D:\\MyProfile\\Documents\\NetBeansProjects\\GraphsForCSV\\DefaultGraph.csv");// default
+            graphCSVScene(primaryStage, CSVClient.staticDirectoryName()+"DefaultGraph.csv");// default
                                                                                                                       // graph
                                                                                                                       // loc
         };

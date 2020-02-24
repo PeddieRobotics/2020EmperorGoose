@@ -41,7 +41,7 @@ public class UnjamTower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(final boolean interrupted) {
-      new IndexPowerCells(m_tower, m_hopper);
+      //will index powerCells automatically, its default command
   }
 
   // Returns true when the command should end.

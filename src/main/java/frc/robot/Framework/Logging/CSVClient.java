@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 public class CSVClient{
-    Thread thats; 
+   
     Socket firstSocket;
     Scanner in;
     ArrayList<Report> report = new ArrayList();
@@ -26,14 +26,23 @@ public class CSVClient{
         try {
             firstSocket = new Socket(addr, portNumber);
             in = new Scanner(firstSocket.getInputStream());
-            dumpOutput();
+            getServerInputAndDumpToCSV();
         } catch (IOException ex) {
-            Logger.getLogger(CSVClient.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CSVClient.class.getName()).log(Level.SEVERE, null, ex);//dont really need, i was just using this in netbeans
         }
        
     }
-
-    public void dumpOutput(){ 
+    /**
+     * Gets the input from the surver and dumps it to an output 
+     * In all honesty this is proably very poorly written and inefficient, and if that bothers you feel free to clean it up
+     * I however am not such a mythical good programmer and am to lazy to fix it
+     * What this does is it gets lines from server until it has none. For each line we deformat into an arraylist (CSV server does some
+     *  formatting to keep data organized across the network so we must first undo it)
+     * Then we take the arraylist and move it into an array(once again prbly pointless but i had already written the array impl
+     * and didn't wanna re-write)
+     * This array is then written to a csv through fun. explained below
+     */
+    public void getServerInputAndDumpToCSV(){ 
         
         String lineFromServer;
         do{
@@ -47,6 +56,7 @@ public class CSVClient{
         for(int i =0; i < lineFromServer.length();i++){
             saveI = i;
             try{
+                
                 if(i>0&&lineFromServer.charAt(i)==','){
                     if(!firstfound){
                         strings.add(lineFromServer.substring(lastIndex,i));
@@ -77,33 +87,47 @@ public class CSVClient{
         writeCsvFile(name+".csv");
     }
     String filename = "";
-    public String fileName(){
+    /**
+     * 
+     * @return the name of the file that we created
+     */
+    public String fileName(){   
+        return directoryName() + filename;
+    }
+    /**
+     * 
+     * @return the name of the directory(full path!) to place the files in + what you named the file, rn  its lrvgwpf(left and right
+     *  velocity for path following)
+     */
+    public static String staticDirectoryName(){
+        return "D:\\MyProfile\\Documents\\NetBeansProjects\\GraphsForCSV\\";
+    }
+    public String directoryName(){
         System.out.println("D:\\MyProfile\\Documents\\NetBeansProjects\\GraphsForCSV\\"+filename);
         return "D:\\MyProfile\\Documents\\NetBeansProjects\\GraphsForCSV\\"+filename;
     }
+    /**
+     * Writes across the network for whatever you wanna call it 
+     * @param fileName the name we wanna call it
+     */
     public void writeCsvFile(String fileName) {
        
         
         FileWriter fileWriter = null;
                  
         try {
-            fileWriter = new FileWriter("D:\\MyProfile\\Documents\\NetBeansProjects\\GraphsForCSV\\"+fileName);
+            fileWriter = new FileWriter(directoryName()+fileName);
             filename = fileName;
             
-            fileWriter.append("\n");
+            fileWriter.append("\n");// add a new line
              
-            //Write ur report to csv
+            //Write ur report to csv=> this was intented to be further implemented but never got around to it, might remove it
             for (Report reportss : report) {
                 reportss.returnCsvReport(fileWriter);
                 fileWriter.append("\n");
             }
- 
-             
-             
-            System.out.println("CSV file was created successfully fasdlfjkasd");
              
         } catch (Exception e) {
-            System.out.println("Error in CsvFileWriter ughhhhhhhhhhhhhhhhh we fail again");
             e.printStackTrace();
         } finally {//being responsible and closing stuff down like good programmer
              
@@ -117,7 +141,7 @@ public class CSVClient{
         }
     }
     public static void main(String[] args) throws IOException {
-      new CSVClient("10.58.95.2",5800);//LoCaL hoST
+      new CSVClient("10.58.95.2",5800);//Robot ip, port 5800(MAKE SURE THIS ISN'T USED IN PORT FORWARDING!!!!!!)
     }
 }
 

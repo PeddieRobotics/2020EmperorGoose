@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Auto.PIDClasses.NEO;
+import frc.robot.Auto.PIDClasses.NEOPIDWithSmartDashboard;
 import frc.robot.Framework.MovingAverage;
 import frc.robot.Framework.Logging.CSVLogger;
 
@@ -33,10 +34,12 @@ public class Flywheel extends SubsystemBase {
     avgOfFlyWheelSpeeds = new MovingAverage(10);
     flyWheelForward = new NEO( Constants.FLYWHEEL_1 );
     flyWheelBackward = new NEO( Constants.FLYWHEEL_2 );
-
+   // NEOPIDWithSmartDashboard flyWheelForwards = new NEOPIDWithSmartDashboard(Constants.FLYWHEEL_1);
+   // NEOPIDWithSmartDashboard flyWheelBackwards = new NEOPIDWithSmartDashboard(Constants.FLYWHEEL_2);
     flyWheelForward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
     flyWheelBackward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
-    
+    flyWheelForward.setSmartCurrentLimit(40);
+    flyWheelBackward.setSmartCurrentLimit(40);
     CSVLogger.getInstance().addStringToHeader("velocity");
     CSVLogger.getInstance().addVariablesToRecored(this::getAvgVelocity);
     
@@ -46,7 +49,25 @@ public class Flywheel extends SubsystemBase {
    * sets shooter motors
    * @param setpoint shooter speed
    */
-  public void runMotors() {
+  public void setMotors( double setpoint ) {
+    if(setpoint > 0.0){
+      currentMode = FlywheelModeType.SHOOTING;
+    }
+    else if(setpoint == 0.0){
+      currentMode = FlywheelModeType.DISABLED;
+    }
+    else{
+      currentMode = FlywheelModeType.REVERSE;
+    }
+    
+
+    m_setpoint = setpoint;
+
+    
+  
+    flyWheelBackward.setVelocity(-setpoint);
+
+    flyWheelForward.setVelocity(setpoint);
   
     flyWheelBackward.setVelocity(-m_setpoint);
     flyWheelForward.setVelocity(m_setpoint);
@@ -82,7 +103,7 @@ public class Flywheel extends SubsystemBase {
       currentMode = FlywheelModeType.DISABLED;
     }
 
-    flyWheelBackward.set(setpoint);
+    flyWheelBackward.set(-setpoint);
     flyWheelForward.set(setpoint);
   }
 
@@ -99,6 +120,7 @@ public class Flywheel extends SubsystemBase {
 
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("fly wheel motor current", flyWheelForward.getOutputCurrent());
     // This method will be called once per scheduler run
   }
 
@@ -116,4 +138,13 @@ public class Flywheel extends SubsystemBase {
     if(m_setpoint < 999 || m_setpoint > 5000)
         m_setpoint = defaultSetpoint;    
   }
+  public void runMotors() {
+  
+    flyWheelBackward.setVelocity(-m_setpoint);
+    flyWheelForward.setVelocity(m_setpoint);
+    avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
+
+  }
+
+
 }
