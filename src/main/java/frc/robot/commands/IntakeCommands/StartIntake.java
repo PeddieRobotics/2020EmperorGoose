@@ -8,21 +8,25 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
 
 public class StartIntake extends CommandBase {
   
-  private Intake m_Intake;
+  private Intake m_intake;
+  private Hopper m_hopper;
   
-  public StartIntake(Intake intake) {
-    m_Intake = intake;
+  public StartIntake(Intake intake, Hopper hopper) {
+    m_intake = intake;
+    m_hopper = hopper;
     addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_Intake.startIntake();
+    m_intake.startIntake();
+    m_hopper.runAll();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

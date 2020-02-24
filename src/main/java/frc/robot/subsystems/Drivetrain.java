@@ -162,7 +162,7 @@ public class Drivetrain extends SubsystemBase {
 
   public void arcadeDrive( double speed, double turn, boolean squareInputs) {
     
-    diffDrive.arcadeDrive(speed, -turn, false);
+    diffDrive.arcadeDrive(speed, -turn, true);
 
     /*double deadband = 0.08;
 

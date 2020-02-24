@@ -37,6 +37,7 @@ import frc.robot.commands.HopperCommands.StopHopper;
 import frc.robot.commands.HopperCommands.ToggleHopperOnOff;
 import frc.robot.commands.IntakeCommands.LowerIntake;
 import frc.robot.commands.IntakeCommands.RaiseIntake;
+import frc.robot.commands.IntakeCommands.StartIntake;
 import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.IntakeCommands.ToggleIntakeOnOff;
 import frc.robot.commands.IntakeCommands.ToggleIntakeUpDown;
@@ -139,11 +140,11 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   public void configureButtonBindings() {
-    leftTrigger.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
-    leftButton2.whenHeld(new UnjamTower(m_tower, m_hopper, 0.5));
-    leftButton3.whenHeld(new RaiseClimber(m_climber));
-    leftButton4.whenPressed(new LowerClimber(m_climber));
-
+    leftTrigger.whenPressed(new StartIntake(m_intake, m_hopper));
+    leftButton2.whenPressed(new StopIntake(m_intake, m_hopper));
+    leftButton3.whenHeld(new UnjamTower(m_tower, m_hopper, 0.5));
+    leftButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
+    
     rightTrigger.whileHeld(new ParallelCommandGroup(
                             new ShootLayup(m_flywheel), 
                             new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
@@ -152,13 +153,13 @@ public class RobotContainer {
                                       new ShootFromFar(m_flywheel),
                                       new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightButton2.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
-    rightButton3.whileHeld(new ParallelCommandGroup(
+    /*rightButton3.whileHeld(new ParallelCommandGroup(
                                       new ShootFromFar(m_flywheel),
                                       new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel),
                                       new Centering(m_limelight,m_driveTrain,0)));
-    rightButton3.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
-
-    rightButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
+    rightButton3.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));*/
+    rightButton3.whenHeld(new RaiseClimber(m_climber));
+    rightButton4.whenPressed(new LowerClimber(m_climber));
 
     opTrigger.toggleWhenPressed(new ToggleHoodUpDown(m_flywheel));
     opButton2.toggleWhenPressed(new ToggleClimberUpDown(m_climber));

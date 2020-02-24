@@ -8,14 +8,18 @@
 package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Tower;
 
 public class StopIntake extends CommandBase {
   
   private Intake m_intake;
+  private Hopper m_hopper;
 
-  public StopIntake(Intake intake) {
+  public StopIntake(Intake intake, Hopper hopper) {
     m_intake = intake;
+    m_hopper = hopper;
     addRequirements(intake);
   }
 
@@ -23,6 +27,7 @@ public class StopIntake extends CommandBase {
   @Override
   public void initialize() {
     m_intake.stopIntake();
+    m_hopper.stopAll();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
