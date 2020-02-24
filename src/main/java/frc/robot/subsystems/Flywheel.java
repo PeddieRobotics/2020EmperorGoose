@@ -74,7 +74,7 @@ public class Flywheel extends SubsystemBase {
   
   public void setMotorPercentOutput(double setpoint){
     m_setpoint = 0.0;
-    
+
     if(setpoint > 0.0){
       currentMode = FlywheelModeType.SHOOTING;
     }
@@ -104,6 +104,10 @@ public class Flywheel extends SubsystemBase {
 
   public void updateSetpoint(double setpoint){
     m_setpoint = setpoint;
+  }
+
+  public double getSetpoint(){
+    return m_setpoint;
   }
 
   public void setpointWithSmartDashboard(double defaultSetpoint){

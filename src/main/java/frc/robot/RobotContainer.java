@@ -26,6 +26,7 @@ import frc.robot.commands.ClimberCommands.RaiseClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
 import frc.robot.commands.DriveCommands.Drive;
 import frc.robot.commands.FlywheelCommands.RaiseHood;
+import frc.robot.commands.FlywheelCommands.RunFlywheelUntilTowerHasStopped;
 import frc.robot.commands.FlywheelCommands.ShootFromFar;
 import frc.robot.commands.FlywheelCommands.ShootLayup;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheelOnOff;
@@ -151,6 +152,8 @@ public class RobotContainer {
     rightButton2.whenHeld(new ParallelCommandGroup(
                                       new ShootFromFar(m_flywheel, Constants.RPM_FAR),
                                       new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, Constants.RPM_FAR)));
+    leftButton3.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
+
     rightButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
 
     opTrigger.toggleWhenPressed(new ToggleHoodUpDown(m_flywheel));

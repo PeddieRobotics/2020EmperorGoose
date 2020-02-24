@@ -54,16 +54,12 @@ public class Tower extends SubsystemBase {
   }
 
   public void reverse(double percent){
-    double topMotorSpeed = topMotor.get();
-    double bottomMotorSpeed = topMotor.get();
+    double topMotorSpeed = getTopMotorSpeed();
+    double bottomMotorSpeed = getBottomMotorSpeed();
     runTopMotor(-percent*topMotorSpeed);
     runBottomMotor(-percent*bottomMotorSpeed);
 
     currentMode = TowerModeType.REVERSE;
-  }
-
-  public double getBottomMotorSpeed(){
-    return bottomMotor.get();
   }
 
   /**
@@ -159,5 +155,14 @@ public class Tower extends SubsystemBase {
   public void stopAll(){
     runMotors(0.0);
   }
+
+  public double getTopMotorSpeed(){
+    return topMotor.getEncoder().getVelocity();
+  }
+
+  public double getBottomMotorSpeed(){
+    return bottomMotor.getEncoder().getVelocity();
+  }
+
 
 }
