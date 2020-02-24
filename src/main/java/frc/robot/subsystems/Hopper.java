@@ -112,9 +112,9 @@ public class Hopper extends SubsystemBase {
 
   public void runAll() {
     
-    setRightWall( -.5 );  //currently: -0.3
-    setLeftWall( -.5 );    //currently:  0.2
-    setFloor( -.5 );      //currently: -0.3
+    setRightWall( 0.5 );
+    setLeftWall( 0.5 );
+    setFloor( -0.5 );
 
     currentMode = HopperModeType.INTAKING;
 
@@ -137,7 +137,7 @@ public class Hopper extends SubsystemBase {
   }
 
   public void reverse(double percent){
-    double leftWallPercent = 0.0;
+    /*double leftWallPercent = 0.0;
     double floorPercent = 0.0;
     if(RobotContainer.isCompetitionRobot()){
       leftWallPercent = leftWallTalon.getMotorOutputPercent();
@@ -148,7 +148,11 @@ public class Hopper extends SubsystemBase {
       floorPercent = floorVictor.getMotorOutputPercent();  
     }
     setLeftWall(-percent*leftWallPercent);
-    setFloor(-percent*floorPercent);
+    setFloor(-percent*floorPercent);*/
+
+    setLeftWall(-0.5);
+    setRightWall(0.5);
+    setFloor(0.5);
 
     currentMode = HopperModeType.REVERSE;
   }

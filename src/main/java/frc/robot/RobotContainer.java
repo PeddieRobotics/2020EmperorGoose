@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Framework.CommandLooper;
@@ -138,22 +139,22 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   public void configureButtonBindings() {
-    leftTrigger.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
+    leftTrigger.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
     leftButton2.whenHeld(new UnjamTower(m_tower, m_hopper, 0.5));
-    leftButton3.whenPressed(new RaiseClimber(m_climber));
+    leftButton3.whenHeld(new RaiseClimber(m_climber));
     leftButton4.whenPressed(new LowerClimber(m_climber));
 
     rightTrigger.whileHeld(new ParallelCommandGroup(
-                            new ShootLayup(m_flywheel, Constants.RPM_LAYUP), 
-                            new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, Constants.RPM_LAYUP)));
+                            new ShootLayup(m_flywheel), 
+                            new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightTrigger.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     rightButton2.whileHeld(new ParallelCommandGroup(
-                                      new ShootFromFar(m_flywheel, Constants.RPM_FAR),
-                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, Constants.RPM_FAR)));
+                                      new ShootFromFar(m_flywheel),
+                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightButton2.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     rightButton3.whileHeld(new ParallelCommandGroup(
-                                      new ShootFromFar(m_flywheel, Constants.RPM_FAR),
-                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, Constants.RPM_FAR),
+                                      new ShootFromFar(m_flywheel),
+                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel),
                                       new Centering(m_limelight,m_driveTrain,0)));
     rightButton3.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
 
@@ -161,7 +162,7 @@ public class RobotContainer {
 
     opTrigger.toggleWhenPressed(new ToggleHoodUpDown(m_flywheel));
     opButton2.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
-    opButton3.toggleWhenPressed(new ToggleIntakeUpDown(m_intake));
+    opButton3.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
     opButton4.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
     opButton5.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
     opButton6.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
@@ -188,7 +189,7 @@ public class RobotContainer {
     leftTrigger.toggleWhenPressed(new ToggleHoodUpDown(m_flywheel));
     leftButton2.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
     leftButton3.toggleWhenPressed(new ToggleIntakeUpDown(m_intake));
-    leftButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
+    leftButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
     leftButton5.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
     leftButton6.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
     leftButton7.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));

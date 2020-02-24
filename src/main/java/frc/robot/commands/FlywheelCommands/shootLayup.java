@@ -9,6 +9,7 @@ package frc.robot.commands.FlywheelCommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Flywheel;
 
 public class ShootLayup extends CommandBase {
@@ -17,9 +18,9 @@ public class ShootLayup extends CommandBase {
 
   private double speed;
 
-  public ShootLayup(Flywheel flywheel, double rpm) {
-    speed = rpm;
+  public ShootLayup(Flywheel flywheel) {
     m_flywheel = flywheel;
+    speed = Constants.RPM_LAYUP;
     addRequirements(m_flywheel);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -28,7 +29,6 @@ public class ShootLayup extends CommandBase {
   @Override
   public void initialize() {
     m_flywheel.updateSetpoint(speed);
-    SmartDashboard.putNumber("Flywheel Setpoint", speed);
     m_flywheel.setHood(false);
 
   }
@@ -36,7 +36,7 @@ public class ShootLayup extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_flywheel.setpointWithSmartDashboard(speed);
+    m_flywheel.getSetpointFromSmartDashboard(speed);
     m_flywheel.runMotors();
   }
 

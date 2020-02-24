@@ -29,14 +29,14 @@ public class ShootFlywheel extends SequentialCommandGroup {
   private Flywheel m_flywheel;
   private Hopper m_hopper;
 
-  public ShootFlywheel(Tower tower, Flywheel flywheel, Hopper hopper, double rpm) {
+  public ShootFlywheel(Tower tower, Flywheel flywheel, Hopper hopper) {
     
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     
-    super(new ParallelCommandGroup(new ShootFromFar(flywheel, rpm), 
-    new RunTowerBasedOffFlyWheel(hopper, tower, flywheel,rpm)), 
-    new ParallelRaceGroup( new WaitCommand(1), new ShootFromFar(flywheel,rpm)));
+    super(new ParallelCommandGroup(new ShootFromFar(flywheel), 
+    new RunTowerBasedOffFlyWheel(hopper, tower, flywheel)), 
+    new ParallelRaceGroup( new WaitCommand(1), new ShootFromFar(flywheel)));
 
       m_tower = tower;
       m_flywheel = flywheel;

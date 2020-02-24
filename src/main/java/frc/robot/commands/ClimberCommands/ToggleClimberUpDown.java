@@ -6,13 +6,17 @@
 /*----------------------------------------------------------------------------*/
 package frc.robot.commands.ClimberCommands;
 
+import java.sql.Time;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Climber;
 
 public class ToggleClimberUpDown extends CommandBase {
 
   private Climber m_climber;
-
+  double startTime = 0;
+  double endTime = 0;
   public ToggleClimberUpDown(Climber climber) {
     m_climber = climber;
     addRequirements(climber);
@@ -21,12 +25,15 @@ public class ToggleClimberUpDown extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_climber.raiseClimber();    
+    startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(Timer.getFPGATimestamp()-startTime>1){
+      m_climber.raiseClimber();    
+    }
   }
 
   // Called once the command ends or is interrupted.

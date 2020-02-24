@@ -19,7 +19,7 @@ public class UnjamTower extends CommandBase {
   private final Hopper m_hopper;
   private final double m_percent;
 
-  public UnjamTower(final Tower tower, final Hopper hopper, final double percent) {
+  public UnjamTower(Tower tower, Hopper hopper, double percent) {
     m_tower = tower;
     m_hopper = hopper;
     m_percent = percent;

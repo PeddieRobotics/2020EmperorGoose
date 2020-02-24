@@ -22,7 +22,7 @@ import frc.robot.commands.FlywheelCommands.*;
 
 public class TestAuto extends SequentialCommandGroup {
 
-  public TestAuto(Hopper hopper, Tower tower, Flywheel flywheel, double rpm) {
-    new SequentialCommandGroup(new ParallelRaceGroup(new ShootFlywheel(tower, flywheel, hopper, rpm), new ShootCounter(tower,3)));
+  public TestAuto(Hopper hopper, Tower tower, Flywheel flywheel) {
+    new SequentialCommandGroup(new ParallelRaceGroup(new ShootFlywheel(tower, flywheel, hopper), new ShootCounter(tower,3)));
   }
 }

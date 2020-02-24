@@ -32,11 +32,15 @@ public class Climber extends SubsystemBase {
   public void raiseClimber(){
     leftArmSolenoid.set(true);
     rightArmSolenoid.set(true);
+
+    isUp = true;
   }
 
   public void lowerClimber(){
     leftArmSolenoid.set(false);
     rightArmSolenoid.set(false);
+
+    isUp = false;
   }
 
   @Override
