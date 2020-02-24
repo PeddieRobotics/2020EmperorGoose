@@ -31,6 +31,7 @@ public class StartFlywheel extends CommandBase {
   @Override
   public void initialize() {
     m_flywheel.updateSetpoint(2000);
+    m_flywheel.setpointWithSmartDashboard(2000);
     avgOfSpeed.clearInitialize();
   }
 

@@ -30,6 +30,7 @@ public class ShootFromFar extends CommandBase {
   @Override
   public void initialize() {
     m_flywheel.updateSetpoint(speed);
+    SmartDashboard.putNumber("Flywheel Setpoint", speed);
     m_flywheel.setHood(true);
     //avgOfSpeed.clearInitialize();
   }

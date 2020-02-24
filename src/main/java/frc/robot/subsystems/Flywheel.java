@@ -113,9 +113,6 @@ public class Flywheel extends SubsystemBase {
   public void setpointWithSmartDashboard(double defaultSetpoint){
     m_setpoint = SmartDashboard.getNumber("Flywheel Setpoint", defaultSetpoint);
     if(m_setpoint < 999 || m_setpoint > 5000)
-        m_setpoint = defaultSetpoint;
-    
-    SmartDashboard.putNumber("Flywheel Setpoint", m_setpoint);
-    
+        m_setpoint = defaultSetpoint;    
   }
 }

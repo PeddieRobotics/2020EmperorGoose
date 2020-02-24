@@ -8,18 +8,21 @@
 package frc.robot.commands.HopperCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Hopper;
 
 public class UnjamHopper extends CommandBase {
-  /**
-   * Creates a new unJamHopper.
-   */
-  public UnjamHopper() {
+  
+  Hopper m_hopper;
+
+  public UnjamHopper(Hopper hopper) {
+    m_hopper = hopper;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_hopper.reverse(0.5);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

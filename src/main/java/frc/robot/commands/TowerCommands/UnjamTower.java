@@ -15,11 +15,11 @@ import frc.robot.subsystems.Tower;
 
 public class UnjamTower extends CommandBase {
   
-  private Tower m_tower;
-  private Hopper m_hopper;
-  private double m_percent;
+  private final Tower m_tower;
+  private final Hopper m_hopper;
+  private final double m_percent;
 
-  public UnjamTower(Tower tower, Hopper hopper, double percent) {
+  public UnjamTower(final Tower tower, final Hopper hopper, final double percent) {
     m_tower = tower;
     m_hopper = hopper;
     m_percent = percent;
@@ -40,13 +40,13 @@ public class UnjamTower extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
+  public void end(final boolean interrupted) {
       new IndexPowerCells(m_tower, m_hopper);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 }

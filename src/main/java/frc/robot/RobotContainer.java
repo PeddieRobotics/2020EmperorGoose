@@ -41,6 +41,7 @@ import frc.robot.commands.IntakeCommands.ToggleIntakeOnOff;
 import frc.robot.commands.IntakeCommands.ToggleIntakeUpDown;
 import frc.robot.commands.JoystickCommands.ShootFlywheel;
 import frc.robot.commands.LimelightCommands.Centering;
+import frc.robot.commands.LimelightCommands.ToggleLight;
 import frc.robot.commands.MiscCommands.StopAllSubsystems;
 import frc.robot.commands.TowerCommands.IndexPowerCells;
 import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
@@ -142,28 +143,30 @@ public class RobotContainer {
     leftButton3.whenPressed(new RaiseClimber(m_climber));
     leftButton4.whenPressed(new LowerClimber(m_climber));
 
-    rightTrigger.whenHeld(new ParallelCommandGroup(
+    rightTrigger.whileHeld(new ParallelCommandGroup(
                             new ShootLayup(m_flywheel, Constants.RPM_LAYUP), 
                             new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, Constants.RPM_LAYUP)));
-    rightButton3.whileActiveContinuous(new ParallelCommandGroup(
+    rightTrigger.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
+    rightButton2.whileHeld(new ParallelCommandGroup(
+                                      new ShootFromFar(m_flywheel, Constants.RPM_FAR),
+                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, Constants.RPM_FAR)));
+    rightButton2.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
+    rightButton3.whileHeld(new ParallelCommandGroup(
                                       new ShootFromFar(m_flywheel, Constants.RPM_FAR),
                                       new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, Constants.RPM_FAR),
                                       new Centering(m_limelight,m_driveTrain,0)));
-    rightButton2.whenHeld(new ParallelCommandGroup(
-                                      new ShootFromFar(m_flywheel, Constants.RPM_FAR),
-                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, Constants.RPM_FAR)));
-    leftButton3.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
+    rightButton3.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
 
     rightButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
 
     opTrigger.toggleWhenPressed(new ToggleHoodUpDown(m_flywheel));
     opButton2.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
     opButton3.toggleWhenPressed(new ToggleIntakeUpDown(m_intake));
-    opButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake));
-    opButton5.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
-    opButton6.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
-    opButton7.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
-    // operator limelight light toggle
+    opButton4.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
+    opButton5.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
+    opButton6.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
+    opButton7.toggleWhenPressed(new ToggleLight(m_limelight));
+    opButton8.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
 
   }
 

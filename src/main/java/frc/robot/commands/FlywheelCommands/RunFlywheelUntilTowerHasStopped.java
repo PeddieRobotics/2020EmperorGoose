@@ -31,8 +31,7 @@ public class RunFlywheelUntilTowerHasStopped extends CommandBase {
     if(m_tower.senses_ball_Top0()){
     
       m_tower.runTopMotor(.8);
-      m_flywheel.updateSetpoint(m_flywheel.getSetpoint());
-    
+      m_flywheel.runMotors();
     }
     
     //if no balls try and stop the tower(100 to ignore any noise in motorspeed)
