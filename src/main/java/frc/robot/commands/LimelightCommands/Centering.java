@@ -30,13 +30,19 @@ public class Centering extends CommandBase {
    * for ex. in auto we would want it to be continous but in tele we would want it to be not continous
    */
   public Centering(Limelight limelight, Drivetrain drivetrain, int centers, boolean isContinous) {
+    
     m_driveTrain = drivetrain;
+    
     m_isContinous = isContinous;
+    
     SmartDashboard.putNumber("p value", 0.0);
+    
     SmartDashboard.putNumber("error",0.0);
+
     SmartDashboard.putNumber("deadband", 0.0);
       
     limes= limelight;
+    
     center = centers;
     //addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -69,9 +75,9 @@ public class Centering extends CommandBase {
     SmartDashboard.putBoolean("centered", centered);
     if(limes.hasTarget()){
       
-      double p = 0.015;
-      double error1 = 2.5;
-      double deadband = SmartDashboard.getNumber("deadband", 0.0);
+      double p = 0.02;
+      double error1 =.7;
+      double deadband =  0.064;
       SmartDashboard.putNumber("average", average.get());
       tx = limes.getTx();
       average.add(Math.abs(Math.abs(tx)-center));
@@ -79,9 +85,8 @@ public class Centering extends CommandBase {
         m_driveTrain.addToTurn(keepArbSign(center,tx)*Math.max(deadband,p*Math.abs(tx-center)));
         SmartDashboard.putNumber("Turn", -keepArbSign(center,tx)*Math.max(deadband,p*Math.abs(tx-center)));
       }
-      else if(average.get()<error1){
-        m_driveTrain.addToTurn(0.05);
-      }else if(average.get()<1.5){
+
+      else {
         m_driveTrain.setTurn(0);
         //do nothing
       }

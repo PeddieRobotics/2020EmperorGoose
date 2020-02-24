@@ -20,7 +20,7 @@ public class ToggleIntakeOnOff extends CommandBase {
   Hopper m_hopper;
   public ToggleIntakeOnOff(Intake intake) {
     m_intake = intake;
-    
+  
     addRequirements(intake);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -29,7 +29,7 @@ public class ToggleIntakeOnOff extends CommandBase {
 // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_tower.runMotors(0);
+   // m_tower.runMotors(0);
     m_hopper.runAll();  
     m_intake.startIntake();
   }

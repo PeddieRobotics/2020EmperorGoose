@@ -37,10 +37,12 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
   @Override
   public void execute() {
     DriverStation.reportError("running",false);
-    if(Math.abs(m_flywheel.getAvgVelocity()-rpm)<1000){
+    
+    if(Math.abs(m_flywheel.getAvgVelocity()-rpm)<100){
       m_tower.runMotors(.5);
       m_hopper.runAll(); 
-    }  
+    }
+
     else {
       m_tower.runMotors(0);
       m_hopper.stopAll();
