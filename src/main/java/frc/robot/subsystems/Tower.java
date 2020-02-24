@@ -145,5 +145,12 @@ public class Tower extends SubsystemBase {
     }
 
   }
+  public double topMotorSpeed(){
+    return topMotor.getEncoder().getVelocity();
+  }
+
+  public double bottomMotorSpeed(){
+    return bottomMotor.getEncoder().getVelocity();
+  }
 
 }

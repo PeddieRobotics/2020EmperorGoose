@@ -150,11 +150,12 @@ public class RobotContainer {
       //shoot layup and run flywheel at 2500 rpm
       leftButton3.whileActiveContinuous(new ParallelCommandGroup( new shootLayup(m_flywheel), 
       new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, 2500)));
+    
       leftButton4.whileActiveOnce(new LowerClimber(m_climber));
       //center and shoot
       rightButton2.whileActiveContinuous(new ParallelCommandGroup(
        new ShootFlywheel(m_tower, m_flywheel, m_hopper,m_driveTrain, 3350)));
-
+      rightButton2.whenReleased()
       //drive onto the center line
       rightButton3.whileActiveContinuous(new SequentialCommandGroup( new ResetGyro(m_driveTrain), 
       new Centering(m_limelight,m_driveTrain,0,true), new Centering(m_limelight,m_driveTrain,20,true),

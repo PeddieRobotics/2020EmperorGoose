@@ -7,58 +7,61 @@
 
 package frc.robot.commands.FlywheelCommands;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Framework.MovingAverage;
 import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Tower;
 
-public class RunFlywheel extends CommandBase {
-
-  private Flywheel m_flywheel;
-  private double speed;
-  private MovingAverage avgOfSpeed;
-  private boolean stopFlywheelPostShot;
-  public RunFlywheel(Flywheel flywheel, double rpm, boolean shouldStopFlywheelAfterShot) {
-    stopFlywheelPostShot=shouldStopFlywheelAfterShot;
+public class RunUntilTowerHasStopped extends CommandBase {
+  /**
+   * Creates a new RunUntilTowerHasStopped.
+   */
+  Tower m_tower;
+  Flywheel m_flywheel;
+  boolean hasStoppedFlywheel;
+  public RunUntilTowerHasStopped(Tower tower, Flywheel flywheel) {
+    m_tower = tower;
     m_flywheel = flywheel;
-    speed = rpm;
     addRequirements(flywheel);
     // Use addRequirements() here to declare subsystem dependencies.
   }
-  
 
-// Called when the command is initially scheduled.
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //avgOfSpeed.clearInitialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_flywheel.setMotors(3350);
-    m_flywheel.setHood(true);
+    //get rid of any leftover balls
+    if(m_tower.senses_ball_Top0()){
+      m_tower.runTopMotor(.8);
+      m_flywheel.setMotors(m_flywheel.getSetpoint());
+    }
+    //if no balls try and stop the tower(100 to ignore any noise in motorspeed)
+    else if(m_tower.topMotorSpeed()<=100&&m_tower.bottomMotorSpeed()<=100){
+      hasStoppedFlywheel = true;
+      m_flywheel.setMotorPercentOutput(0);
+      m_tower.runMotors(0);
+    
+    }
+    //run flywheel until motors have pretty much stopped
+    else{
+      m_flywheel.setMotors(m_flywheel.getSetpoint());
+      m_tower.runMotors(0);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    if(!interrupted){
-      DriverStation.reportError("is interupted",false);
-    }
-
-    DriverStation.reportError("is interupted false",false);
-    if(stopFlywheelPostShot){
-      m_flywheel.setMotorPercentOutput(0.0);
-    }
-    m_flywheel.setHood(false);
+    m_tower.runMotors(0);
+    m_flywheel.setMotorPercentOutput(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return hasStoppedFlywheel;
   }
-
 }

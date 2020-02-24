@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Auto.PIDClasses.NEO;
+import frc.robot.Auto.PIDClasses.NEOPIDWithSmartDashboard;
 import frc.robot.Framework.MovingAverage;
 import frc.robot.Framework.Logging.CSVLogger;
 
@@ -28,7 +29,8 @@ public class Flywheel extends SubsystemBase {
     avgOfFlyWheelSpeeds = new MovingAverage(10);
     flyWheelForward = new NEO( Constants.FLYWHEEL_1 );
     flyWheelBackward = new NEO( Constants.FLYWHEEL_2 );
-
+   // NEOPIDWithSmartDashboard flyWheelForwards = new NEOPIDWithSmartDashboard(Constants.FLYWHEEL_1);
+   // NEOPIDWithSmartDashboard flyWheelBackwards = new NEOPIDWithSmartDashboard(Constants.FLYWHEEL_2);
     flyWheelForward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
     flyWheelBackward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
     flyWheelForward.setSmartCurrentLimit(40);
@@ -55,6 +57,8 @@ public class Flywheel extends SubsystemBase {
     
 
     m_setpoint = setpoint;
+
+    
   
     flyWheelBackward.setVelocity(-setpoint);
 
@@ -63,7 +67,9 @@ public class Flywheel extends SubsystemBase {
     avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
 
   }
-
+  public double getSetpoint(){
+    return m_setpoint;
+  }
   public void setHood(boolean isUp){
    
     hSolenoid.set(isUp);
