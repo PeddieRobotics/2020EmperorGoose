@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.Auto.GenPathSetup;
 import frc.robot.Framework.Logging.CSVServer;
 import frc.robot.Framework.Logging.LoadPath;
@@ -175,7 +176,7 @@ public class FollowPath extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(final boolean interrupted) {
-    m_drivetrain.arcadeDrive(0, 0);
+    m_drivetrain.arcadeDrive(0, 0, Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED);
     m_drivetrain.setBrake();
     m_drivetrain.run();
     endTime = System.currentTimeMillis();

@@ -19,7 +19,7 @@ public final class Constants {
     public static final int RIGHT_MASTER = 3;
     public static final int RIGHT_FOLLOWER = 4;
 
-    public static final int HOPPER_RIGHT_WALL = 6; //possibly will use if engineers do a hopper w/2 motors???
+    public static final int HOPPER_RIGHT_WALL = 6;
     public static final int HOPPER_FLOOR = 10;
     public static final int HOPPER_LEFT_WALL = 5;
     public static final int HOTDOG_ROLLER = 10;
@@ -45,6 +45,8 @@ public final class Constants {
     public static final double DRIVETRAIN_ACC = 0.23;
     public static final double DRIVETRAIN_ACC_OFFSET = 0.00;
 
+    public static final double DRIVETRAIN_DEADBAND = 0.05;
+    public static final boolean DRIVETRAIN_USE_SQUARED = true;
 
     public static final double FLYWHEEL_P = 0.0000;
     public static final double FLYWHEEL_I = 0;

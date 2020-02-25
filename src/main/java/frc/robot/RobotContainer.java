@@ -139,14 +139,14 @@ public class RobotContainer {
   public void configureButtonBindings() {
     leftTrigger.whenPressed(new StartIntake(m_intake, m_hopper));
     leftButton2.whenPressed(new StopIntake(m_intake, m_hopper));
-    leftButton3.whenHeld(new UnjamTower(m_tower, m_hopper, 0.5));
+    leftButton3.whenHeld(new UnjamTower(m_tower, m_hopper, 1.0));
     leftButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
     
     rightTrigger.whileHeld(new ParallelCommandGroup(
                             new ShootLayup(m_flywheel, Constants.RPM_LAYUP, false), 
                             new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightTrigger.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
-    rightButton2.whileHeld(new ParallelCommandGroup( new Centering(m_limelight, m_driveTrain, 0,false)
+    rightButton2.whileHeld(new ParallelCommandGroup( new Centering(m_limelight, m_driveTrain, 0, false)
                                      , new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
                                       new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightButton2.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));

@@ -9,6 +9,7 @@ package frc.robot.commands.LimelightCommands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.Framework.CommandLooper;
 import frc.robot.Framework.MovingAverage;
 import frc.robot.subsystems.Drivetrain;
@@ -105,7 +106,7 @@ public class Centering extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     SmartDashboard.putBoolean("executing", false);
-    m_driveTrain.arcadeDrive(0,0);
+    m_driveTrain.arcadeDrive(0,0,Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED);
     m_driveTrain.setSpeed(0);
     m_driveTrain.setTurn(0);
     m_driveTrain.run();

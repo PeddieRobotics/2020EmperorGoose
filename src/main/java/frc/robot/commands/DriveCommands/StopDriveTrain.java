@@ -8,6 +8,7 @@
 package frc.robot.commands.DriveCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class StopDriveTrain extends CommandBase {
@@ -25,7 +26,7 @@ public class StopDriveTrain extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_driveTrain.arcadeDrive(0, 0);
+    m_driveTrain.arcadeDrive(0, 0, Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
