@@ -41,7 +41,6 @@ import frc.robot.commands.IntakeCommands.RaiseIntake;
 import frc.robot.commands.IntakeCommands.StartIntake;
 import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.IntakeCommands.ToggleIntakeOnOff;
-import frc.robot.commands.IntakeCommands.ToggleIntakeUpDown;
 import frc.robot.commands.LimelightCommands.Centering;
 import frc.robot.commands.LimelightCommands.ToggleLight;
 import frc.robot.commands.MiscCommands.StopAllSubsystems;
@@ -149,15 +148,10 @@ public class RobotContainer {
                             new ShootLayup(m_flywheel, Constants.RPM_LAYUP, false), 
                             new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightTrigger.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
-    rightButton2.whileHeld(new ParallelCommandGroup(
-                                      new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
-                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
+    rightButton2.whileHeld(new ParallelCommandGroup( new Centering(m_limelight, m_driveTrain, 0,false)
+                                     , new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
+                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))s);
     rightButton2.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
-    /*rightButton3.whileHeld(new ParallelCommandGroup(
-                                      new ShootFromFar(m_flywheel),
-                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel),
-                                      new Centering(m_limelight,m_driveTrain,0)));
-    rightButton3.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));*/
     rightButton3.whenHeld(new RaiseClimber(m_climber));
     rightButton4.whenPressed(new LowerClimber(m_climber));
 
