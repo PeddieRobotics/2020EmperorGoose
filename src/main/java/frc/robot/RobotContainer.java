@@ -140,7 +140,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   public void configureButtonBindings() {
-    leftTrigger.whenPressed(new StartIntake(m_intake, m_hopper));
+    leftTrigger.whenPressed(new StartIntake(m_intake, m_hopper, m_tower));
     leftButton2.whenPressed(new StopIntake(m_intake, m_hopper));
     leftButton3.whenHeld(new UnjamTower(m_tower, m_hopper, 0.5));
     leftButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));

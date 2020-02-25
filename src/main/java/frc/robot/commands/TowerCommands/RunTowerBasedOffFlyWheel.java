@@ -45,7 +45,7 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
       m_hopper.runAll(); 
     }  
     else {
-      m_tower.runMotors(0);
+      m_tower.stopAll();
       m_hopper.stopAll();
     }
 
@@ -53,7 +53,7 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
 
   @Override
   public void end(boolean interrupted) {
-    m_tower.runMotors(0);
+    m_tower.stopAll();
     m_hopper.stopAll();
   }
 
