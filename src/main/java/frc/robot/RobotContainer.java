@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.AutoCommands.FollowPath;
-import frc.robot.commands.AutoCommands.ShootThree;
+import frc.robot.commands.AutoCommands.ShootNTimes;
 import frc.robot.commands.ClimberCommands.LowerClimber;
 import frc.robot.commands.ClimberCommands.RaiseClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
@@ -124,9 +124,9 @@ public class RobotContainer {
   */ 
   public void configureAutoRoutines(){
     chooser = new SendableChooser<String>();
-    chooser.addOption("turn 12 move 12s","testPath");
-    chooser.addOption("real 10s","real10");
-    chooser.addOption("real 20s","real20");
+    chooser.addOption("Shoot3NoLL","Shoot3NoLL");
+    chooser.addOption("Shoot3LL","Shoot3LL");
+    chooser.addOption("Steal2Shoot5","Steal2Shoot5");
     SmartDashboard.putData(chooser);
   }
 
@@ -230,13 +230,26 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    FollowPath autoPathFromChooser = new frc.robot.commands.AutoCommands.FollowPath(m_driveTrain, chooser.getSelected(), true, false, false);
-    DriverStation.reportError("being scheduled",false);
- 
-    CommandLooper.getInstance().addCommand(new SequentialCommandGroup(autoPathFromChooser, 
- 
-    new FollowPath(m_driveTrain,"run10",false,false,true), 
-    new ShootThree(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350)));
+    String autoRoutineFromChooser = chooser.getSelected();
+
+    if(autoRoutineFromChooser == "Shoot3NoLL"){
+      CommandLooper.getInstance().addCommand(new SequentialCommandGroup( 
+        new ShootNTimes(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350, 3),
+        new FollowPath(m_driveTrain,"testPath",true,false,false)));
+    }
+    else if(autoRoutineFromChooser == "Shoot3LL"){
+      CommandLooper.getInstance().addCommand(new SequentialCommandGroup( 
+        new ParallelCommandGroup(new Centering(m_limelight, m_driveTrain, 0, false),
+                                 new ShootNTimes(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350, 3)),
+        new FollowPath(m_driveTrain,"testPath",true,false,false)));
+    }
+    else if(autoRoutineFromChooser == "Steal2Shoot5"){
+      CommandLooper.getInstance().addCommand(new SequentialCommandGroup(
+        new FollowPath(m_driveTrain,"testPath",true,false,false), 
+        new FollowPath(m_driveTrain,"run10",false,false,true), 
+        new ParallelCommandGroup(new Centering(m_limelight, m_driveTrain, 0, false),
+                                 new ShootNTimes(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350, 3))));
+    }
     return null;
 
   }
