@@ -36,8 +36,6 @@ import frc.robot.commands.FlywheelCommands.ShootLayup;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheelOnOff;
 import frc.robot.commands.FlywheelCommands.ToggleHoodUpDown;
 import frc.robot.commands.HopperCommands.ToggleHopperOnOff;
-import frc.robot.commands.IntakeCommands.LowerIntake;
-import frc.robot.commands.IntakeCommands.RaiseIntake;
 import frc.robot.commands.IntakeCommands.StartIntake;
 import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.IntakeCommands.ToggleIntakeOnOff;
@@ -150,7 +148,7 @@ public class RobotContainer {
     rightTrigger.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     rightButton2.whileHeld(new ParallelCommandGroup( new Centering(m_limelight, m_driveTrain, 0,false)
                                      , new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
-                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))s);
+                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightButton2.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     rightButton3.whenHeld(new RaiseClimber(m_climber));
     rightButton4.whenPressed(new LowerClimber(m_climber));
@@ -183,12 +181,12 @@ public class RobotContainer {
 
     leftTrigger.toggleWhenPressed(new ToggleHoodUpDown(m_flywheel));
     leftButton2.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
-    leftButton3.toggleWhenPressed(new ToggleIntakeUpDown(m_intake));
-    leftButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
-    leftButton5.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
-    leftButton6.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
-    leftButton7.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
-  
+    leftButton3.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
+    leftButton4.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
+    leftButton5.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
+    leftButton6.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
+    leftButton7.toggleWhenPressed(new ToggleLight(m_limelight));
+
   }
 
   private void initializeJoysticks() {
