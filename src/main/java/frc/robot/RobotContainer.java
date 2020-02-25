@@ -114,7 +114,7 @@ public class RobotContainer {
   // Set default behaviors for subsystems which should start active
   public void configureDefaultBehaviors() {
     // Always make the drivetrain active in any mode
-    //m_driveTrain.setDefaultCommand(new Drive(m_driveTrain, true));
+    m_driveTrain.setDefaultCommand(new Drive(m_driveTrain, true));
     // Don't index the tower by default in test mode
     if(!isTestMode){
       m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper,m_intake));

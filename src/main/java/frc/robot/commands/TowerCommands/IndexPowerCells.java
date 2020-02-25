@@ -54,7 +54,7 @@ public class IndexPowerCells extends CommandBase {
         else{
           DriverStation.reportError("noting hon all, stopping", false);
           m_tower.runMotors(0.0);
-          m_hopper.stopAll();
+          m_hopper.runAll();
         }
     }
     // if it has seen a ball and it hasn't been 2 seconds, do nothing
