@@ -176,26 +176,19 @@ public class Drivetrain extends SubsystemBase {
     leftDriveInputTurn -= turn;
     rightDriveInputTurn -= turn;
   }
+  
   public void arcadeDrive( double speed, double turn, double deadband, boolean squaredInputs ) {
     // diffDrive.arcadeDrive(speed, turn, true);
 
-    double updateToSpeed = speed;
-    double updateToTurn = turn;
-
-    if( Math.abs(updateToSpeed) < deadband ) {
+    if( Math.abs(speed) < deadband ) {
       speed = 0;
     }
-    if ( Math.abs(updateToTurn) < deadband ) {
+    if ( Math.abs(turn) < deadband ) {
       turn = 0;
     }
 
-    if(squaredInputs){
-      updateToSpeed = Math.pow(updateToSpeed, 2);
-      updateToTurn = Math.pow(updateToTurn, 2);
-    }
-
-    addToSpeed(updateToSpeed);
-    addToTurn(updateToTurn);  
+    addToSpeed(speed);
+    addToTurn(turn);  
   }
 
   @Override

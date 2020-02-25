@@ -146,9 +146,10 @@ public class RobotContainer {
                             new ShootLayup(m_flywheel, Constants.RPM_LAYUP, false), 
                             new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightTrigger.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
-    rightButton2.whileHeld(new ParallelCommandGroup( new Centering(m_limelight, m_driveTrain, 0, false)
-                                     , new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
-                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
+    rightButton2.whileHeld(new ParallelCommandGroup(
+                            new Centering(m_limelight, m_driveTrain, 0, false),
+                            new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
+                            new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightButton2.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     rightButton3.whenHeld(new RaiseClimber(m_climber));
     rightButton4.whenPressed(new LowerClimber(m_climber));

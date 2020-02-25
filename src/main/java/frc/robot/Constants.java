@@ -45,8 +45,8 @@ public final class Constants {
     public static final double DRIVETRAIN_ACC = 0.23;
     public static final double DRIVETRAIN_ACC_OFFSET = 0.00;
 
-    public static final double DRIVETRAIN_DEADBAND = 0.05;
-    public static final boolean DRIVETRAIN_USE_SQUARED = true;
+    public static final double DRIVETRAIN_DEADBAND = 0.08;
+    public static final boolean DRIVETRAIN_USE_SQUARED = false;
 
     public static final double FLYWHEEL_P = 0.0000;
     public static final double FLYWHEEL_I = 0;
