@@ -15,12 +15,13 @@ public class ShootCounter extends CommandBase {
   /**
    * Creates a new shootCounter.
    */
-  boolean currentTopState; 
+  boolean currentTopState;
   boolean lastTopState;
-   Tower m_tower;
+  Tower m_tower;
   int amountOfShotsWeWant = 0;
   int counter;
-   public ShootCounter(Tower tower, int shotCount) {
+
+  public ShootCounter(Tower tower, int shotCount) {
     m_tower = tower;
     counter = 0;
     

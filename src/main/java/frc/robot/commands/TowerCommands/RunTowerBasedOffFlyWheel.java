@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Limelight;
+import frc.robot.Framework.MovingAverage;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Tower;
 
@@ -21,26 +23,32 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
   private Hopper m_hopper;
   private Tower m_tower;
   private Flywheel m_flywheel;
+  private Limelight m_limelight;
   private double rpm;
+  private MovingAverage m_average = new MovingAverage(5);
+  private double tx;
 
-  public RunTowerBasedOffFlyWheel(Hopper hopper, Tower tower, Flywheel flywheel) {
+  public RunTowerBasedOffFlyWheel(Hopper hopper, Tower tower, Flywheel flywheel, Limelight limelight) {
     m_flywheel = flywheel;
     m_tower = tower;
     m_hopper = hopper;
-  
+    m_limelight = limelight;
+    
   }
   
 @Override
   public void initialize() {
+    m_average.clearInitialize();
   }
 
   @Override
   public void execute() {
     rpm = m_flywheel.getSetpoint();
-
+    tx = m_limelight.getTx();
     DriverStation.reportError("running",false);
     SmartDashboard.putNumber("Flywheel velocity",m_flywheel.getAvgVelocity());
-    if(Math.abs(m_flywheel.getAvgVelocity()-rpm)<100){
+    m_average.add(tx);
+    if(Math.abs(m_flywheel.getAvgVelocity()-rpm)<100&&m_average.get()<0.7){
       m_tower.runMotors(.5);
       m_hopper.runAll(); 
     }

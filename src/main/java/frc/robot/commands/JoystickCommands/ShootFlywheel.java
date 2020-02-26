@@ -17,6 +17,7 @@ import frc.robot.commands.HopperCommands.StopHopper;
 import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
 import frc.robot.commands.TowerCommands.StopTower;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Tower;
@@ -30,11 +31,11 @@ public class ShootFlywheel extends SequentialCommandGroup {
   private Flywheel m_flywheel;
   private Hopper m_hopper;
   Drivetrain m_driveTrain;
-  public ShootFlywheel(Tower tower, Flywheel flywheel, Hopper hopper, Drivetrain driveTrain, double rpm) {
+  public ShootFlywheel(Tower tower, Flywheel flywheel, Hopper hopper, Drivetrain driveTrain, Limelight limelight, double rpm) {
     
      //have drive train incase we wanna stop it 
     super(new ParallelCommandGroup(new ShootFromFar(flywheel, rpm,false), 
-    new RunTowerBasedOffFlyWheel(hopper, tower, flywheel)), 
+    new RunTowerBasedOffFlyWheel(hopper, tower, flywheel, limelight)), 
     new ParallelRaceGroup( new WaitCommand(1), new ShootFromFar(flywheel,rpm,true)));
     
     m_driveTrain = driveTrain;
@@ -46,9 +47,9 @@ public class ShootFlywheel extends SequentialCommandGroup {
     addRequirements(m_hopper);
     addRequirements(m_tower);
   }
-  public ShootFlywheel(Tower tower, Flywheel flywheel, Hopper hopper, double rpm){
+  public ShootFlywheel(Tower tower, Flywheel flywheel, Hopper hopper, Limelight limelight, double rpm){
     super(new ParallelCommandGroup(new ShootFromFar(flywheel, rpm,false), 
-    new RunTowerBasedOffFlyWheel(hopper, tower, flywheel)), 
+    new RunTowerBasedOffFlyWheel(hopper, tower, flywheel, limelight)), 
     new ParallelRaceGroup( new WaitCommand(1), new ShootFromFar(flywheel,rpm,true)));
       
       m_tower = tower;

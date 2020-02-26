@@ -156,12 +156,12 @@ public class RobotContainer {
     
     rightTrigger.whileHeld(new ParallelCommandGroup(
                             new ShootLayup(m_flywheel, Constants.RPM_LAYUP, false), 
-                            new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
+                            new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel,m_limelight)));
     rightTrigger.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     rightButton2.whileHeld(new ParallelCommandGroup(
-                            new Centering(m_limelight, m_driveTrain, 0, false),
-                            new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
-                            new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
+                              new Centering(m_limelight, m_driveTrain, 0, false),
+                              new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
+                              new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, m_limelight)));
     rightButton2.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     rightButton3.whenHeld(new RaiseClimber(m_climber));
     rightButton4.whenPressed(new LowerClimber(m_climber));
@@ -252,7 +252,7 @@ public class RobotContainer {
       CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
         new ParallelRaceGroup(
           new ShootNTimes(m_tower, m_flywheel, 3500, 3),
-          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),
+          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, m_limelight)),
         new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,true,true));})));
  
     }
@@ -260,7 +260,7 @@ public class RobotContainer {
       CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
         new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
                                  new ShootNTimes(m_tower, m_flywheel, 3500, 3),
-                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),
+                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, m_limelight)),
                                  new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,true,true));})));
     }
     else if(autoRoutineFromChooser == "BackupShoot3NoLL"){
@@ -268,14 +268,14 @@ public class RobotContainer {
         new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,true,true));})),  
         new ParallelRaceGroup(
           new ShootNTimes(m_tower, m_flywheel, 3350, 3),
-          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
+          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, m_limelight)));
     }
     else if(autoRoutineFromChooser == "BackupShoot3LL"){
       CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
         new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,false,true));})),
         new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
                                  new ShootNTimes(m_tower, m_flywheel, 3350, 3),
-                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
+                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel, m_limelight)));
     }
     else if(autoRoutineFromChooser == "Steal2Shoot5"){
       CommandScheduler.getInstance().schedule(new SequentialCommandGroup(
