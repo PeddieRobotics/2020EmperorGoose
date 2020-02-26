@@ -45,7 +45,7 @@ public class Centering extends CommandBase {
     limes= limelight;
     
     center = centers;
-    // addRequirements(drivetrain);
+  addRequirements(drivetrain);
     // Use addRequirements() here to declare subsystem dependencies.
   }
   public int side(int center){
@@ -99,7 +99,7 @@ public class Centering extends CommandBase {
     if(Math.abs(m_driveTrain.returnAngle()-center)<1&&Math.abs(tx-center)<1){
       txNavSame = true;
     }  
-    //m_driveTrain.run(); in theory arcade drive should call this
+    m_driveTrain.run(); //in theory arcade drive should call this
   }
 
   // Called once the command ends or is interrupted.
