@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpiutil.net.PortForwarder;
@@ -12,7 +13,9 @@ public class Robot extends TimedRobot {
     PortForwarder.add(5801,"10.58.95.11",5801);
     PortForwarder.add(5805,"10.58.95.11",5805);
     m_RobotContainer = new RobotContainer();
-
+    m_RobotContainer.configureButtonBindings();
+    
+    m_RobotContainer.configureDefaultBehaviors();
   }
 
   public void robotPeriodic() {
@@ -39,9 +42,14 @@ public class Robot extends TimedRobot {
   }
   
   public void teleopInit() {
-    m_RobotContainer.configureButtonBindings();
+    try{
+      CommandScheduler.getInstance().cancelAll();
+    
+    }catch(Exception e){
+      String error = e.toString();
+      DriverStation.reportError("e" + e, false);
+    }
     m_RobotContainer.setCoastMode();
-    m_RobotContainer.configureDefaultBehaviors();
   }
 
   public void teleopPeriodic() {
