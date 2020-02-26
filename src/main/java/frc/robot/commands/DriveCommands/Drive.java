@@ -7,6 +7,7 @@
 package frc.robot.commands.DriveCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class Drive extends CommandBase {
@@ -43,7 +44,7 @@ public class Drive extends CommandBase {
     if( isNormalizedDrive ){
       NormalizedDrive( speedInput, turnInput );
     } else {
-      m_drivetrain.arcadeDrive( speedInput, turnInput);
+      m_drivetrain.arcadeDrive(speedInput, turnInput, Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED);
     }
     m_drivetrain.run();
 
@@ -70,7 +71,7 @@ public class Drive extends CommandBase {
     	speed = speed / saturatedInput;
 		  turn = turn / saturatedInput;
     
-      m_drivetrain.arcadeDrive( speed, turn );
+      m_drivetrain.arcadeDrive( speed, turn, Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED );
       m_drivetrain.run();
 
   }

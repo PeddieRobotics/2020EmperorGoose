@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.AutoCommands.FollowPath;
-import frc.robot.commands.AutoCommands.ShootThree;
+import frc.robot.commands.AutoCommands.ShootNTimes;
 import frc.robot.commands.ClimberCommands.LowerClimber;
 import frc.robot.commands.ClimberCommands.RaiseClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
@@ -36,12 +36,9 @@ import frc.robot.commands.FlywheelCommands.ShootLayup;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheelOnOff;
 import frc.robot.commands.FlywheelCommands.ToggleHoodUpDown;
 import frc.robot.commands.HopperCommands.ToggleHopperOnOff;
-import frc.robot.commands.IntakeCommands.LowerIntake;
-import frc.robot.commands.IntakeCommands.RaiseIntake;
 import frc.robot.commands.IntakeCommands.StartIntake;
 import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.IntakeCommands.ToggleIntakeOnOff;
-import frc.robot.commands.IntakeCommands.ToggleIntakeUpDown;
 import frc.robot.commands.LimelightCommands.Centering;
 import frc.robot.commands.LimelightCommands.ToggleLight;
 import frc.robot.commands.MiscCommands.StopAllSubsystems;
@@ -127,9 +124,9 @@ public class RobotContainer {
   */ 
   public void configureAutoRoutines(){
     chooser = new SendableChooser<String>();
-    chooser.addOption("turn 12 move 12s","testPath");
-    chooser.addOption("real 10s","real10");
-    chooser.addOption("real 20s","real20");
+    chooser.addOption("Shoot3NoLL","Shoot3NoLL");
+    chooser.addOption("Shoot3LL","Shoot3LL");
+    chooser.addOption("Steal2Shoot5","Steal2Shoot5");
     SmartDashboard.putData(chooser);
   }
 
@@ -142,7 +139,7 @@ public class RobotContainer {
   public void configureButtonBindings() {
     leftTrigger.whenPressed(new StartIntake(m_intake, m_hopper, m_tower));
     leftButton2.whenPressed(new StopIntake(m_intake, m_hopper));
-    leftButton3.whenHeld(new UnjamTower(m_tower, m_hopper, 0.5));
+    leftButton3.whenHeld(new UnjamTower(m_tower, m_hopper, 1.0));
     leftButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
     
     rightTrigger.whileHeld(new ParallelCommandGroup(
@@ -150,14 +147,10 @@ public class RobotContainer {
                             new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightTrigger.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     rightButton2.whileHeld(new ParallelCommandGroup(
-                                      new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
-                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
+                            new Centering(m_limelight, m_driveTrain, 0, false),
+                            new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
+                            new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightButton2.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
-    /*rightButton3.whileHeld(new ParallelCommandGroup(
-                                      new ShootFromFar(m_flywheel),
-                                      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel),
-                                      new Centering(m_limelight,m_driveTrain,0)));
-    rightButton3.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));*/
     rightButton3.whenHeld(new RaiseClimber(m_climber));
     rightButton4.whenPressed(new LowerClimber(m_climber));
 
@@ -189,12 +182,12 @@ public class RobotContainer {
 
     leftTrigger.toggleWhenPressed(new ToggleHoodUpDown(m_flywheel));
     leftButton2.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
-    leftButton3.toggleWhenPressed(new ToggleIntakeUpDown(m_intake));
-    leftButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
-    leftButton5.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
-    leftButton6.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
-    leftButton7.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
-  
+    leftButton3.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
+    leftButton4.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
+    leftButton5.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
+    leftButton6.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
+    leftButton7.toggleWhenPressed(new ToggleLight(m_limelight));
+
   }
 
   private void initializeJoysticks() {
@@ -238,13 +231,26 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    FollowPath autoPathFromChooser = new frc.robot.commands.AutoCommands.FollowPath(m_driveTrain, chooser.getSelected(), true, false, false);
-    DriverStation.reportError("being scheduled",false);
- 
-    CommandLooper.getInstance().addCommand(new SequentialCommandGroup(autoPathFromChooser, 
- 
-    new FollowPath(m_driveTrain,"run10",false,false,true), 
-    new ShootThree(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350)));
+    String autoRoutineFromChooser = chooser.getSelected();
+
+    if(autoRoutineFromChooser == "Shoot3NoLL"){
+      CommandLooper.getInstance().addCommand(new SequentialCommandGroup( 
+        new ShootNTimes(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350, 3),
+        new FollowPath(m_driveTrain,"testPath",true,false,false)));
+    }
+    else if(autoRoutineFromChooser == "Shoot3LL"){
+      CommandLooper.getInstance().addCommand(new SequentialCommandGroup( 
+        new ParallelCommandGroup(new Centering(m_limelight, m_driveTrain, 0, false),
+                                 new ShootNTimes(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350, 3)),
+        new FollowPath(m_driveTrain,"testPath",true,false,false)));
+    }
+    else if(autoRoutineFromChooser == "Steal2Shoot5"){
+      CommandLooper.getInstance().addCommand(new SequentialCommandGroup(
+        new FollowPath(m_driveTrain,"testPath",true,false,false), 
+        new FollowPath(m_driveTrain,"run10",false,false,true), 
+        new ParallelCommandGroup(new Centering(m_limelight, m_driveTrain, 0, false),
+                                 new ShootNTimes(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350, 3))));
+    }
     return null;
 
   }

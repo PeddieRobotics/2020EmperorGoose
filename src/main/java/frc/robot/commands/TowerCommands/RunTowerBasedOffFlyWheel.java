@@ -43,7 +43,8 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
     if(Math.abs(m_flywheel.getAvgVelocity()-rpm)<100){
       m_tower.runMotors(.5);
       m_hopper.runAll(); 
-    }  
+    }
+
     else {
       m_tower.stopAll();
       m_hopper.stopAll();

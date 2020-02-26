@@ -32,7 +32,7 @@ public class ToggleIntakeOnOff extends CommandBase {
 // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_tower.runMotors(0);
+   // m_tower.runMotors(0);
     m_hopper.runAll();  
     m_intake.startIntake();
   }

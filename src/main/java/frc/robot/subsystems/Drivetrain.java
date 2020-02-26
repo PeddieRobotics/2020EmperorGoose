@@ -29,7 +29,7 @@ public class Drivetrain extends SubsystemBase {
 
   private CANPIDController m_pidController, m_pidController2;
   
-  //private DifferentialDrive diffDrive;
+  private DifferentialDrive diffDrive;
 
   // Keep track of the joystick controllers to get their speed and turn during ArcadeDrive.
   private Joystick leftJoystick, rightJoystick;
@@ -176,18 +176,20 @@ public class Drivetrain extends SubsystemBase {
     leftDriveInputTurn -= turn;
     rightDriveInputTurn -= turn;
   }
-  public void arcadeDrive( double speed, double turn ) {
-    double deadband = 0.05;
+  
+  public void arcadeDrive( double speed, double turn, double deadband, boolean squaredInputs ) {
+    // diffDrive.arcadeDrive(speed, turn, true);
 
-    if( Math.abs( speed ) < deadband ) {
+    if( Math.abs(speed) < deadband ) {
       speed = 0;
     }
-    if ( Math.abs( turn ) < deadband ) {
+    if ( Math.abs(turn) < deadband ) {
       turn = 0;
     }
 
     addToSpeed(speed);
-    addToTurn(turn);  }
+    addToTurn(turn);  
+  }
 
   @Override
   public void periodic() {

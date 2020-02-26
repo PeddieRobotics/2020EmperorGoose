@@ -9,6 +9,7 @@ package frc.robot.commands.DriveCommands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
 public class driveOffLine extends CommandBase {
@@ -33,7 +34,7 @@ public class driveOffLine extends CommandBase {
   @Override
   public void execute() {
     // just drive for 2 seconds 
-    m_driveTrain.arcadeDrive(.2, 0);
+    m_driveTrain.arcadeDrive(.2, 0, Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED);
     m_driveTrain.run();
 
   }

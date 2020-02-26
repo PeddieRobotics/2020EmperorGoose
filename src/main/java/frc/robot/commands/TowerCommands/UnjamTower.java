@@ -11,6 +11,7 @@ package frc.robot.commands.TowerCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Tower;
 
 public class UnjamTower extends CommandBase {

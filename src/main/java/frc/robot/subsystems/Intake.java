@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 
 public class Intake extends SubsystemBase {
 
@@ -18,8 +17,6 @@ public class Intake extends SubsystemBase {
 
   private IntakeModeType currentMode;
   
-  private boolean isDown;
-
   private Solenoid intakeSolenoid;
   
   private TalonSRX intakeMotorTalon;
@@ -29,7 +26,6 @@ public class Intake extends SubsystemBase {
   public Intake() {
 
     currentMode = IntakeModeType.DISABLED;
-    isDown = false;
     
     intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
     intakeMotorTalon= new TalonSRX(9);//intake is a talon on both robots
@@ -52,14 +48,6 @@ public class Intake extends SubsystemBase {
   public boolean isIntaking() {
 
     return( currentMode == IntakeModeType.INTAKING );
-  }
-
-  /**
-   * @return true if the intake is down, false if it is up
-   */
-  public boolean isIntakeDown() {
-
-    return isDown;
   }
 
   @Override
@@ -94,16 +82,6 @@ public class Intake extends SubsystemBase {
     currentMode = IntakeModeType.REVERSE;
     setIntakeMotor( -0.5 );
 
-  }
-
-  public void lowerIntake(){
-
-    intakeSolenoid.set(true);
-  }
-
-  public void raiseIntake(){
-
-    intakeSolenoid.set(false);
   }
 
 }
