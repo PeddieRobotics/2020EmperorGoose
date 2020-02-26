@@ -6,6 +6,7 @@
 
 package frc.robot.commands.DriveCommands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
@@ -46,6 +47,7 @@ public class Drive extends CommandBase {
     } else {
       m_drivetrain.arcadeDrive(speedInput, turnInput, Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED);
     }
+    DriverStation.reportError("arcade drive is running ;(", false);
     m_drivetrain.run();
 
   }

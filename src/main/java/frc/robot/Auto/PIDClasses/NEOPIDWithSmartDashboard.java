@@ -43,5 +43,8 @@ public class NEOPIDWithSmartDashboard extends SmartDashboardSubsystem{
         SmartDashboard.putNumber("currentVelocity " + slotID, neo.getVelocity());
         
     }
+    public NEO currentNeo(){
+        return neo;
+    }
 
 }

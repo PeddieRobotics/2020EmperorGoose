@@ -18,10 +18,12 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants;
 import frc.robot.Auto.GenPathSetup;
 import frc.robot.Framework.Logging.CSVServer;
 import frc.robot.Framework.Logging.LoadPath;
+import frc.robot.commands.DriveCommands.StopDriveTrain;
 import frc.robot.subsystems.Drivetrain;
 
 import java.util.Map;
@@ -52,10 +54,10 @@ public class FollowPath extends CommandBase {
       return value;
     }
   }
-  
+
   private int currentLine = 0;
-  private double feetPerSecondToRpm =(60.0*10.6666)/(Math.PI*(6.25/12.0));
-  private double RpmToFeetPerSecond = (Math.PI*(6.25/12.0))/(60.0*10.6666);
+  private double feetPerSecondToRpm = (60.0 * 10.6666) / (Math.PI * (6.25 / 12.0));
+  private double RpmToFeetPerSecond = (Math.PI * (6.25 / 12.0)) / (60.0 * 10.6666);
   private double startTime = 0.0;
   private double endTime = 0.0;
   private Drivetrain m_drivetrain;
@@ -68,6 +70,7 @@ public class FollowPath extends CommandBase {
   boolean resetGyro = false;
   boolean areReportingValues = false;
   boolean isReversed = false;
+  StopDriveTrain stopping; 
   /**
    * 
    * @param drivetrain      we need to make the drive train move so we are using
@@ -80,27 +83,31 @@ public class FollowPath extends CommandBase {
    *                        init, for example when we first run our auto routine
    *                        we will want to reset our gyro but after we will want
    *                        to keep the same angle
-   * @param reportValues tells DriveTrain whether or not we want to report the CSV it recorded or not
+   * @param reportValues    tells DriveTrain whether or not we want to report the
+   *                        CSV it recorded or not
    */
-  public FollowPath(Drivetrain drivetrain, String fname, boolean resetGyroOnInit, boolean reportValues, boolean isReversed) {
+  public FollowPath(Drivetrain drivetrain, String fname, boolean resetGyroOnInit, boolean reportValues,
+      boolean isReversed) {
     LoadPath loader = new LoadPath();
     this.isReversed = isReversed;
     areReportingValues = reportValues;
     /**
-     * How files work on rio
-      * /home/lvuser is the location of the rio directory, everything in the deploy folder will get put into the rios 
-      deploy folder. So all paths from bob are put on our src/main/deploy folder, and then when we deploy they get moved to 
-      deploy. So if our paths are under deploy/paths, on rio they will be put in 
-      /home/lvuser/deploy/paths, and then we can load them in there
-      Thus below we are loading the csv file into an arraylist of points, we can't use the class because 200hz paths are so large
-      that we run into java's double limit so we use the csvs
+     * How files work on rio /home/lvuser is the location of the rio directory,
+     * everything in the deploy folder will get put into the rios deploy folder. So
+     * all paths from bob are put on our src/main/deploy folder, and then when we
+     * deploy they get moved to deploy. So if our paths are under deploy/paths, on
+     * rio they will be put in /home/lvuser/deploy/paths, and then we can load them
+     * in there Thus below we are loading the csv file into an arraylist of points,
+     * we can't use the class because 200hz paths are so large that we run into
+     * java's double limit so we use the csvs
      */
     left = loader.loadCSV("/home/lvuser/deploy/paths/" + fname + ".left" + ".csv");
 
     right = loader.loadCSV("/home/lvuser/deploy/paths/" + fname + ".right" + ".csv");
 
     center = loader.loadCSV("/home/lvuser/deploy/paths/" + fname + ".center" + ".csv");
-    //we wills store our recorded points here to be logged + sent across the network
+    // we wills store our recorded points here to be logged + sent across the
+    // network
     points = new ArrayList<String[]>();
     // Use addRequirements() here to declare subsystem dependencies.
     m_drivetrain = drivetrain;
@@ -114,12 +121,23 @@ public class FollowPath extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    
+    
+    stopping = new StopDriveTrain(m_drivetrain);
+    CommandScheduler.getInstance().schedule(stopping);
     DriverStation.reportError("Path has been initialized(scheduler has run it) ", false);
     m_drivetrain.setBrake();
-
+    startTime = Timer.getFPGATimestamp();
     if (resetGyro) {
       m_drivetrain.calibrateIMU();
+      try {
+        Thread.sleep(15);
+      } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
     }
+   
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -179,7 +197,8 @@ public class FollowPath extends CommandBase {
     m_drivetrain.arcadeDrive(0, 0, Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED);
     m_drivetrain.setCoast();
     m_drivetrain.run();
-    endTime = System.currentTimeMillis();
+    CommandScheduler.getInstance().cancel(stopping);
+    endTime =Timer.getFPGATimestamp();
     String timeDiff = Double.toString(endTime - startTime);
     /**
      * Report values only if you need to tune

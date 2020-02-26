@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -83,7 +84,7 @@ public class RobotContainer {
   private JoystickButton opTrigger, opButton2, opButton3, opButton4, opButton5, opButton6, opButton7, opButton8;
   
   public RobotContainer() {
-
+    CommandLooper.getInstance().startAndSetPeriodic(5);
     // Set up the command looper to manage command scheduling
     // CommandLooper.getInstance().startAndSetPeriodic(5);
   
@@ -122,12 +123,9 @@ public class RobotContainer {
 
   public void resetWhenDisabled(){
     setCoastMode();
-    CommandScheduler.getInstance().unregisterSubsystem(m_driveTrain);
   }
 
   public void resetForAuto(){
-    setBrakeMode();
-    CommandScheduler.getInstance().registerSubsystem(m_driveTrain);
   }
 
   /* Use a SendableChooser to create a list of possible autonomous paths.
@@ -246,7 +244,7 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     String autoRoutineFromChooser = chooser.getSelected();
-
+    configureDefaultBehaviors();
     if(autoRoutineFromChooser == "MoveOffLine"){
       CommandScheduler.getInstance().schedule(new FollowPath(m_driveTrain,"MoveOffLine",true,false,true));
     }
@@ -255,28 +253,29 @@ public class RobotContainer {
         new ParallelRaceGroup(
           new ShootNTimes(m_tower, m_flywheel, 3500, 3),
           new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),
-        new FollowPath(m_driveTrain,"MoveOffLine",true,false,true)));
+        new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,true,true));})));
+ 
     }
     else if(autoRoutineFromChooser == "Shoot3BackupLL"){
       CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
         new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
                                  new ShootNTimes(m_tower, m_flywheel, 3500, 3),
                                  new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),
-                                 new FollowPath(m_driveTrain,"MoveOffLine",true,false,true)));
+                                 new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,true,true));})));
     }
     else if(autoRoutineFromChooser == "BackupShoot3NoLL"){
       CommandScheduler.getInstance().schedule(new ParallelCommandGroup( 
-        new FollowPath(m_driveTrain,"MoveOffLine",true,false,true),  
+        new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,true,true));})),  
         new ParallelRaceGroup(
           new ShootNTimes(m_tower, m_flywheel, 3350, 3),
-          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
+          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     }
     else if(autoRoutineFromChooser == "BackupShoot3LL"){
       CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
-        new FollowPath(m_driveTrain,"MoveOffLine",true,false,true),
+        new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,false,true));})),
         new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
                                  new ShootNTimes(m_tower, m_flywheel, 3350, 3),
-                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
+                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     }
     else if(autoRoutineFromChooser == "Steal2Shoot5"){
       CommandScheduler.getInstance().schedule(new SequentialCommandGroup(

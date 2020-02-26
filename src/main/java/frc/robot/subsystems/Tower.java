@@ -135,7 +135,7 @@ public class Tower extends SubsystemBase {
    */
   public boolean senses_ball_Top0() {
     top0Avg.add(m_topSensor0.getVoltage());
-    if ( top0Avg.get() < 1.3 ) {
+    if ( top0Avg.get() < 3.0 ) {
       return true;
     } else {
       return false;
