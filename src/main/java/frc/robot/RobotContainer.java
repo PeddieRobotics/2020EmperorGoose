@@ -126,7 +126,6 @@ public class RobotContainer {
   }
 
   public void resetForAuto(){
-    setBrakeMode();
     CommandScheduler.getInstance().registerSubsystem(m_driveTrain);
   }
 
