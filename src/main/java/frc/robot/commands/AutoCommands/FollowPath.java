@@ -195,7 +195,7 @@ public class FollowPath extends CommandBase {
   @Override
   public void end(final boolean interrupted) {
     m_drivetrain.arcadeDrive(0, 0, Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED);
-    m_drivetrain.setCoast();
+    m_drivetrain.setBrake();
     m_drivetrain.run();
     CommandScheduler.getInstance().cancel(stopping);
     endTime =Timer.getFPGATimestamp();
