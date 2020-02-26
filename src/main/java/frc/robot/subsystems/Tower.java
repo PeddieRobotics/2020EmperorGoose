@@ -38,7 +38,7 @@ public class Tower extends SubsystemBase {
     
     bottom3Avg = new MovingAverage(5);
     
-    bottom2Avg = new MovingAverage(5);
+    bottom2Avg = new MovingAverage(10);
     top1Avg = new MovingAverage(5);
     top0Avg = new MovingAverage(5);
 
@@ -108,9 +108,9 @@ public class Tower extends SubsystemBase {
    * @return boolean of whether there is a ball at the base of the tower or not
    */
   public boolean senses_ball_Bottom() {
-    bottom2Avg.add(m_bottomSensor2.getVoltage());
-    bottom3Avg.add(m_bottomSensor3.getVoltage());
-    if ( bottom2Avg.get()< 3 || bottom3Avg.get() < 3 ) {
+    bottom2Avg.add(m_bottomSensor2.getVoltage()+m_bottomSensor3.getVoltage());
+
+    if ( bottom2Avg.get()< 7) {
       return true;
     } else {
       return false;
@@ -126,7 +126,9 @@ public class Tower extends SubsystemBase {
     SmartDashboard.putNumber("volatage of two", m_topSensor1.getVoltage());
     SmartDashboard.putNumber("volatage of three", m_bottomSensor2.getVoltage());
     SmartDashboard.putNumber("volatage of four", m_bottomSensor3.getVoltage());
-  
+    SmartDashboard.putNumber("sum", m_bottomSensor2.getVoltage()+m_bottomSensor3.getVoltage());
+    bottom2Avg.add(m_bottomSensor2.getVoltage()+m_bottomSensor3.getVoltage());
+    SmartDashboard.putNumber("average", bottom2Avg.get());
   }
 
   /**

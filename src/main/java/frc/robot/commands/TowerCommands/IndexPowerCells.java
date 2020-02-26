@@ -34,6 +34,7 @@ public class IndexPowerCells extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_tower.printSensorVolts();
       if(m_intake.isIntaking()){
         m_tower.printSensorVolts();
         if(!m_tower.senses_ball_Top1()){
