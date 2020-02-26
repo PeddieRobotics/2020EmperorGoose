@@ -56,6 +56,9 @@ public class IndexPowerCells extends CommandBase {
           m_tower.stopAll();
           m_hopper.stopAll(); // changed from run hopper to stop hopper
         }
+    }else{
+      m_tower.stopAll();
+      m_hopper.stopAll();
     }
     // if it has seen a ball and it hasn't been 2 seconds, do nothing
     

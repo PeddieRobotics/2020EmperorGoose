@@ -33,16 +33,22 @@ public class Flywheel extends SubsystemBase {
 
     avgOfFlyWheelSpeeds = new MovingAverage(10);
     flyWheelForward = new NEO( Constants.FLYWHEEL_1 );
-    flyWheelBackward = new NEO( Constants.FLYWHEEL_2 );
+    flyWheelBackward = new NEO(Constants.FLYWHEEL_2);
+    
+    flyWheelBackward.follow(flyWheelForward, true);
    // NEOPIDWithSmartDashboard flyWheelForwards = new NEOPIDWithSmartDashboard(Constants.FLYWHEEL_1);
    // NEOPIDWithSmartDashboard flyWheelBackwards = new NEOPIDWithSmartDashboard(Constants.FLYWHEEL_2);
     flyWheelForward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
-    flyWheelBackward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
     flyWheelForward.setSmartCurrentLimit(40);
     flyWheelBackward.setSmartCurrentLimit(40);
+    flyWheelForward.getPIDController().setIMaxAccum(0.3, 0);
+    flyWheelForward.getPIDController().setIZone(400);
+    flyWheelForward.getPIDController().setOutputRange(0, 1, 0);
+    flyWheelForward.getPIDController().setSmartMotionMaxVelocity(4000, 0);
     CSVLogger.getInstance().addStringToHeader("velocity");
     CSVLogger.getInstance().addVariablesToRecored(this::getAvgVelocity);
     
+  SmartDashboard.putNumber("velocity of flywheel",flyWheelForward.getVelocity());
   } 
 
   /**
@@ -63,14 +69,10 @@ public class Flywheel extends SubsystemBase {
 
     m_setpoint = setpoint;
 
-    
-  
-    flyWheelBackward.setVelocity(-setpoint);
-
     flyWheelForward.setVelocity(setpoint);
-  
-    flyWheelBackward.setVelocity(-m_setpoint);
+  SmartDashboard.putNumber("velocity of flywheel",flyWheelForward.getVelocity());
     flyWheelForward.setVelocity(m_setpoint);
+
     avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
 
   }
@@ -139,9 +141,9 @@ public class Flywheel extends SubsystemBase {
         m_setpoint = defaultSetpoint;    
   }
   public void runMotors() {
-  
-    flyWheelBackward.setVelocity(-m_setpoint);
+
     flyWheelForward.setVelocity(m_setpoint);
+
     avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
 
   }

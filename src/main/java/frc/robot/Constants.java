@@ -48,13 +48,13 @@ public final class Constants {
     public static final double DRIVETRAIN_DEADBAND = 0.08;
     public static final boolean DRIVETRAIN_USE_SQUARED = false; // doesn't currently do anything
 
-    public static final double FLYWHEEL_P = 0.0000;
-    public static final double FLYWHEEL_I = 0;
+    public static final double FLYWHEEL_P = 0.00015;
+    public static final double FLYWHEEL_I = 0.0000005;
     public static final double FLYWHEEL_D = 0;
-    public static final double FLYWHEEL_FF = 0.00021;
+    public static final double FLYWHEEL_FF = 0.00018;
     //PID for Flywheel
 
     public static final double RPM_LAYUP = 2000;
-    public static final double RPM_FAR = 3350;
+    public static final double RPM_FAR = 3400;
 
 }
