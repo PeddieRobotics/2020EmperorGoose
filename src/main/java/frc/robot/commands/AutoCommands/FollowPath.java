@@ -115,7 +115,7 @@ public class FollowPath extends CommandBase {
   @Override
   public void initialize() {
     DriverStation.reportError("Path has been initialized(scheduler has run it) ", false);
-    m_drivetrain.setCoast();
+    m_drivetrain.setBrake();
 
     if (resetGyro) {
       m_drivetrain.calibrateIMU();
@@ -177,7 +177,7 @@ public class FollowPath extends CommandBase {
   @Override
   public void end(final boolean interrupted) {
     m_drivetrain.arcadeDrive(0, 0, Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED);
-    m_drivetrain.setBrake();
+    m_drivetrain.setCoast();
     m_drivetrain.run();
     endTime = System.currentTimeMillis();
     String timeDiff = Double.toString(endTime - startTime);

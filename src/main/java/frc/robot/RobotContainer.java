@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Framework.CommandLooper;
@@ -84,8 +85,8 @@ public class RobotContainer {
   public RobotContainer() {
 
     // Set up the command looper to manage command scheduling
-    CommandLooper.getInstance().startAndSetPeriodic(5);
-
+    // CommandLooper.getInstance().startAndSetPeriodic(5);
+  
     // Set up driver and operator joysticks, along with all of their buttons
     initializeJoysticks();
 
@@ -119,15 +120,21 @@ public class RobotContainer {
    
   }
 
+  public void resetWhenDisabled(){
+    setCoastMode();
+    CommandScheduler.getInstance().unregisterSubsystem(m_driveTrain);
+  }
+
   /* Use a SendableChooser to create a list of possible autonomous paths.
   *  Each path is defined by a String naming the .csv file to use for that path.
   */ 
   public void configureAutoRoutines(){
     chooser = new SendableChooser<String>();
+    chooser.addOption("MoveOffLine","MoveOffLine");
     chooser.addOption("Shoot3NoLL","Shoot3NoLL");
     chooser.addOption("Shoot3LL","Shoot3LL");
     chooser.addOption("Steal2Shoot5","Steal2Shoot5");
-    SmartDashboard.putData(chooser);
+    SmartDashboard.putData("Auto routine", chooser);
   }
 
   /**
@@ -233,23 +240,28 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     String autoRoutineFromChooser = chooser.getSelected();
 
-    if(autoRoutineFromChooser == "Shoot3NoLL"){
-      CommandLooper.getInstance().addCommand(new SequentialCommandGroup( 
-        new ShootNTimes(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350, 3),
-        new FollowPath(m_driveTrain,"testPath",true,false,false)));
+    if(autoRoutineFromChooser == "MoveOffLine"){
+      CommandScheduler.getInstance().schedule(new FollowPath(m_driveTrain,"testPath",true,false,false));
+    }
+    else if(autoRoutineFromChooser == "Shoot3NoLL"){
+      CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
+        new ParallelRaceGroup(
+          new ShootNTimes(m_tower, m_flywheel, 3350, 3),
+          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),
+        new FollowPath(m_driveTrain,"testPath",true,false,true)));
     }
     else if(autoRoutineFromChooser == "Shoot3LL"){
-      CommandLooper.getInstance().addCommand(new SequentialCommandGroup( 
+      CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
         new ParallelCommandGroup(new Centering(m_limelight, m_driveTrain, 0, false),
-                                 new ShootNTimes(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350, 3)),
-        new FollowPath(m_driveTrain,"testPath",true,false,false)));
+                                 new ShootNTimes(m_tower, m_flywheel, 3350, 3)),
+                                 new FollowPath(m_driveTrain,"testPath",true,false,true)));
     }
     else if(autoRoutineFromChooser == "Steal2Shoot5"){
-      CommandLooper.getInstance().addCommand(new SequentialCommandGroup(
+      CommandScheduler.getInstance().schedule(new SequentialCommandGroup(
         new FollowPath(m_driveTrain,"testPath",true,false,false), 
         new FollowPath(m_driveTrain,"run10",false,false,true), 
         new ParallelCommandGroup(new Centering(m_limelight, m_driveTrain, 0, false),
-                                 new ShootNTimes(m_hopper, m_tower, m_flywheel, m_driveTrain, 3350, 3))));
+                                 new ShootNTimes(m_tower, m_flywheel, 1000, 3))));
     }
     return null;
 

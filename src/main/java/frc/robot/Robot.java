@@ -16,14 +16,12 @@ public class Robot extends TimedRobot {
   }
 
   public void robotPeriodic() {
-
     CommandScheduler.getInstance().run();
 
   }
 
-  
-  public void disabledInit() {
-    m_RobotContainer.setCoastMode();
+  public void disabledInit(){
+    m_RobotContainer.resetWhenDisabled();
   }
  
   public void disabledPeriodic() {
@@ -37,7 +35,6 @@ public class Robot extends TimedRobot {
 
   public void autonomousPeriodic() {
     CommandScheduler.getInstance().run();
-    m_RobotContainer.setBrakeMode();
   }
   
   public void teleopInit() {

@@ -24,9 +24,9 @@ import frc.robot.commands.FlywheelCommands.*;
 
 public class ShootNTimes extends SequentialCommandGroup {
 
-  public ShootNTimes(Hopper hopper, Tower tower, Flywheel flywheel, Drivetrain driveTrain, double rpm, int numberOfBalls) {
+  public ShootNTimes(Tower tower, Flywheel flywheel, double rpm, int numberOfBalls) {
     
-    super(new ParallelRaceGroup(new ShootFromFar(flywheel, rpm, false), new ShootCounter(tower, numberOfBalls)));
+    super(new ParallelRaceGroup(new ShootFromFar(flywheel, rpm, true), new ShootCounter(tower, numberOfBalls)));
     
   }
 }
