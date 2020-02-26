@@ -125,14 +125,21 @@ public class RobotContainer {
     CommandScheduler.getInstance().unregisterSubsystem(m_driveTrain);
   }
 
+  public void resetForAuto(){
+    setBrakeMode();
+    CommandScheduler.getInstance().registerSubsystem(m_driveTrain);
+  }
+
   /* Use a SendableChooser to create a list of possible autonomous paths.
   *  Each path is defined by a String naming the .csv file to use for that path.
   */ 
   public void configureAutoRoutines(){
     chooser = new SendableChooser<String>();
     chooser.addOption("MoveOffLine","MoveOffLine");
-    chooser.addOption("Shoot3NoLL","Shoot3NoLL");
-    chooser.addOption("Shoot3LL","Shoot3LL");
+    chooser.addOption("Shoot3BackupNoLL","Shoot3BackupNoLL");
+    chooser.addOption("Shoot3BackupLL","Shoot3BackupLL");
+    chooser.addOption("BackupShoot3NoLL","BackupShoot3NoLL");
+    chooser.addOption("BackupShoot3LL","BackupShoot3LL");
     chooser.addOption("Steal2Shoot5","Steal2Shoot5");
     SmartDashboard.putData("Auto routine", chooser);
   }
@@ -241,27 +248,40 @@ public class RobotContainer {
     String autoRoutineFromChooser = chooser.getSelected();
 
     if(autoRoutineFromChooser == "MoveOffLine"){
-      CommandScheduler.getInstance().schedule(new FollowPath(m_driveTrain,"testPath",true,false,false));
+      CommandScheduler.getInstance().schedule(new FollowPath(m_driveTrain,"MoveOffLine",true,false,true));
     }
-    else if(autoRoutineFromChooser == "Shoot3NoLL"){
+    else if(autoRoutineFromChooser == "Shoot3BackupNoLL"){
       CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
         new ParallelRaceGroup(
-          new ShootNTimes(m_tower, m_flywheel, 3350, 3),
+          new ShootNTimes(m_tower, m_flywheel, 3500, 3),
           new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),
-        new FollowPath(m_driveTrain,"testPath",true,false,true)));
+        new FollowPath(m_driveTrain,"MoveOffLine",true,false,true)));
     }
-    else if(autoRoutineFromChooser == "Shoot3LL"){
+    else if(autoRoutineFromChooser == "Shoot3BackupLL"){
       CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
-        new ParallelCommandGroup(new Centering(m_limelight, m_driveTrain, 0, false),
-                                 new ShootNTimes(m_tower, m_flywheel, 3350, 3)),
-                                 new FollowPath(m_driveTrain,"testPath",true,false,true)));
+        new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
+                                 new ShootNTimes(m_tower, m_flywheel, 3500, 3),
+                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),
+                                 new FollowPath(m_driveTrain,"MoveOffLine",true,false,true)));
+    }
+    else if(autoRoutineFromChooser == "BackupShoot3NoLL"){
+      CommandScheduler.getInstance().schedule(new ParallelCommandGroup( 
+        new FollowPath(m_driveTrain,"MoveOffLine",true,false,true),  
+        new ParallelRaceGroup(
+          new ShootNTimes(m_tower, m_flywheel, 3350, 3),
+          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
+    }
+    else if(autoRoutineFromChooser == "BackupShoot3LL"){
+      CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
+        new FollowPath(m_driveTrain,"MoveOffLine",true,false,true),
+        new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
+                                 new ShootNTimes(m_tower, m_flywheel, 3350, 3),
+                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
     }
     else if(autoRoutineFromChooser == "Steal2Shoot5"){
       CommandScheduler.getInstance().schedule(new SequentialCommandGroup(
-        new FollowPath(m_driveTrain,"testPath",true,false,false), 
-        new FollowPath(m_driveTrain,"run10",false,false,true), 
-        new ParallelCommandGroup(new Centering(m_limelight, m_driveTrain, 0, false),
-                                 new ShootNTimes(m_tower, m_flywheel, 1000, 3))));
+        new FollowPath(m_driveTrain,"MoveOffLine",true,false,false), 
+        new FollowPath(m_driveTrain,"TestTurn",false,false,false)));
     }
     return null;
 
