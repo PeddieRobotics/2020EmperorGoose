@@ -8,24 +8,22 @@
 package frc.robot.commands.TowerCommands;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Tower;
 
 public class ShootCounter extends CommandBase {
   /**
    * Creates a new shootCounter.
-   */
-  boolean prevSensesBall0;
+   */ 
+  boolean prevSenseBall0;
   Tower m_tower;
   int shotsToFire;
   int counter;
-
-  public ShootCounter(Tower tower, int shotCount) {
+   public ShootCounter(Tower tower, int shotCount) {
     m_tower = tower;
     counter = 0;
     
-    shotsToFire = shotCount;
+  shotsToFire = shotCount;// 2 changes for each shot
     addRequirements(tower);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -33,20 +31,19 @@ public class ShootCounter extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    prevSensesBall0 = m_tower.senses_ball_Top0();
-    
+   prevSenseBall0 = m_tower.senses_ball_Top0();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putBoolean("Sensing Ball", prevSensesBall0);
-    //increment our negative edges
-    if (!m_tower.senses_ball_Top0() && prevSensesBall0){
-      counter++;
+    //increment our changes
+    //DriverStation.reportError("running it",false);
+    if(!m_tower.senses_ball_Top0()&& prevSenseBall0){
+      counter ++;
     }
     DriverStation.reportError("count"+counter,false);
-    prevSensesBall0 = m_tower.senses_ball_Top0();
+    prevSenseBall0 = m_tower.senses_ball_Top0();
   }
 
   // Called once the command ends or is interrupted.

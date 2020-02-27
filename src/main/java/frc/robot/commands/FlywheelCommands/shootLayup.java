@@ -32,7 +32,8 @@ public class ShootLayup extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(SmartDashboard.getNumber("ShootLayup Setpoint", speed) != 0){
+    
+    if(SmartDashboard.getNumber("ShootLayup Setpoint", speed) != 0.0){
       m_flywheel.updateSetpoint(SmartDashboard.getNumber("ShootLayup Setpoint", speed));
     }
     else{

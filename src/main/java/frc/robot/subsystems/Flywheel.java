@@ -143,14 +143,13 @@ public class Flywheel extends SubsystemBase {
   public void setFlywheelMode(FlywheelModeType mode){
     currentMode = mode;
   }
-
-  public void updateSetpointFromSmartDashboard(double defaultSetpoint){
-    m_setpoint = SmartDashboard.getNumber("Flywheel Setpoint", defaultSetpoint);
-    
-  }
   
   public void runMotors() {
-    setMotors(m_setpoint);
+    flyWheelForward.setVelocity(m_setpoint);
+
+    avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
+
+    SmartDashboard.putNumber("Flywheel velocity", flyWheelForward.getVelocity());
   }
 
 
