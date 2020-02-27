@@ -130,7 +130,7 @@ public class Hopper extends SubsystemBase {
   public void runAll() {
     
     setRightWall( -0.5 );
-    setLeftWall( 0.5 );
+    setLeftWall( -0.5 );
     setFloor( -0.5 );
 
     currentMode = HopperModeType.INTAKING;

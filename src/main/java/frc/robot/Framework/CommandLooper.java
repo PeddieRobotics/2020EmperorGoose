@@ -57,6 +57,9 @@ public class CommandLooper{
      */
     public void clearCommandLists(){
         listOfSmartCommands.clear();
+        for(int i =0; i < listOfCommands.size();i++){
+            listOfCommands.get(i).end(true);
+        }
         listOfCommands.clear();
         startLocationForSmartCommandList.clear();
         slowRemoveList.clear();

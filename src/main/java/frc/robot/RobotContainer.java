@@ -261,11 +261,11 @@ public class RobotContainer {
           new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     }
     else if(autoRoutineFromChooser == "BackupShoot3LL"){
-      CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
-        new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,false,true));})),
+      CommandLooper.getInstance().addCommand(new SequentialCommandGroup( 
+        new FollowPath(m_driveTrain,"MoveOffLine",true,false,true),
         new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
                                  new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
-                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
+                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
     }
     else if(autoRoutineFromChooser == "Steal2Shoot5"){
       CommandScheduler.getInstance().schedule(new SequentialCommandGroup(

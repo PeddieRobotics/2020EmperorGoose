@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpiutil.net.PortForwarder;
+import frc.robot.Framework.CommandLooper;
 
 public class Robot extends TimedRobot {
 
@@ -25,12 +26,14 @@ public class Robot extends TimedRobot {
 
   public void disabledInit(){
     m_RobotContainer.resetWhenDisabled();
+    CommandLooper.getInstance().clearCommandLists();
   }
  
   public void disabledPeriodic() {
   }
   
   public void autonomousInit() {
+    clearCommmandScheduler();
     m_RobotContainer.resetForAuto();
     if(!(m_RobotContainer.getAutonomousCommand()==null)){
       CommandScheduler.getInstance().schedule(m_RobotContainer.getAutonomousCommand());
@@ -40,8 +43,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     CommandScheduler.getInstance().run();
   }
-  
-  public void teleopInit() {
+  public void clearCommmandScheduler(){
     try{
       CommandScheduler.getInstance().cancelAll();
     
@@ -49,6 +51,9 @@ public class Robot extends TimedRobot {
       String error = e.toString();
       DriverStation.reportError("e" + e, false);
     }
+  }
+  public void teleopInit() {
+    clearCommmandScheduler();
     m_RobotContainer.setCoastMode();
   }
 
