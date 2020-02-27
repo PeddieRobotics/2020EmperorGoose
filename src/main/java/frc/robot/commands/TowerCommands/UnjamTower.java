@@ -29,9 +29,9 @@ public class UnjamTower extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_tower.reverse(m_percent);
-    m_hopper.reverse(m_percent);
+  public void initialize(){
+    m_tower.reverse(m_percent, true);
+    m_hopper.reverse(m_percent, true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,7 +42,8 @@ public class UnjamTower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(final boolean interrupted) {
-      //will index powerCells automatically, its default command
+    m_tower.reverse(m_percent, false);
+    m_hopper.reverse(m_percent, false);
   }
 
   // Returns true when the command should end.

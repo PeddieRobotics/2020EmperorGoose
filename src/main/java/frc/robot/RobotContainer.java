@@ -55,7 +55,6 @@ import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.TestSubsystem;
 import frc.robot.subsystems.Tower;
 public class RobotContainer {
   // Default to code for competition robot, but can switch this boolean here to run practice robot
@@ -72,8 +71,6 @@ public class RobotContainer {
   private final Intake m_intake;
   private final Climber m_climber;
   private final Limelight m_limelight;
-  
-  // private final TestSubsystem test;
 
   private SendableChooser<String> chooser;
 
@@ -84,9 +81,8 @@ public class RobotContainer {
   private JoystickButton opTrigger, opButton2, opButton3, opButton4, opButton5, opButton6, opButton7, opButton8;
   
   public RobotContainer() {
-    CommandLooper.getInstance().startAndSetPeriodic(5);
     // Set up the command looper to manage command scheduling
-    // CommandLooper.getInstance().startAndSetPeriodic(5);
+    CommandLooper.getInstance().startAndSetPeriodic(5);
   
     // Set up driver and operator joysticks, along with all of their buttons
     initializeJoysticks();
@@ -100,10 +96,6 @@ public class RobotContainer {
     m_climber = new Climber();
     m_limelight = new Limelight();
     
-    // Vijay's temporary test subsystem for running new robot
-    // Should be refactored/removed
-    // test = new TestSubsystem();
-  
     // Configure menu for SmartDashboard to select auto routines to be sent to robot
     configureAutoRoutines();
     configureSmartDashboard();
@@ -116,7 +108,7 @@ public class RobotContainer {
     m_driveTrain.setDefaultCommand(new Drive(m_driveTrain, true));
     // Don't index the tower by default in test mode
     if(!isTestMode){
-      m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper,m_intake));
+      m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper, m_intake));
     }
    
   }
@@ -133,12 +125,9 @@ public class RobotContainer {
   */ 
   public void configureAutoRoutines(){
     chooser = new SendableChooser<String>();
-    chooser.addOption("MoveOffLine","MoveOffLine");
-    chooser.addOption("Shoot3BackupNoLL","Shoot3BackupNoLL");
-    chooser.addOption("Shoot3BackupLL","Shoot3BackupLL");
+    chooser.addOption("BackOffLine","BackOffLine");
     chooser.addOption("BackupShoot3NoLL","BackupShoot3NoLL");
     chooser.addOption("BackupShoot3LL","BackupShoot3LL");
-    chooser.addOption("Steal2Shoot5","Steal2Shoot5");
     SmartDashboard.putData("Auto routine", chooser);
   }
 
@@ -151,7 +140,7 @@ public class RobotContainer {
   public void configureButtonBindings() {
     leftTrigger.whenPressed(new StartIntake(m_intake, m_hopper, m_tower));
     leftButton2.whenPressed(new StopIntake(m_intake, m_hopper));
-    leftButton3.whenHeld(new UnjamTower(m_tower, m_hopper, 1.0));
+    leftButton3.whenHeld(new UnjamTower(m_tower, m_hopper, 0.5));
     leftButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
     
     rightTrigger.whileHeld(new ParallelCommandGroup(
@@ -175,7 +164,7 @@ public class RobotContainer {
     opButton7.toggleWhenPressed(new ToggleLight(m_limelight));
     opButton8.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
 
-  
+
   }
 
   public void configureSmartDashboard()
@@ -246,13 +235,13 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     String autoRoutineFromChooser = chooser.getSelected();
     configureDefaultBehaviors();
-    if(autoRoutineFromChooser == "MoveOffLine"){
-      CommandScheduler.getInstance().schedule(new FollowPath(m_driveTrain,"MoveOffLine",true,false,true));
+    if(autoRoutineFromChooser == "BackOffLine"){
+      CommandScheduler.getInstance().schedule(new FollowPath(m_driveTrain,"BackOffLine",true,false,true));
     }
     else if(autoRoutineFromChooser == "Shoot3BackupNoLL"){
       CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
         new ParallelRaceGroup(
-          new ShootNTimes(m_tower, m_flywheel, 3500, 3),
+          new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
           new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),
         new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,true,true));})));
  
@@ -260,7 +249,7 @@ public class RobotContainer {
     else if(autoRoutineFromChooser == "Shoot3BackupLL"){
       CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
         new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
-                                 new ShootNTimes(m_tower, m_flywheel, 3500, 3),
+                                 new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
                                  new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),
                                  new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,true,true));})));
     }
@@ -268,14 +257,14 @@ public class RobotContainer {
       CommandScheduler.getInstance().schedule(new ParallelCommandGroup( 
         new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,true,true));})),  
         new ParallelRaceGroup(
-          new ShootNTimes(m_tower, m_flywheel, 3350, 3),
+          new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
           new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     }
     else if(autoRoutineFromChooser == "BackupShoot3LL"){
       CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
         new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,false,true));})),
         new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
-                                 new ShootNTimes(m_tower, m_flywheel, 3350, 3),
+                                 new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
                                  new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     }
     else if(autoRoutineFromChooser == "Steal2Shoot5"){

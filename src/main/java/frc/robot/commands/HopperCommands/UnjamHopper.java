@@ -22,7 +22,7 @@ public class UnjamHopper extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_hopper.reverse(0.5);
+    m_hopper.reverse(0.5, true);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -33,6 +33,7 @@ public class UnjamHopper extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_hopper.reverse(0.5, false);
   }
 
   // Returns true when the command should end.

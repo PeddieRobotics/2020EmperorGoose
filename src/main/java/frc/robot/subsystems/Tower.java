@@ -28,6 +28,7 @@ public class Tower extends SubsystemBase {
   private MovingAverage bottom3Avg, bottom2Avg, top1Avg, top0Avg;
 
   public Tower() {
+    
 
     currentMode = TowerModeType.DISABLED;
 
@@ -55,10 +56,23 @@ public class Tower extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void reverse(double percent){
+  public void reverse(double percent, boolean startingReverse){
 
-    runMotors(-0.5);
-    currentMode = TowerModeType.REVERSE;
+    runMotors(-percent*topMotor.get());
+    if(startingReverse){
+      currentMode = TowerModeType.REVERSE;
+    }
+    else{
+      currentMode = TowerModeType.INDEXING;
+    }
+  }
+
+  public void sampleSensors(){
+    top0Avg.add(m_topSensor0.getVoltage());
+    top1Avg.add(m_topSensor1.getVoltage());
+    bottom2Avg.add(m_bottomSensor2.getVoltage());
+    bottom3Avg.add(m_bottomSensor3.getVoltage());
+
   }
 
   /**
@@ -175,6 +189,5 @@ public class Tower extends SubsystemBase {
   public TowerModeType getCurrentMode(){
     return currentMode;
   }
-
 
 }

@@ -42,11 +42,11 @@ public class IndexPowerCells extends CommandBase {
           m_tower.runMotors(.25); // reduced to prevent over-indexing when the flywheel is spinning down
           m_hopper.runAll();
         }
-        else if(m_tower.senses_ball_Top0()){
+        /*else if(m_tower.senses_ball_Top0()){
           DriverStation.reportError("sense top, reversing",false);
           m_tower.runMotors(-.15);
           m_hopper.stopAll();
-        }
+        }*/
         else if(!m_tower.senses_ball_Bottom()){
           m_tower.runBottomMotor(0.35); // reduced to prevent over-indexing when the flywheel is spinning down
           DriverStation.reportError("running bottom", false);

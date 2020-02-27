@@ -129,7 +129,7 @@ public class Hopper extends SubsystemBase {
 
   public void runAll() {
     
-    setRightWall( 0.5 );
+    setRightWall( -0.5 );
     setLeftWall( 0.5 );
     setFloor( -0.5 );
 
@@ -138,9 +138,9 @@ public class Hopper extends SubsystemBase {
   }
   public void stopAll(){
     
-    setRightWall( 0 );  //currently: -0.3
-    setLeftWall( 0 );    //currently:  0.2
-    setFloor( 0 );      //currently: -0.3
+    setRightWall( 0 ); 
+    setLeftWall( 0 );    
+    setFloor( 0 );
 
     currentMode = HopperModeType.DISABLED;
   }
@@ -153,13 +153,18 @@ public class Hopper extends SubsystemBase {
     return( currentMode == HopperModeType.INTAKING );
   }
 
-  public void reverse(double percent){
+  public void reverse(double percent, boolean startingReverse){
 
-    setLeftWall(-0.5);
-    setRightWall(0.5);
-    setFloor(0.5);
+    setLeftWall(-percent*leftWallTalon.getMotorOutputPercent());
+    setRightWall(-percent*rightWallTalon.getMotorOutputPercent());
+    setFloor(-percent*floorTalon.getMotorOutputPercent());
 
-    currentMode = HopperModeType.REVERSE;
+    if(startingReverse){
+      currentMode = HopperModeType.REVERSE;
+    }
+    else{
+      currentMode = HopperModeType.INTAKING;
+    }
   }
   
 }
