@@ -39,7 +39,7 @@ public class Tower extends SubsystemBase {
     
     bottom3Avg = new MovingAverage(5);
     
-    bottom2Avg = new MovingAverage(10);
+    bottom2Avg = new MovingAverage(20);
     top1Avg = new MovingAverage(5);
     top0Avg = new MovingAverage(5);
 
@@ -134,6 +134,7 @@ public class Tower extends SubsystemBase {
   /**
    * prints sensor volts
    */
+
   public void printSensorVolts() {
 
     SmartDashboard.putNumber("volatage of one", m_topSensor0.getVoltage());
@@ -160,7 +161,7 @@ public class Tower extends SubsystemBase {
   }
   public boolean senses_ball_Top1() {
     top1Avg.add(m_topSensor1.getVoltage());
-    if ( top1Avg.get() < 3.3 ) {
+    if ( top1Avg.get() < 3.0 ) {
       return true;
     } else {
       return false;
