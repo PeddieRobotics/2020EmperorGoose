@@ -11,7 +11,7 @@ import frc.robot.Framework.Logging.CSVLogger;
 
 public class Flywheel extends SubsystemBase {
 
-  private static enum FlywheelModeType {
+  public static enum FlywheelModeType {
     SHOOTING, DISABLED, REVERSE
   }
 
@@ -22,6 +22,7 @@ public class Flywheel extends SubsystemBase {
   private NEO flyWheelForward, flyWheelBackward;
   private double m_setpoint;
   private MovingAverage avgOfFlyWheelSpeeds;
+
   Solenoid hSolenoid;
 
   public Flywheel() {
@@ -51,7 +52,7 @@ public class Flywheel extends SubsystemBase {
   SmartDashboard.putNumber("velocity of flywheel",flyWheelForward.getVelocity());
   } 
 
-  /**
+    /**
    * sets shooter motors
    * @param setpoint shooter speed
    */
@@ -59,19 +60,14 @@ public class Flywheel extends SubsystemBase {
     if(setpoint > 0.0){
       currentMode = FlywheelModeType.SHOOTING;
     }
-    else if(setpoint == 0.0){
+    else{
       currentMode = FlywheelModeType.DISABLED;
     }
-    else{
-      currentMode = FlywheelModeType.REVERSE;
-    }
     
-
     m_setpoint = setpoint;
 
-    flyWheelForward.setVelocity(setpoint);
-  SmartDashboard.putNumber("velocity of flywheel",flyWheelForward.getVelocity());
     flyWheelForward.setVelocity(m_setpoint);
+    SmartDashboard.putNumber("Flywheel velocity", flyWheelForward.getVelocity());
 
     avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
 
@@ -101,7 +97,7 @@ public class Flywheel extends SubsystemBase {
     if(setpoint > 0.0){
       currentMode = FlywheelModeType.SHOOTING;
     }
-    else if(setpoint == 0.0){
+    else{
       currentMode = FlywheelModeType.DISABLED;
     }
 
@@ -117,6 +113,7 @@ public class Flywheel extends SubsystemBase {
    * disables shooter
    */
   public void disable() {
+    currentMode = FlywheelModeType.DISABLED;
     this.setMotorPercentOutput(0.0);
   }
 
@@ -127,25 +124,33 @@ public class Flywheel extends SubsystemBase {
   }
 
   public void updateSetpoint(double setpoint){
-    m_setpoint = setpoint;
-    SmartDashboard.putNumber("Flywheel Setpoint", m_setpoint);
+    double newSetpoint = setpoint;
+    if(setpoint < 500 || setpoint > 4000){
+        newSetpoint = 0;   
+    }
+    m_setpoint = newSetpoint;
+  }
+
+  public void reverse(){
+    currentMode = FlywheelModeType.REVERSE;
+    flyWheelForward.setVoltage(-0.2);
   }
 
   public double getSetpoint(){
     return m_setpoint;
   }
 
-  public void getSetpointFromSmartDashboard(double defaultSetpoint){
-    m_setpoint = SmartDashboard.getNumber("Flywheel Setpoint", defaultSetpoint);
-    if(m_setpoint < 999 || m_setpoint > 5000)
-        m_setpoint = defaultSetpoint;    
+  public void setFlywheelMode(FlywheelModeType mode){
+    currentMode = mode;
   }
+
+  public void updateSetpointFromSmartDashboard(double defaultSetpoint){
+    m_setpoint = SmartDashboard.getNumber("Flywheel Setpoint", defaultSetpoint);
+    
+  }
+  
   public void runMotors() {
-
-    flyWheelForward.setVelocity(m_setpoint);
-
-    avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
-
+    setMotors(m_setpoint);
   }
 
 

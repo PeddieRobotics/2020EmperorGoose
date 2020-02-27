@@ -18,8 +18,8 @@ public class ShootFromFar extends CommandBase {
 
   private Flywheel m_flywheel;
   private double speed;
-  private MovingAverage avgOfSpeed;
   private boolean stopFlywheelPostShot;
+  
   public ShootFromFar(Flywheel flywheel, double rpm, boolean shouldStopFlywheelPostShot) {
     stopFlywheelPostShot = shouldStopFlywheelPostShot;
     m_flywheel = flywheel;
@@ -32,15 +32,18 @@ public class ShootFromFar extends CommandBase {
 // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_flywheel.updateSetpoint(speed);
+    if(SmartDashboard.getNumber("ShootFar Setpoint", speed) != 0){
+      m_flywheel.updateSetpoint(SmartDashboard.getNumber("ShootFar Setpoint", speed));
+    }
+    else{
+      m_flywheel.updateSetpoint(speed);
+    }
     m_flywheel.setHood(true);
-    //avgOfSpeed.clearInitialize();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_flywheel.getSetpointFromSmartDashboard(speed);
     m_flywheel.runMotors();
   }
 

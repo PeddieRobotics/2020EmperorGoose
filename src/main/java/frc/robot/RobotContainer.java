@@ -32,6 +32,7 @@ import frc.robot.commands.ClimberCommands.RaiseClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
 import frc.robot.commands.DriveCommands.Drive;
 import frc.robot.commands.FlywheelCommands.RaiseHood;
+import frc.robot.commands.FlywheelCommands.ReverseFlywheel;
 import frc.robot.commands.FlywheelCommands.RunFlywheelUntilTowerHasStopped;
 import frc.robot.commands.FlywheelCommands.ShootFromFar;
 import frc.robot.commands.FlywheelCommands.ShootLayup;
@@ -140,8 +141,8 @@ public class RobotContainer {
   public void configureButtonBindings() {
     leftTrigger.whenPressed(new StartIntake(m_intake, m_hopper, m_tower));
     leftButton2.whenPressed(new StopIntake(m_intake, m_hopper));
-    leftButton3.whenHeld(new UnjamTower(m_tower, m_hopper, 0.5));
-    leftButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
+    // leftButton3.whenHeld(new UnjamTower(m_tower, m_hopper, 0.5));
+    // leftButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
     
     rightTrigger.whileHeld(new ParallelCommandGroup(
                             new ShootLayup(m_flywheel, Constants.RPM_LAYUP, false), 
@@ -155,10 +156,10 @@ public class RobotContainer {
     rightButton3.whenHeld(new RaiseClimber(m_climber));
     rightButton4.whenPressed(new LowerClimber(m_climber));
 
-    opTrigger.toggleWhenPressed(new ToggleHoodUpDown(m_flywheel));
-    opButton2.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
-    opButton3.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
-    opButton4.toggleWhenPressed(new ToggleHopperOnOff(m_hopper));
+    opTrigger.whenHeld(new ToggleHoodUpDown(m_flywheel));
+    opButton2.whenHeld(new ReverseFlywheel(m_flywheel));
+    opButton3.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
+    opButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
     opButton5.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
     opButton6.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
     opButton7.toggleWhenPressed(new ToggleLight(m_limelight));
@@ -169,7 +170,8 @@ public class RobotContainer {
 
   public void configureSmartDashboard()
   {
-    SmartDashboard.putNumber("Flywheel Setpoint", m_flywheel.getSpeed());
+    SmartDashboard.putNumber("ShootLayup Setpoint", Constants.RPM_LAYUP);
+    SmartDashboard.putNumber("ShootFar Setpoint", Constants.RPM_FAR);
   }
 
   public void setTestMode(boolean mode){
