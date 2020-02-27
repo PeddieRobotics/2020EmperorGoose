@@ -14,17 +14,16 @@ import frc.robot.subsystems.Tower;
 public class ShootCounter extends CommandBase {
   /**
    * Creates a new shootCounter.
-   */
-  boolean currentTopState; 
-  boolean lastTopState;
-   Tower m_tower;
-  int amountOfShotsWeWant = 0;
+   */ 
+  boolean prevSenseBall0;
+  Tower m_tower;
+  int shotsToFire;
   int counter;
    public ShootCounter(Tower tower, int shotCount) {
     m_tower = tower;
     counter = 0;
     
-    amountOfShotsWeWant = 2*shotCount;// 2 changes for each shot
+  shotsToFire = shotCount;// 2 changes for each shot
     addRequirements(tower);
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -32,11 +31,7 @@ public class ShootCounter extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    lastTopState = m_tower.senses_ball_Top0();
-    if(lastTopState==true){
-      amountOfShotsWeWant -=1; // sub tract one if we already have a ball chambered
-    }
-    
+   prevSenseBall0 = m_tower.senses_ball_Top0();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -44,11 +39,11 @@ public class ShootCounter extends CommandBase {
   public void execute() {
     //increment our changes
     //DriverStation.reportError("running it",false);
-    if(m_tower.senses_ball_Top0()!=lastTopState){
+    if(!m_tower.senses_ball_Top0()&& prevSenseBall0){
       counter ++;
     }
     DriverStation.reportError("count"+counter,false);
-    lastTopState = m_tower.senses_ball_Top0();
+    prevSenseBall0 = m_tower.senses_ball_Top0();
   }
 
   // Called once the command ends or is interrupted.
@@ -60,6 +55,6 @@ public class ShootCounter extends CommandBase {
   @Override
   public boolean isFinished() {
     
-    return (counter >= amountOfShotsWeWant);
+    return (counter >= shotsToFire);
   }
 }
