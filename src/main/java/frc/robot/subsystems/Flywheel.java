@@ -117,7 +117,6 @@ public class Flywheel extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("fly wheel motor current", flyWheelForward.getOutputCurrent());
     // This method will be called once per scheduler run
   }
 
@@ -147,7 +146,6 @@ public class Flywheel extends SubsystemBase {
 
     avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
 
-    SmartDashboard.putNumber("Flywheel velocity", flyWheelForward.getVelocity());
   }
 
 

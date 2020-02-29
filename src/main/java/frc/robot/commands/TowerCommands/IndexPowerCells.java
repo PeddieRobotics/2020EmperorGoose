@@ -38,7 +38,7 @@ public class IndexPowerCells extends CommandBase {
       if(m_intake.isIntaking()){
         m_tower.printSensorVolts();
         if(!m_tower.senses_ball_Top1()){
-          DriverStation.reportError("running all",false);
+          //DriverStation.reportError("running all",false);
           m_tower.runMotors(.2); // reduced to prevent over-indexing when the flywheel is spinning down
           m_hopper.runAll();
         }
@@ -49,11 +49,11 @@ public class IndexPowerCells extends CommandBase {
         }*/
         else if(!m_tower.senses_ball_Bottom()){
           m_tower.runBottomMotor(0.35); // reduced to prevent over-indexing when the flywheel is spinning down
-          DriverStation.reportError("running bottom", false);
+         // DriverStation.reportError("running bottom", false);
           m_hopper.runAll();
         }
         else{
-          DriverStation.reportError("noting hon all, stopping", false);
+        //  DriverStation.reportError("noting hon all, stopping", false);
           m_tower.stopAll();
           m_hopper.stopAll(); // changed from run hopper to stop hopper
         }
@@ -69,7 +69,7 @@ public class IndexPowerCells extends CommandBase {
   public void end(boolean interrupted) {
     m_tower.stopAll();
     m_hopper.stopAll();
-    DriverStation.reportError("ending", false);
+   // DriverStation.reportError("ending", false);
   }
   // Returns true when the command should end.
   @Override

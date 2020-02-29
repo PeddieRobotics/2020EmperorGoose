@@ -52,8 +52,6 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("intake current",intakeMotorTalon.getOutputCurrent());
-    // This method will be called once per scheduler run
   }
 
  /**
