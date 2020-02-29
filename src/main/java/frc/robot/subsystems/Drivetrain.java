@@ -6,7 +6,6 @@
 
 package frc.robot.subsystems;
 
-import com.analog.adis16470.frc.ADIS16470_IMU;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 

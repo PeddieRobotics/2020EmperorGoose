@@ -36,17 +36,17 @@ public final class Constants {
     public static final int SOLENOID_CLIMBER_1 = 4;
     public static final int SOLENOID_CLIMBER_2 = 5;
 
-    public static final double DRIVETRAIN_P = 0.0002; 
+    public static final double DRIVETRAIN_P = 0.000; 
     public static final double DRIVETRAIN_I = 0.0000;
-    public static final double DRIVETRAIN_D = 0.0001; 
-    public static final double DRIVETRAIN_FF = 0.0004 ;
-    public static final double DRIVETRAIN_FF_OFFSET = 0.000002;
+    public static final double DRIVETRAIN_D = 0.000; 
+    public static final double DRIVETRAIN_FF = 0.00018 ;
+    public static final double DRIVETRAIN_FF_OFFSET = 0.00000;
     
     public static final double DRIVETRAIN_ACC = 0.23;
     public static final double DRIVETRAIN_ACC_OFFSET = 0.00;
 
     public static final double DRIVETRAIN_DEADBAND = 0.08;
-    public static final boolean DRIVETRAIN_USE_SQUARED = false;
+    public static final boolean DRIVETRAIN_USE_SQUARED = true;
 
     public static final double FLYWHEEL_P = 0.00015;
     public static final double FLYWHEEL_I = 0.0000005;

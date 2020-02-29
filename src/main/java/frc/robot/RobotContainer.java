@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Framework.CommandLooper;
 import frc.robot.commands.AutoCommands.FollowPath;
 import frc.robot.commands.AutoCommands.ShootNTimes;
 import frc.robot.commands.ClimberCommands.LowerClimber;
@@ -83,8 +82,7 @@ public class RobotContainer {
   
   public RobotContainer() {
     // Set up the command looper to manage command scheduling
-    CommandLooper.getInstance().startAndSetPeriodic(5);
-  
+ 
     // Set up driver and operator joysticks, along with all of their buttons
     initializeJoysticks();
 
@@ -242,39 +240,26 @@ public class RobotContainer {
     if(autoRoutineFromChooser == "BackOffLine"){
       CommandScheduler.getInstance().schedule(new FollowPath(m_driveTrain,"BackOffLine",true,false,true));
     }
-    else if(autoRoutineFromChooser == "Shoot3BackupNoLL"){
-      CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
-        new ParallelRaceGroup(
-          new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
-          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),
-        new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,true,true));})));
- 
-    }
-    else if(autoRoutineFromChooser == "Shoot3BackupLL"){
-      CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
-        new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
-                                 new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
-                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),
-                                 new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,true,true));})));
-    }
     else if(autoRoutineFromChooser == "BackupShoot3NoLL"){
       CommandScheduler.getInstance().schedule(new ParallelCommandGroup( 
-        new InstantCommand(()->{CommandLooper.getInstance().addCommand(new FollowPath(m_driveTrain,"MoveOffLine",true,true,true));})),  
+        new FollowPath(m_driveTrain,"MoveOffLine",true,true,true)),  
         new ParallelRaceGroup(
           new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
           new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     }
     else if(autoRoutineFromChooser == "BackupShoot3LL"){
-      CommandLooper.getInstance().addCommand(new SequentialCommandGroup( 
+      CommandScheduler.getInstance().schedule( new SequentialCommandGroup( 
         new FollowPath(m_driveTrain,"MoveOffLine",true,false,true),
         new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
                                  new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
                                  new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
     }
-    else if(autoRoutineFromChooser == "Steal2Shoot5"){
-      CommandScheduler.getInstance().schedule(new SequentialCommandGroup(
-        new FollowPath(m_driveTrain,"MoveOffLine",true,false,false), 
-        new FollowPath(m_driveTrain,"TestTurn",false,false,false)));
+    else {
+      CommandScheduler.getInstance().schedule( new SequentialCommandGroup( 
+        new FollowPath(m_driveTrain,"MoveOffLine",true,false,true),
+        new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
+                                 new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
+                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
     }
     return null;
 

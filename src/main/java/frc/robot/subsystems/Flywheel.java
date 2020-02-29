@@ -46,8 +46,6 @@ public class Flywheel extends SubsystemBase {
     flyWheelForward.getPIDController().setIZone(400);
     flyWheelForward.getPIDController().setOutputRange(0, 1, 0);
     flyWheelForward.getPIDController().setSmartMotionMaxVelocity(4000, 0);
-    CSVLogger.getInstance().addStringToHeader("velocity");
-    CSVLogger.getInstance().addVariablesToRecored(this::getAvgVelocity);
     
   SmartDashboard.putNumber("velocity of flywheel",flyWheelForward.getVelocity());
   } 
