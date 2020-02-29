@@ -51,10 +51,10 @@ public class ShootFromFar extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     if(!interrupted){
-      DriverStation.reportError("is interupted",false);
+      //DriverStation.reportError("is interupted",false);
     }
 
-    DriverStation.reportError("is interupted false",false);
+    //DriverStation.reportError("is interupted false",false);
     if(stopFlywheelPostShot){
       m_flywheel.setMotorPercentOutput(0.0);
     }

@@ -47,8 +47,7 @@ public class Drive extends CommandBase {
     } else {
       m_drivetrain.arcadeDrive(speedInput, turnInput, Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED);
     }
-    DriverStation.reportError("arcade drive is running ;(", false);
-    m_drivetrain.run();
+     m_drivetrain.run();
 
   }
 

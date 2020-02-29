@@ -36,7 +36,7 @@ public class Drivetrain extends SubsystemBase {
 
   // For the gyro
   public int smartMotionSlot = 0;
-  private final ADIS16470_IMU imu;
+ // private final ADIS16470_IMU imu;
 
   /* Value between -1.0 and 1.0 (units?) that were last given to left and right master
   CANSparkMax motor controllers during teleop (ArcadeDrive).
@@ -49,7 +49,7 @@ public class Drivetrain extends SubsystemBase {
     rightJoystick = right;
 
     // Set up the gyro
-    imu = new ADIS16470_IMU();
+    //imu = new ADIS16470_IMU();
    
     leftDriveMaster = new NEO(1);
     rightDriveMaster = new NEO(3);
@@ -77,8 +77,8 @@ public class Drivetrain extends SubsystemBase {
    */
   public double returnAngle() {
 
-    return imu.getAngle();
-    
+    //return imu.getAngle();
+    return 0;
   }
 
   /**
@@ -207,7 +207,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void resetADIS() {
 
-    imu.reset();
+    //imu.reset();
 
   }
   /**
@@ -221,7 +221,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void calibrateIMU() {
 
-    imu.calibrate();
+    //imu.calibrate();
 
   }
 

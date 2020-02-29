@@ -1,4 +1,4 @@
-/**
+     /**
  * FRC 5895 (Peddie School Robotics)
  * Initializes and configures all controls.
  * Also initializes all subsystems for the robots.
@@ -153,8 +153,8 @@ public class RobotContainer {
                             new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
                             new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightButton2.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
-    rightButton3.whenHeld(new RaiseClimber(m_climber));
-    rightButton4.whenPressed(new LowerClimber(m_climber));
+    rightButton3.whenPressed(new LowerClimber(m_climber));
+    rightButton4.whenHeld(new RaiseClimber(m_climber));
 
     opTrigger.whenHeld(new ToggleHoodUpDown(m_flywheel));
     opButton2.toggleWhenPressed(new ToggleClimberUpDown(m_climber));

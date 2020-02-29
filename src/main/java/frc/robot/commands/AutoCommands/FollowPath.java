@@ -125,7 +125,7 @@ public class FollowPath extends CommandBase {
     
     stopping = new StopDriveTrain(m_drivetrain);
     CommandScheduler.getInstance().schedule(stopping);
-    DriverStation.reportError("Path has been initialized(scheduler has run it) ", false);
+//    DriverStation.reportError("Path has been initialized(scheduler has run it) ", false);
     m_drivetrain.setBrake();
     startTime = Timer.getFPGATimestamp();
     if (resetGyro) {
@@ -204,7 +204,7 @@ public class FollowPath extends CommandBase {
      * Report values only if you need to tune
      */
     if(areReportingValues){
-      DriverStation.reportError("sending data",false);
+  //    DriverStation.reportError("sending data",false);
       try {
         points.add(m_drivetrain.getPIDVariables());
         serv.sendDataAccrossNetwork(points);
@@ -213,13 +213,13 @@ public class FollowPath extends CommandBase {
         e.printStackTrace();
       }
     }else{
-      DriverStation.reportError("not sending values",false);
+    //  DriverStation.reportError("not sending values",false);
       points = null;//free memory? 
     }
     left = null;// we don't really need to have large files hanging around
     right = null;
     center = null;
-    DriverStation.reportError("Time difference between start and end of path" + timeDiff ,false);
+    //DriverStation.reportError("Time difference between start and end of path" + timeDiff ,false);
   }
   
   // Returns true when the command should end.

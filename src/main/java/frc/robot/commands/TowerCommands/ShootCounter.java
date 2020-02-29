@@ -42,7 +42,7 @@ public class ShootCounter extends CommandBase {
     if(!m_tower.senses_ball_Top0()&& prevSenseBall0){
       counter ++;
     }
-    DriverStation.reportError("count"+counter,false);
+    //DriverStation.reportError("count"+counter,false);
     prevSenseBall0 = m_tower.senses_ball_Top0();
   }
 

@@ -38,7 +38,7 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
   public void execute() {
     rpm = m_flywheel.getSetpoint();
 
-    DriverStation.reportError("running",false);
+   // DriverStation.reportError("running",false);
     SmartDashboard.putNumber("Flywheel velocity",m_flywheel.getAvgVelocity());
     if(Math.abs(m_flywheel.getAvgVelocity()-rpm)<200){
       m_tower.runMotors(.5);
@@ -59,7 +59,7 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
     m_tower.stopAll();
     m_hopper.stopAll();
   }
-
+ 
   @Override
   public boolean isFinished() {
     return false;
