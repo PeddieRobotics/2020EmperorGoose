@@ -47,7 +47,7 @@ public class StartFlywheel extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    DriverStation.reportError("done here", false);
+///    DriverStation.reportError("done here", false);
     m_flywheel.disable();
   
   }
