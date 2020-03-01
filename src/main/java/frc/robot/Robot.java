@@ -25,7 +25,7 @@ public class Robot extends TimedRobot {
   }
 
   public void disabledInit(){
-    //m_RobotContainer.configureSmartDashboard();
+    m_RobotContainer.configureSmartDashboard();
     m_RobotContainer.setBrakeMode();
     m_RobotContainer.resetWhenDisabled();
   }

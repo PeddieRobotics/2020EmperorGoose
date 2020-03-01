@@ -128,7 +128,7 @@ public class RobotContainer {
     chooser.addOption("BackupShoot3NoLL","BackupShoot3NoLL");
     chooser.addOption("BackupShoot3LL","BackupShoot3LL");
     chooser.addOption("BackUp8Test","8feet");
-    chooser.addOption("Backup12Test","12feet");
+    chooser.addOption("BackUp12Test","12ft");
     SmartDashboard.putData("Auto routine", chooser);
   }
 
@@ -169,10 +169,9 @@ public class RobotContainer {
 
   public void configureSmartDashboard()
   {
-    DriverStation.reportError("is being called ? ", false);
+  //  DriverStation.reportError("is being called ? ", false);
     SmartDashboard.putNumber("ShootLayup Setpoint", Constants.RPM_LAYUP);
     SmartDashboard.putNumber("ShootFar Setpoint", Constants.RPM_FAR);
-    
     SmartDashboard.putNumber("feed velocity", m_tower.topMotorSpeed());
   }
 
@@ -256,7 +255,7 @@ public class RobotContainer {
                                  new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
                                  new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
     }
-    else if(autoRoutineFromChooser=="Backup8Test"){
+    else if(autoRoutineFromChooser=="BackUp8Test"){
       
       CommandScheduler.getInstance().schedule( new SequentialCommandGroup( 
         new FollowPath(m_driveTrain,"8feet",true,false,true),
@@ -264,10 +263,10 @@ public class RobotContainer {
                                  new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
                                  new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
     }
-    else if(autoRoutineFromChooser=="Backup12Test"){
+    else if(autoRoutineFromChooser=="BackUp12Test"){
       
       CommandScheduler.getInstance().schedule( new SequentialCommandGroup( 
-        new FollowPath(m_driveTrain,"12feet",true,false,true),
+        new FollowPath(m_driveTrain,"12ft",true,false,true),
         new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
                                  new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
                                  new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
