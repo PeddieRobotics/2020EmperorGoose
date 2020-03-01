@@ -1,13 +1,13 @@
-     /**
- * FRC 5895 (Peddie School Robotics)
- * Initializes and configures all controls.
- * Also initializes all subsystems for the robots.
- * 
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
- */
+/**
+* FRC 5895 (Peddie School Robotics)
+* Initializes and configures all controls.
+* Also initializes all subsystems for the robots.
+* 
+* This class is where the bulk of the robot should be declared.  Since Command-based is a
+* "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+* periodic methods (other than the scheduler calls).  Instead, the structure of the robot
+* (including subsystems, commands, and button mappings) should be declared here.
+*/
 
 package frc.robot;
 
@@ -38,6 +38,7 @@ import frc.robot.commands.FlywheelCommands.ShootLayup;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheelOnOff;
 import frc.robot.commands.FlywheelCommands.ToggleHoodUpDown;
 import frc.robot.commands.HopperCommands.ToggleHopperOnOff;
+import frc.robot.commands.IntakeCommands.AutoIntakeUp;
 import frc.robot.commands.IntakeCommands.StartIntake;
 import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.IntakeCommands.ToggleIntakeOnOff;
@@ -56,6 +57,7 @@ import frc.robot.subsystems.Hopper;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Tower;
+import frc.robot.commands.LimelightCommands.TurnUntilTarget;
 public class RobotContainer {
   // Default to code for competition robot, but can switch this boolean here to run practice robot
   private static boolean isCompetitionRobot = true;
@@ -82,7 +84,8 @@ public class RobotContainer {
   
   public RobotContainer() {
     // Set up the command looper to manage command scheduling
- 
+    //CommandLooper.getInstance().startAndSetPeriodic(5);
+  
     // Set up driver and operator joysticks, along with all of their buttons
     initializeJoysticks();
 
@@ -127,6 +130,7 @@ public class RobotContainer {
     chooser.addOption("BackOffLine","BackOffLine");
     chooser.addOption("BackupShoot3NoLL","BackupShoot3NoLL");
     chooser.addOption("BackupShoot3LL","BackupShoot3LL");
+    chooser.addOption("TrenchRun", "TrenchRun");
     SmartDashboard.putData("Auto routine", chooser);
   }
 
@@ -141,7 +145,6 @@ public class RobotContainer {
     leftButton2.whenPressed(new StopIntake(m_intake, m_hopper));
     // leftButton3.whenHeld(new UnjamTower(m_tower, m_hopper, 0.5));
     // leftButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
-    
     rightTrigger.whileHeld(new ParallelCommandGroup(
                             new ShootLayup(m_flywheel, Constants.RPM_LAYUP, false), 
                             new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
@@ -240,6 +243,21 @@ public class RobotContainer {
     if(autoRoutineFromChooser == "BackOffLine"){
       CommandScheduler.getInstance().schedule(new FollowPath(m_driveTrain,"BackOffLine",true,false,true));
     }
+    else if(autoRoutineFromChooser == "Shoot3BackupNoLL"){
+      CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
+        new ParallelRaceGroup(
+          new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
+          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),
+          new FollowPath(m_driveTrain,"MoveOffLine",true,true,true)));
+ 
+    }
+    else if(autoRoutineFromChooser == "Shoot3BackupLL"){
+      CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
+        new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
+                                 new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
+                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),
+                                 new FollowPath(m_driveTrain,"MoveOffLine",true,true,true)));
+    }
     else if(autoRoutineFromChooser == "BackupShoot3NoLL"){
       CommandScheduler.getInstance().schedule(new ParallelCommandGroup( 
         new FollowPath(m_driveTrain,"MoveOffLine",true,true,true)),  
@@ -248,18 +266,26 @@ public class RobotContainer {
           new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     }
     else if(autoRoutineFromChooser == "BackupShoot3LL"){
-      CommandScheduler.getInstance().schedule( new SequentialCommandGroup( 
+      CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
         new FollowPath(m_driveTrain,"MoveOffLine",true,false,true),
         new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
                                  new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
                                  new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
     }
-    else {
-      CommandScheduler.getInstance().schedule( new SequentialCommandGroup( 
-        new FollowPath(m_driveTrain,"MoveOffLine",true,false,true),
+    else if(autoRoutineFromChooser == "Steal2Shoot5"){
+      CommandScheduler.getInstance().schedule(new SequentialCommandGroup(
+        new FollowPath(m_driveTrain,"MoveOffLine",true,false,false), 
+        new FollowPath(m_driveTrain,"TestTurn",false,false,false)));
+    }
+    else if(autoRoutineFromChooser == "TrenchRun"){
+      CommandScheduler.getInstance().schedule(new SequentialCommandGroup( 
+        new AutoIntakeUp(m_intake),
+        new FollowPath(m_driveTrain,"TrenchRun",true,false,false),
+        new TurnUntilTarget(m_limelight, m_driveTrain),
         new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
-                                 new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
+                                 new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 5),
                                  new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
+                                
     }
     return null;
 

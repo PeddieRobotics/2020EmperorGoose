@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -10,6 +11,7 @@ public class Robot extends TimedRobot {
   RobotContainer m_RobotContainer;
 
   public void robotInit() {
+    CameraServer.getInstance().addServer("localhost",5800);
     PortForwarder.add(5801,"10.58.95.11",5801);
     PortForwarder.add(5805,"10.58.95.11",5805);
     PortForwarder.add(5800,"10.58.95.11",5800);
@@ -27,6 +29,7 @@ public class Robot extends TimedRobot {
   public void disabledInit(){
     m_RobotContainer.setBrakeMode();
     m_RobotContainer.resetWhenDisabled();
+
   }
  
   public void disabledPeriodic() {
