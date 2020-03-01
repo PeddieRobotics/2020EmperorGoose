@@ -55,6 +55,6 @@ public class ShootCounter extends CommandBase {
   @Override
   public boolean isFinished() {
     
-    return (counter >= shotsToFire);
+    return false;
   }
 }
