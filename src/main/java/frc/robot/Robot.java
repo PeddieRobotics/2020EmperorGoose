@@ -10,9 +10,9 @@ public class Robot extends TimedRobot {
   RobotContainer m_RobotContainer;
 
   public void robotInit() {
-    PortForwarder.add(5801,"10.58.95.11",5801);
-    PortForwarder.add(5805,"10.58.95.11",5805);
-    PortForwarder.add(5800,"10.58.95.11",5800);
+    PortForwarder.add(5801,"10.58.95.11",5801);//web interface
+    PortForwarder.add(5805,"10.58.95.11",5805);//back end data for web interface
+    PortForwarder.add(5800,"10.58.95.11",5800);//stream for web interface 
     m_RobotContainer = new RobotContainer();
     m_RobotContainer.configureButtonBindings();
     
@@ -25,6 +25,7 @@ public class Robot extends TimedRobot {
   }
 
   public void disabledInit(){
+    //m_RobotContainer.configureSmartDashboard();
     m_RobotContainer.setBrakeMode();
     m_RobotContainer.resetWhenDisabled();
   }
@@ -49,7 +50,6 @@ public class Robot extends TimedRobot {
     
     }catch(Exception e){
       String error = e.toString();
-      DriverStation.reportError("e" + e, false);
     }
   }
   public void teleopInit() {

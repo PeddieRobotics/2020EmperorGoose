@@ -5,56 +5,53 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.IntakeCommands;
+package frc.robot.commands.LimelightCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Tower;
-import frc.robot.subsystems.Tower.TowerModeType;
+import frc.robot.subsystems.Drivetrain;
+import frc.robot.subsystems.Limelight;
 
-public class StartIntake extends CommandBase {
- 
-  private Intake m_intake;
-  private Hopper m_hopper;
-  private Tower m_tower;
-
-  public StartIntake(Intake intake, Hopper hopper, Tower tower) {
-    m_intake = intake;
-    m_hopper = hopper;
-    m_tower = tower;
-    addRequirements(intake);
+public class TurnUntilSeesTarget extends CommandBase {
+  /**
+   * Creates a new TurnUntilSeesTarget.
+   */
+  Limelight m_limelight; 
+  Drivetrain m_drivetrain;
+  double count = 5;
+  public TurnUntilSeesTarget(Drivetrain drivetrain, Limelight limelight) {
+    m_limelight = limelight;
+    m_drivetrain = drivetrain;
+    addRequirements(drivetrain);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
-    m_intake.startIntake();
-
-    if(m_tower.getCurrentMode() == TowerModeType.INDEXING){
-
-      m_hopper.runAll();
-
-    }
-
+    count = 5;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    if(m_limelight.hasTarget()){
+      count--;
+    }
+    m_drivetrain.setTurn(.2);
+    m_drivetrain.run();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  
+    m_drivetrain.setSpeed(0);
+    m_drivetrain.setTurn(0);
+    m_drivetrain.run();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return count<=0;
   }
 }

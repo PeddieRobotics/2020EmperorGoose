@@ -19,7 +19,7 @@ public class StartIntake extends CommandBase {
   private Hopper m_hopper;
   private Tower m_tower;
 
-  public StartIntake(Intake intake, Hopper hopper, Tower tower) {
+  public StartIntake(Intake intake) {
     m_intake = intake;
     m_hopper = hopper;
     m_tower = tower;
@@ -32,11 +32,6 @@ public class StartIntake extends CommandBase {
 
     m_intake.startIntake();
 
-    if(m_tower.getCurrentMode() == TowerModeType.INDEXING){
-
-      m_hopper.runAll();
-
-    }
 
   }
 

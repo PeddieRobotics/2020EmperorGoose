@@ -127,6 +127,8 @@ public class RobotContainer {
     chooser.addOption("BackOffLine","BackOffLine");
     chooser.addOption("BackupShoot3NoLL","BackupShoot3NoLL");
     chooser.addOption("BackupShoot3LL","BackupShoot3LL");
+    chooser.addOption("BackUp8Test","8feet");
+    chooser.addOption("Backup12Test","12feet");
     SmartDashboard.putData("Auto routine", chooser);
   }
 
@@ -250,6 +252,22 @@ public class RobotContainer {
     else if(autoRoutineFromChooser == "BackupShoot3LL"){
       CommandScheduler.getInstance().schedule( new SequentialCommandGroup( 
         new FollowPath(m_driveTrain,"MoveOffLine",true,false,true),
+        new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
+                                 new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
+                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
+    }
+    else if(autoRoutineFromChooser=="Backup8Test"){
+      
+      CommandScheduler.getInstance().schedule( new SequentialCommandGroup( 
+        new FollowPath(m_driveTrain,"8feet",true,false,true),
+        new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
+                                 new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
+                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
+    }
+    else if(autoRoutineFromChooser=="Backup12Test"){
+      
+      CommandScheduler.getInstance().schedule( new SequentialCommandGroup( 
+        new FollowPath(m_driveTrain,"12feet",true,false,true),
         new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
                                  new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
                                  new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
