@@ -255,29 +255,6 @@ public class RobotContainer {
                                  new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
                                  new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
     }
-    else if(autoRoutineFromChooser=="BackUp8Test"){
-      
-      CommandScheduler.getInstance().schedule( new SequentialCommandGroup( 
-        new FollowPath(m_driveTrain,"8feet",true,false,true),
-        new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
-                                 new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
-                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
-    }
-    else if(autoRoutineFromChooser=="BackUp12Test"){
-      
-      CommandScheduler.getInstance().schedule( new SequentialCommandGroup( 
-        new FollowPath(m_driveTrain,"12ft",true,false,true),
-        new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
-                                 new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
-                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
-    }
-    else {
-      CommandScheduler.getInstance().schedule( new SequentialCommandGroup( 
-        new FollowPath(m_driveTrain,"MoveOffLine",true,false,true),
-        new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
-                                 new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
-                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
-    }
     return null;
 
   }
