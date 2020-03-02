@@ -40,8 +40,8 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
 
    // DriverStation.reportError("running",false);
   //  SmartDashboard.putNumber("Flywheel velocity",m_flywheel.getAvgVelocity());
-    if(Math.abs(m_flywheel.getAvgVelocity()-rpm)<100){
-      m_tower.runMotors(.5);
+    if(Math.abs(m_flywheel.getAvgVelocity()-rpm)<500){
+      m_tower.runMotors(.8);
     //  SmartDashboard.putNumber("feed velocity", m_tower.topMotorSpeed());
       m_hopper.runAll(); 
     }

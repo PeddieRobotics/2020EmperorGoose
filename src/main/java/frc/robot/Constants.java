@@ -54,7 +54,7 @@ public final class Constants {
     public static final double FLYWHEEL_FF = 0.00018;
     //PID for Flywheel
 
-    public static final double RPM_LAYUP = 2000;
+    public static final double RPM_LAYUP = 2200;
     public static final double RPM_FAR = 3500;
 
     public static final double REVERSE_PERCENT_INTAKE = 0.8;

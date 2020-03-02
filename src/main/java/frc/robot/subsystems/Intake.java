@@ -56,7 +56,7 @@ public class Intake extends SubsystemBase {
   public void startIntake() {
     intakeSolenoid.set(true);
 
-    setIntakeMotor( .8 ); 
+    setIntakeMotor( 1 ); 
   }
 
   /**
