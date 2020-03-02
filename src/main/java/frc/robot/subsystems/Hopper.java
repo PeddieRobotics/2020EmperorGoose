@@ -129,9 +129,9 @@ public class Hopper extends SubsystemBase {
 
   public void runAll() {
     
-    setRightWall( -0.5 );
-    setLeftWall( -0.5 );
-    setFloor( -0.5 );
+    setRightWall( -0.5 ); //Taking in
+    setLeftWall( -0.5 ); //Going out
+    setFloor( -0.5 ); //Taking in
 
     currentMode = HopperModeType.INTAKING;
 
@@ -153,18 +153,12 @@ public class Hopper extends SubsystemBase {
     return( currentMode == HopperModeType.INTAKING );
   }
 
-  public void reverse(double percent, boolean startingReverse){
+  public void reverse(double setpoint){
 
-    setLeftWall(-percent*leftWallTalon.getMotorOutputPercent());
-    setRightWall(-percent*rightWallTalon.getMotorOutputPercent());
-    setFloor(-percent*floorTalon.getMotorOutputPercent());
+    setLeftWall(setpoint);
+    setRightWall(setpoint);
+    setFloor(setpoint);
 
-    if(startingReverse){
-      currentMode = HopperModeType.REVERSE;
-    }
-    else{
-      currentMode = HopperModeType.INTAKING;
-    }
   }
   
 }

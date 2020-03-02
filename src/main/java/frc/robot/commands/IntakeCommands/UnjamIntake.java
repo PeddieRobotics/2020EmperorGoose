@@ -5,26 +5,28 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.HopperCommands;
+package frc.robot.commands.IntakeCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Intake;
 
-public class UnjamHopper extends CommandBase {
-  
-  Hopper m_hopper;
+public class UnjamIntake extends CommandBase {
+  /**
+   * Creates a new UnjamIntake.
+   */
+  Intake m_intake;
   double m_percent;
-  public UnjamHopper(Hopper hopper, double percent) {
-    m_hopper = hopper;
+  public UnjamIntake(Intake intake, double percent) {
+    m_intake = intake;
     m_percent = percent;
-    addRequirements(hopper);
+    addRequirements(intake);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_hopper.reverse(m_percent);
+    m_intake.reverse(m_percent);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,7 +37,12 @@ public class UnjamHopper extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
+    if(!m_intake.isSolenoidActive()){
+      m_intake.stopIntake();
+    }
+    else{
+      m_intake.startIntake();
+    }
   }
 
   // Returns true when the command should end.

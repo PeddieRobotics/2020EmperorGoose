@@ -23,6 +23,7 @@ public class IndexPowerCells extends CommandBase {
     m_intake = intake;
     addRequirements(hopper);
     addRequirements(tower);
+    
   }
   // Called when the command is initially scheduled.
   @Override
