@@ -11,7 +11,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -19,7 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -30,8 +28,6 @@ import frc.robot.commands.ClimberCommands.LowerClimber;
 import frc.robot.commands.ClimberCommands.RaiseClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
 import frc.robot.commands.DriveCommands.Drive;
-import frc.robot.commands.FlywheelCommands.RaiseHood;
-import frc.robot.commands.FlywheelCommands.ReverseFlywheel;
 import frc.robot.commands.FlywheelCommands.RunFlywheelUntilTowerHasStopped;
 import frc.robot.commands.FlywheelCommands.ShootFromFar;
 import frc.robot.commands.FlywheelCommands.ShootLayup;
@@ -48,7 +44,6 @@ import frc.robot.commands.LimelightCommands.ToggleLight;
 import frc.robot.commands.MiscCommands.StopAllSubsystems;
 import frc.robot.commands.TowerCommands.IndexPowerCells;
 import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
-import frc.robot.commands.TowerCommands.StopTower;
 import frc.robot.commands.TowerCommands.ToggleTowerOnOff;
 import frc.robot.commands.TowerCommands.UnjamTower;
 import frc.robot.subsystems.Climber;
