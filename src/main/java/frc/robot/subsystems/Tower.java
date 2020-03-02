@@ -59,8 +59,8 @@ public class Tower extends SubsystemBase {
 
   public void reverse(double percent){
 
-    topMotor.setPercent(-percent);
-    bottomMotor.setPercent(percent);
+    topMotor.set(-percent);
+    bottomMotor.set(percent);
   }
 
   public void sampleSensors(){
