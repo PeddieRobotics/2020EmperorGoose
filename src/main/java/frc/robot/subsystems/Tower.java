@@ -7,6 +7,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,7 +31,6 @@ public class Tower extends SubsystemBase {
 
   public Tower() {
     
-
     currentMode = TowerModeType.DISABLED;
 
     topMotor = new NEO( Constants.TOWER_BOTTOM );
@@ -56,15 +57,10 @@ public class Tower extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void reverse(double percent, boolean startingReverse){
+  public void reverse(double percent){
 
-    runMotors(-percent*topMotor.get());
-    if(startingReverse){
-      currentMode = TowerModeType.REVERSE;
-    }
-    else{
-      currentMode = TowerModeType.INDEXING;
-    }
+    topMotor.setPercent(-percent);
+    bottomMotor.setPercent(percent);
   }
 
   public void sampleSensors(){
@@ -76,7 +72,7 @@ public class Tower extends SubsystemBase {
   }
 
   /**
-   * runs the top motor
+   * runs ONLY the top motor
    * @param speed speed of motor
    */
   public void runTopMotor( double speed ) {
@@ -87,7 +83,7 @@ public class Tower extends SubsystemBase {
   }
 
   /**
-   * runs bottom motor
+   * runs ONLY the bottom motor
    * @param speed speed of motor
    */
   public void runBottomMotor( double speed ) {
@@ -129,14 +125,6 @@ public class Tower extends SubsystemBase {
     } else {
       return false;
     }
-  }
-
-  /**
-   * prints sensor volts
-   */
-
-  public void printSensorVolts() {
-
   }
 
   /**
