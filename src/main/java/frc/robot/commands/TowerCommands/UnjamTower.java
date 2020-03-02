@@ -5,33 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-// REDUNDANT COMMAND -- add m_Tower.runMotors(0) to the end() methods of the other tower commands
-
 package frc.robot.commands.TowerCommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Hopper;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Tower;
 
 public class UnjamTower extends CommandBase {
   
   private final Tower m_tower;
-  private final Hopper m_hopper;
   private final double m_percent;
 
-  public UnjamTower(Tower tower, Hopper hopper, double percent) {
+  public UnjamTower(Tower tower, double percent) {
     m_tower = tower;
-    m_hopper = hopper;
     m_percent = percent;
-    addRequirements(tower, hopper);
+    addRequirements(tower);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize(){
-    m_tower.reverse(m_percent, true);
-    m_hopper.reverse(m_percent, true);
+    m_tower.reverse(m_percent);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,8 +35,6 @@ public class UnjamTower extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(final boolean interrupted) {
-    m_tower.reverse(m_percent, false);
-    m_hopper.reverse(m_percent, false);
   }
 
   // Returns true when the command should end.

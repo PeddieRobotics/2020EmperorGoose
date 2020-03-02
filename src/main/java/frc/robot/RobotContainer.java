@@ -124,11 +124,11 @@ public class RobotContainer {
   */ 
   public void configureAutoRoutines(){
     chooser = new SendableChooser<String>();
+
     chooser.addOption("BackOffLine","BackOffLine");
     chooser.addOption("BackupShoot3NoLL","BackupShoot3NoLL");
     chooser.addOption("BackupShoot3LL","BackupShoot3LL");
-    chooser.addOption("BackUp8Test","8feet");
-    chooser.addOption("BackUp12Test","12ft");
+
     SmartDashboard.putData("Auto routine", chooser);
   }
 
@@ -157,12 +157,13 @@ public class RobotContainer {
     rightButton4.whenHeld(new RaiseClimber(m_climber));
 
     opTrigger.whenHeld(new ToggleHoodUpDown(m_flywheel));
-    opButton2.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
-    opButton3.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
-    opButton4.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
-    opButton5.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
-    opButton6.toggleWhenPressed(new ToggleLight(m_limelight));
-    opButton7.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
+    opButton2.whenHeld(new UnjamTower(m_tower, 0.5));
+    opButton3.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
+    opButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
+    opButton5.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
+    opButton6.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
+    opButton7.toggleWhenPressed(new ToggleLight(m_limelight));
+    opButton8.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
 
 
   }
