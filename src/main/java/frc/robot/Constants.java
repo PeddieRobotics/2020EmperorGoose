@@ -48,6 +48,7 @@ public final class Constants {
     public static final double DRIVETRAIN_DEADBAND = 0.08;
     public static final boolean DRIVETRAIN_USE_SQUARED = true;
 
+
     public static final double FLYWHEEL_P = 0.00015;
     public static final double FLYWHEEL_I = 0.0000005;
     public static final double FLYWHEEL_D = 0;
@@ -56,6 +57,8 @@ public final class Constants {
 
     public static final double RPM_LAYUP = 2200;
     public static final double RPM_FAR = 3500;
+    public static final int THRESHOLD_LAYUP = 500;
+    public static final int THRESHOLD_FAR = 200;
 
     public static final double REVERSE_PERCENT_INTAKE = 0.8;
     public static final double REVERSE_PERCENT_HOPPER = 0.8;

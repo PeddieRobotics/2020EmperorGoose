@@ -17,7 +17,6 @@ public class Flywheel extends SubsystemBase {
 
   private FlywheelModeType currentMode;
 
-  private boolean isHoodUp;
 
   private NEO flyWheelForward, flyWheelBackward;
   private double m_setpoint;
@@ -74,8 +73,12 @@ public class Flywheel extends SubsystemBase {
   public void setHood(boolean isUp){
    
     hSolenoid.set(isUp);
-    isHoodUp = isUp;
   
+  }
+
+  public boolean isHoodUp()
+  {
+    return hSolenoid.get();
   }
 
   public double getSpeed(){

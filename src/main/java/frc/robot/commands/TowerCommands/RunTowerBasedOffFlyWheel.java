@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Hopper;
+import frc.robot.Constants;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Tower;
 
@@ -21,7 +22,8 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
   private Hopper m_hopper;
   private Tower m_tower;
   private Flywheel m_flywheel;
-  private double rpm;
+  private double setpoint;
+  private int shootingThreshold;
 
   public RunTowerBasedOffFlyWheel(Hopper hopper, Tower tower, Flywheel flywheel) {
     m_flywheel = flywheel;
@@ -36,13 +38,18 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
 
   @Override
   public void execute() {
-    rpm = m_flywheel.getSetpoint();
+    setpoint = m_flywheel.getSetpoint();
 
-   // DriverStation.reportError("running",false);
-  //  SmartDashboard.putNumber("Flywheel velocity",m_flywheel.getAvgVelocity());
-    if(Math.abs(m_flywheel.getAvgVelocity()-rpm)<500){
+  //if robot is shooting from trench or behind init line, 
+  //need a higher accuracy. if layup, range of error is larger. 
+  if(m_flywheel.isHoodUp()) 
+    shootingThreshold = Constants.THRESHOLD_FAR;
+  else  
+    shootingThreshold = Constants.THRESHOLD_LAYUP;
+
+    //Checking whether the speed of flywheel is good enough to shoot
+    if(Math.abs(m_flywheel.getAvgVelocity()-setpoint)<shootingThreshold){
       m_tower.runMotors(.8);
-    //  SmartDashboard.putNumber("feed velocity", m_tower.topMotorSpeed());
       m_hopper.runAll(); 
     }
 
