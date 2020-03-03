@@ -27,7 +27,7 @@ public class Tower extends SubsystemBase {
   private NEO topMotor, bottomMotor;
   private final AnalogInput m_topSensor0, m_topSensor1, m_bottomSensor2, m_bottomSensor3;
   
-  private MovingAverage bottom3Avg, bottom2Avg, top1Avg, top0Avg;
+  private MovingAverage bottom3Avg, bottom2Avg, top1Avg, top0Avg, bottomMotorAvg;
 
   public Tower() {
     
@@ -38,11 +38,13 @@ public class Tower extends SubsystemBase {
     topMotor.setBrake();
     bottomMotor.setBrake();
     
-    bottom3Avg = new MovingAverage(5);
+    bottom3Avg = new MovingAverage(20);
     
     bottom2Avg = new MovingAverage(20);
     top1Avg = new MovingAverage(5);
     top0Avg = new MovingAverage(5);
+
+    bottomMotorAvg = new MovingAverage(Constants.TOWER_LOWER_JAMMING_WINDOW);
 
     m_topSensor0 = new AnalogInput(0);
     m_topSensor1 = new AnalogInput(1);
@@ -68,7 +70,7 @@ public class Tower extends SubsystemBase {
     top1Avg.add(m_topSensor1.getVoltage());
     bottom2Avg.add(m_bottomSensor2.getVoltage());
     bottom3Avg.add(m_bottomSensor3.getVoltage());
-
+    bottomMotorAvg.add(bottomMotor.getOutputCurrent());
   }
 
   /**
@@ -82,7 +84,10 @@ public class Tower extends SubsystemBase {
 
   }
 
-  
+  public double getBottomMotorCurrent()
+  {
+    return bottomMotor.getOutputCurrent();
+  }
   /**
    * runs the bottom motor
    * @param speed speed of motor
@@ -148,6 +153,15 @@ public class Tower extends SubsystemBase {
     }
   }
 
+  public boolean isBottomMotorJammed(){
+    bottomMotorAvg.add(bottomMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Tower Lower Motor Avg", bottomMotorAvg.get());
+    return (bottomMotorAvg.get() > Constants.TOWER_LOWER_JAMMING_THRESHOLD);
+    
+  }
+
+  
+
   public void stopAll(){
     runMotors(0.0);
   }
@@ -170,5 +184,7 @@ public class Tower extends SubsystemBase {
   public TowerModeType getCurrentMode(){
     return currentMode;
   }
+
+  
 
 }

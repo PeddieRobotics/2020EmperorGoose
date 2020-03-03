@@ -64,4 +64,7 @@ public final class Constants {
     public static final double REVERSE_PERCENT_HOPPER = 0.8;
     public static final double REVERSE_PERCENT_TOWER = 0.8;
 
+    public static final double TOWER_LOWER_JAMMING_THRESHOLD = 7.0;
+    public static final int TOWER_LOWER_JAMMING_WINDOW = 20;
+
 }

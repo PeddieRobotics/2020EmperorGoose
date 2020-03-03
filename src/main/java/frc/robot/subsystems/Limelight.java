@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -26,6 +27,7 @@ public class Limelight extends SubsystemBase {
   NetworkTableEntry ty = limes.getEntry("ty");
   NetworkTableEntry thor = limes.getEntry("thor");
   NetworkTableEntry tvert = limes.getEntry("tvert");
+  
 
   public Limelight() {
     try {
