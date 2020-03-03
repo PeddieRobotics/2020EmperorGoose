@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 package frc.robot.commands.TowerCommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
@@ -18,6 +19,8 @@ public class IndexPowerCells extends CommandBase {
   private Tower m_tower;
   private Hopper m_hopper; 
   private Intake m_intake;
+  private double reverseTimeEnd;
+
   
   public IndexPowerCells(Tower tower, Hopper hopper, Intake intake) {
     m_hopper = hopper;
@@ -30,6 +33,7 @@ public class IndexPowerCells extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    reverseTimeEnd = 0.0;
   }
   
   // Called every time the scheduler runs while the command is scheduled.
@@ -38,10 +42,12 @@ public class IndexPowerCells extends CommandBase {
     SmartDashboard.putNumber("Tower Lower Current", m_tower.getBottomMotorCurrent());
     //m_tower.isBottomMotorJammed();
 
-    //if(m_tower.isBottomMotorJammed()){
-      //m_tower.reverse(Constants.REVERSE_PERCENT_TOWER);
-      //m_hopper.reverse(Constants.REVERSE_PERCENT_HOPPER);
-    //}
+
+    if(m_tower.isBottomMotorJammed() && Timer.getFPGATimestamp()-reverseTimeEnd > 3.0){
+      m_tower.reverse(Constants.REVERSE_PERCENT_TOWER);
+      m_hopper.reverse(Constants.REVERSE_PERCENT_HOPPER);
+      reverseTimeEnd = Timer.getFPGATimestamp();
+    }
     //In the following code, here is what each sensor is. There are 4 sensors in total.
 
     // There are two top sensors on the tower:
@@ -51,7 +57,7 @@ public class IndexPowerCells extends CommandBase {
     // There are also two bottom sensors on the tower:
     // Bottom 2: Third Sensor (the top of the bottom sensors)
     // Bottom 3: Fouth Sensor (the bottom of the bottom sensors)
-    //else{
+    else{
       if(m_intake.isIntaking()){ // Checks if the intake is running
 
         // Control the bottom roller
@@ -94,7 +100,7 @@ public class IndexPowerCells extends CommandBase {
 
   } 
     
-  //}
+  }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
