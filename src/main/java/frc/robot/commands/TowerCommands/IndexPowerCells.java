@@ -34,18 +34,39 @@ public class IndexPowerCells extends CommandBase {
   @Override
   public void execute() {
       if(m_intake.isIntaking()){
-        if(!m_tower.senses_ball_Top1()){
-          m_tower.runMotors(.2); // reduced to prevent over-indexing when the flywheel is spinning down
-          m_hopper.runAll();
+        // Control the bottom roller
+        if(!m_tower.senses_ball_Bottom()){ // If there is no ball at the bottom of the tower
+          m_tower.runBottomMotor(0.35);
         }
-        else if(!m_tower.senses_ball_Bottom()){
-          m_tower.runBottomMotor(0.35); // reduced to prevent over-indexing when the flywheel is spinning down
-          m_hopper.runAll();
-        }
+
+
         else{
-          m_tower.stopAll();
-          m_hopper.stopAll(); 
+          if(m_tower.senses_ball_Top0() || m_tower.senses_ball_Top1())  // If there are two balls in the tower
+            m_tower.runBottomMotor(0.0);
+          else  // if there is a ball at the bottom but no ball at the top
+            m_tower.runBottomMotor(0.35);  
         }
+
+      // Control the tower belts
+      // If there is a ball at the top of the tower, but not being sensed by the highest sensor
+      if(m_tower.senses_ball_Top0()){
+        m_tower.runTopMotor(0.0);
+      }
+
+      // If there is a ball at the highest sensor
+      else{
+        if(m_tower.senses_ball_Top1())
+          m_tower.runTopMotor(0.2);
+        else
+          m_tower.runTopMotor(0.25);
+      }
+
+      if( (m_tower.senses_ball_Top0() || m_tower.senses_ball_Top1()) && m_tower.senses_ball_Bottom()){
+        m_hopper.stopAll();
+      }
+      else{
+        m_hopper.runAll();
+      }
     }
     else{
       m_tower.stopAll();

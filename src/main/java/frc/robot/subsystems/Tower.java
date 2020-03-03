@@ -72,25 +72,24 @@ public class Tower extends SubsystemBase {
   }
 
   /**
-   * runs ONLY the top motor
+   * runs the top motor
    * @param speed speed of motor
    */
   public void runTopMotor( double speed ) {
 
     topMotor.set( speed );
-    bottomMotor.set(0);
+    
 
   }
 
+  
   /**
-   * runs ONLY the bottom motor
+   * runs the bottom motor
    * @param speed speed of motor
    */
-  public void runBottomMotor( double speed ) {
-
-    topMotor.set(0);
-    bottomMotor.set( -speed );
-
+  public void runBottomMotor(double speed)
+  {
+    bottomMotor.set(-speed);
   }
   
   /**
