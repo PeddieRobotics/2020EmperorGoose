@@ -117,7 +117,7 @@ public class RobotContainer {
   }
 
   /* Use a SendableChooser to create a list of possible autonomous paths.
-  *  Each path is defined by a String naming the .csv file to use for that path.
+  *  Each path is defined by a String naming the java file for that path.
   */ 
   public void configureAutoRoutines(){
     chooser = new SendableChooser<String>();
