@@ -57,4 +57,8 @@ public final class Constants {
     public static final double RPM_LAYUP = 2000;
     public static final double RPM_FAR = 3500;
 
+    public static final double REVERSE_PERCENT_INTAKE = 0.8;
+    public static final double REVERSE_PERCENT_HOPPER = 0.8;
+    public static final double REVERSE_PERCENT_TOWER = 0.8;
+
 }

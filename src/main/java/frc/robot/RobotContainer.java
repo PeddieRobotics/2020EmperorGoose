@@ -1,17 +1,16 @@
-     /**
- * FRC 5895 (Peddie School Robotics)
- * Initializes and configures all controls.
- * Also initializes all subsystems for the robots.
- * 
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
- */
+/**
+* FRC 5895 (Peddie School Robotics)
+* Initializes and configures all controls.
+* Also initializes all subsystems for the robots.
+* 
+* This class is where the bulk of the robot should be declared.  Since Command-based is a
+* "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
+* periodic methods (other than the scheduler calls).  Instead, the structure of the robot
+* (including subsystems, commands, and button mappings) should be declared here.
+*/
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -19,7 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -30,23 +28,22 @@ import frc.robot.commands.ClimberCommands.LowerClimber;
 import frc.robot.commands.ClimberCommands.RaiseClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
 import frc.robot.commands.DriveCommands.Drive;
-import frc.robot.commands.FlywheelCommands.RaiseHood;
-import frc.robot.commands.FlywheelCommands.ReverseFlywheel;
 import frc.robot.commands.FlywheelCommands.RunFlywheelUntilTowerHasStopped;
 import frc.robot.commands.FlywheelCommands.ShootFromFar;
 import frc.robot.commands.FlywheelCommands.ShootLayup;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheelOnOff;
 import frc.robot.commands.FlywheelCommands.ToggleHoodUpDown;
 import frc.robot.commands.HopperCommands.ToggleHopperOnOff;
+import frc.robot.commands.HopperCommands.UnjamHopper;
 import frc.robot.commands.IntakeCommands.StartIntake;
 import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.IntakeCommands.ToggleIntakeOnOff;
+import frc.robot.commands.IntakeCommands.UnjamIntake;
 import frc.robot.commands.LimelightCommands.Centering;
 import frc.robot.commands.LimelightCommands.ToggleLight;
 import frc.robot.commands.MiscCommands.StopAllSubsystems;
 import frc.robot.commands.TowerCommands.IndexPowerCells;
 import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
-import frc.robot.commands.TowerCommands.StopTower;
 import frc.robot.commands.TowerCommands.ToggleTowerOnOff;
 import frc.robot.commands.TowerCommands.UnjamTower;
 import frc.robot.subsystems.Climber;
@@ -78,7 +75,7 @@ public class RobotContainer {
 
   private JoystickButton leftTrigger, leftButton2, leftButton3, leftButton4, leftButton5, leftButton6, leftButton7, leftButton8;
   private JoystickButton rightTrigger, rightButton2, rightButton3, rightButton4, rightButton5, rightButton6, rightButton7, rightButton8;
-  private JoystickButton opTrigger, opButton2, opButton3, opButton4, opButton5, opButton6, opButton7, opButton8;
+  private JoystickButton opTrigger, opButton2, opButton3, opButton4, opButton5, opButton6, opButton7, opButton8, opButton9, opButton10, opButton11, opButton12;
   
   public RobotContainer() {
     // Set up the command looper to manage command scheduling
@@ -156,14 +153,24 @@ public class RobotContainer {
     rightButton3.whenPressed(new LowerClimber(m_climber));
     rightButton4.whenHeld(new RaiseClimber(m_climber));
 
-    opTrigger.whenHeld(new ToggleHoodUpDown(m_flywheel));
-    opButton2.whenHeld(new UnjamTower(m_tower, 0.5));
-    opButton3.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
-    opButton4.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
-    opButton5.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
-    opButton6.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel));
-    opButton7.toggleWhenPressed(new ToggleLight(m_limelight));
-    opButton8.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
+    opTrigger.whileHeld(new ParallelCommandGroup(
+      new UnjamTower(m_tower, Constants.REVERSE_PERCENT_TOWER),
+      new UnjamHopper(m_hopper, Constants.REVERSE_PERCENT_HOPPER)
+    ));
+    opButton2.whileHeld(new ParallelCommandGroup(
+      new UnjamTower(m_tower, Constants.REVERSE_PERCENT_TOWER),
+      new UnjamHopper(m_hopper, Constants.REVERSE_PERCENT_HOPPER),
+      new UnjamIntake(m_intake, Constants.REVERSE_PERCENT_INTAKE)
+    ));
+    opButton3.whenHeld(new ToggleHoodUpDown(m_flywheel));
+    opButton4.whenHeld(new UnjamTower(m_tower, Constants.REVERSE_PERCENT_TOWER));
+    opButton5.whenHeld(new UnjamHopper(m_hopper, Constants.REVERSE_PERCENT_HOPPER));
+    opButton6.whenHeld(new UnjamIntake(m_intake, Constants.REVERSE_PERCENT_INTAKE));
+    opButton7.toggleWhenPressed(new ToggleClimberUpDown(m_climber));
+    opButton8.toggleWhenPressed(new ToggleIntakeOnOff(m_intake, m_tower, m_hopper));
+    opButton9.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
+    opButton10.toggleWhenPressed(new ToggleLight(m_limelight));
+    opButton11.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
 
 
   }
@@ -228,6 +235,11 @@ public class RobotContainer {
     opButton6 = new JoystickButton(operatorJoystick, 6);
     opButton7 = new JoystickButton(operatorJoystick, 7);
     opButton8 = new JoystickButton(operatorJoystick, 8);
+    opButton9 = new JoystickButton(operatorJoystick, 9);
+    opButton10 = new JoystickButton(operatorJoystick, 10);
+    opButton11 = new JoystickButton(operatorJoystick, 11);
+    opButton12 = new JoystickButton(operatorJoystick, 12);
+
 
   }
   

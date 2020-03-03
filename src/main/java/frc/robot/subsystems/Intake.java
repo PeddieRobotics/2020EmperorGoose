@@ -11,12 +11,6 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
 
-  private static enum IntakeModeType {
-    INTAKING, DISABLED, REVERSE
-  }
-
-  private IntakeModeType currentMode;
-  
   private Solenoid intakeSolenoid;
   
   private TalonSRX intakeMotorTalon;
@@ -25,14 +19,16 @@ public class Intake extends SubsystemBase {
 
   public Intake() {
 
-    currentMode = IntakeModeType.DISABLED;
-    
     intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
     intakeMotorTalon= new TalonSRX(9);//intake is a talon on both robots
     intakeMotorTalon.configContinuousCurrentLimit(20,0);
     intakeMotorTalon.configPeakCurrentDuration(100, 0);   
     intakeMotorTalon.enableCurrentLimit(true);
     intakeMotorTalon.configPeakCurrentLimit(30, 0);
+  }
+
+  public boolean isSolenoidActive(){
+    return intakeSolenoid.get();
   }
 
   public void setIntakeMotor(double setpoint){
@@ -47,7 +43,7 @@ public class Intake extends SubsystemBase {
    */
   public boolean isIntaking() {
 
-    return( currentMode == IntakeModeType.INTAKING );
+    return (intakeMotorTalon.getMotorOutputPercent() > 0.0);
   }
 
   @Override
@@ -59,7 +55,7 @@ public class Intake extends SubsystemBase {
    */
   public void startIntake() {
     intakeSolenoid.set(true);
-    currentMode = IntakeModeType.INTAKING;
+
     setIntakeMotor( .8 ); 
   }
 
@@ -68,17 +64,14 @@ public class Intake extends SubsystemBase {
    */
   public void stopIntake() {
     intakeSolenoid.set(false);
-    currentMode = IntakeModeType.DISABLED;
     setIntakeMotor( 0 );
   }
 
   /**
    * Run the intake in reverse (to fix jams).
    */
-  public void reverse() {
-
-    currentMode = IntakeModeType.REVERSE;
-    setIntakeMotor( -0.5 );
+  public void reverse(double setpoint) {
+    setIntakeMotor( -setpoint );
 
   }
 
