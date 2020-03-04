@@ -46,7 +46,7 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
     shootingThreshold = Constants.THRESHOLD_FAR;
   else  
     shootingThreshold = Constants.THRESHOLD_LAYUP;
-s
+
     //Checking whether the speed of flywheel is good enough to shoot
     if(Math.abs(m_flywheel.getAvgVelocity()-setpoint)<shootingThreshold){
       m_tower.runMotors(Constants.TOWER_SHOT_SPEED);
