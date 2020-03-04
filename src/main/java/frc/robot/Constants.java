@@ -56,12 +56,20 @@ public final class Constants {
     //PID for Flywheel
 
     public static final double RPM_LAYUP = 2200;
-    public static final double RPM_FAR = 3500;
+    public static final double RPM_FAR = 3350;
     public static final int THRESHOLD_LAYUP = 500;
-    public static final int THRESHOLD_FAR = 200;
+    public static final int THRESHOLD_FAR = 100;
 
     public static final double REVERSE_PERCENT_INTAKE = 0.8;
     public static final double REVERSE_PERCENT_HOPPER = 0.8;
     public static final double REVERSE_PERCENT_TOWER = 0.8;
 
+    public static final boolean USE_XBOX_CONTROLLER = true;
+    public static final double XBOX_TRIGGER_DEADZONE = 0.02; // Jiggle room for the xbox triggers
+    public static final double XBOX_TRIGGER_SENSITIVITY = 0.5;  // If the trigger is beyond this limit, say it has been pressed
+
+
+    public static final boolean COMPETITION_ROBOT = true;
+
+    public static final double SLOW_MODE_SCALE_FACTOR = 0.5;
 }
