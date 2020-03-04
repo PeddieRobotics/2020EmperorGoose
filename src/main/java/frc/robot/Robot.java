@@ -1,22 +1,28 @@
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpiutil.net.PortForwarder;
 
 public class Robot extends TimedRobot {
 
   RobotContainer m_RobotContainer;
-
+  
   public void robotInit() {
     PortForwarder.add(5801,"10.58.95.11",5801);//web interface
     PortForwarder.add(5805,"10.58.95.11",5805);//back end data for web interface
     PortForwarder.add(5800,"10.58.95.11",5800);//stream for web interface 
     m_RobotContainer = new RobotContainer();
     m_RobotContainer.configureButtonBindings();
-    
+    UsbCamera driverCamera = CameraServer.getInstance().startAutomaticCapture(0);
+    driverCamera.setExposureAuto();
+    driverCamera.setFPS(24);
     m_RobotContainer.configureDefaultBehaviors();
+    SmartDashboard.putNumber("lastState",0);
   }
 
   public void robotPeriodic() {
