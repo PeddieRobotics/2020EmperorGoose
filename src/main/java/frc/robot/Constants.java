@@ -64,6 +64,8 @@ public final class Constants {
     public static final double REVERSE_PERCENT_HOPPER = 0.8;
     public static final double REVERSE_PERCENT_TOWER = 0.8;
 
+    public static final double TOWER_SHOT_SPEED = 0.8;
+
     public static final boolean USE_XBOX_CONTROLLER = true;
     public static final double XBOX_TRIGGER_DEADZONE = 0.02; // Jiggle room for the xbox triggers
     public static final double XBOX_TRIGGER_SENSITIVITY = 0.5;  // If the trigger is beyond this limit, say it has been pressed
