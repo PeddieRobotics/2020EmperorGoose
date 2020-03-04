@@ -118,7 +118,6 @@ public class RobotContainer {
 
   /* Use a SendableChooser to create a list of possible autonomous paths.
   *  Each path is defined by a String naming the java file for that path.
-  *  This is very helpful.
   */ 
   public void configureAutoRoutines(){
     chooser = new SendableChooser<String>();
