@@ -138,7 +138,10 @@ public class RobotContainer {
   public void configureButtonBindings() {
     leftTrigger.whenPressed(new StartIntake(m_intake, m_hopper, m_tower));
     leftButton2.whenPressed(new StopIntake(m_intake, m_hopper));
-    // leftButton3.whenHeld(new UnjamTower(m_tower, m_hopper, 0.5));
+    leftButton3.whileHeld(new ParallelCommandGroup(
+      new UnjamTower(m_tower, Constants.REVERSE_PERCENT_TOWER),
+      new UnjamHopper(m_hopper, Constants.REVERSE_PERCENT_HOPPER)
+    ));
     // leftButton4.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
     
     rightTrigger.whileHeld(new ParallelCommandGroup(
