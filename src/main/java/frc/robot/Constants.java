@@ -40,9 +40,9 @@ public final class Constants {
     public static final double DRIVETRAIN_I = 0.0000;
     public static final double DRIVETRAIN_D = 0.000; 
     public static final double DRIVETRAIN_FF = 0.00018 ;
-    public static final double DRIVETRAIN_FF_OFFSET = 0.00000;
+    public static final double DRIVETRAIN_FF_OFFSET = 0.000001;
     
-    public static final double DRIVETRAIN_ACC = 0.23;
+    public static final double DRIVETRAIN_ACC = 0.7;
     public static final double DRIVETRAIN_ACC_OFFSET = 0.00;
 
     public static final double DRIVETRAIN_DEADBAND = 0.08;

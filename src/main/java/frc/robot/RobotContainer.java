@@ -22,6 +22,10 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.paths.MoveOffLine;
+import frc.paths.TenFeet;
+import frc.robot.Auto.HelixPathFollower;
+
 import frc.robot.commands.AutoCommands.FollowPath;
 import frc.robot.commands.AutoCommands.ShootNTimes;
 import frc.robot.commands.ClimberCommands.LowerClimber;
@@ -258,24 +262,18 @@ public class RobotContainer {
       CommandScheduler.getInstance().schedule(new FollowPath(m_driveTrain,"BackOffLine",true,false,true));
     }
     else if(autoRoutineFromChooser == "BackupShoot3NoLL"){
-      CommandScheduler.getInstance().schedule(new ParallelCommandGroup( 
-        new FollowPath(m_driveTrain,"MoveOffLine",true,true,true)),  
-        new ParallelRaceGroup(
-          new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
-          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
+      return new HelixPathFollower(new TenFeet(), m_driveTrain);
     }
     else if(autoRoutineFromChooser == "BackupShoot3LL"){
-      CommandScheduler.getInstance().schedule( new SequentialCommandGroup( 
-        new FollowPath(m_driveTrain,"MoveOffLine",true,false,true),
-        new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
-                                 new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
-                                 new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))));
+      return new HelixPathFollower(new TenFeet(), m_driveTrain);
     }
     return null;
 
   }
 
-  public void setBrakeMode(){
+
+
+  public void setBrakeMode() {
     m_driveTrain.setBrake();
   }
 

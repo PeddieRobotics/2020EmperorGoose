@@ -108,7 +108,7 @@ public class GraphsForCSV extends Application {
             }
         });
         EventHandler<ActionEvent> drawFromServer = (ActionEvent e) -> {
-            CSVClient csvCreator = new CSVClient("10.58.95.2", 5800);/// thread will run until connection made(be wary!)
+            CSVClient csvCreator = new CSVClient("10.58.95.2", 5802);/// thread will run until connection made(be wary!)
             graphCSVScene(primaryStage, csvCreator.fileName());//once connectoin made run csvScene
 
         };
