@@ -26,7 +26,7 @@ public class StopDriveTrain extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_driveTrain.arcadeDrive(0, 0, Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED);
+    m_driveTrain.arcadeDrive(0, 0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

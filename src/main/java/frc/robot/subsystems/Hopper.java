@@ -32,7 +32,7 @@ public class Hopper extends SubsystemBase {
      /**
      * changes the motors based off if the robot is comp bot or pbot
      */
-    if( RobotContainer.isCompetitionRobot() ) { //comp robot has TalonSRX's
+    if( Constants.COMPETITION_ROBOT ) { //comp robot has TalonSRX's
 
       //left and right motors for the v-belts
       leftWallTalon = new TalonSRX( Constants.HOPPER_LEFT_WALL );
@@ -73,7 +73,7 @@ public class Hopper extends SubsystemBase {
    */
   public void setMotors( TalonSRX talonMotor, VictorSPX victorMotor, double setpoint ) {
 
-    if( RobotContainer.isCompetitionRobot() ) {
+    if( Constants.COMPETITION_ROBOT ) {
       talonMotor.set( ControlMode.PercentOutput, setpoint );
     } else {
       victorMotor.set( ControlMode.PercentOutput, setpoint );
@@ -85,7 +85,7 @@ public class Hopper extends SubsystemBase {
    * @param setpoint set the floor to this speed
    */
   public void setFloor( double setpoint ) {
-    if(RobotContainer.isCompetitionRobot()){
+    if(Constants.COMPETITION_ROBOT){
       floorTalon.set(ControlMode.PercentOutput, setpoint);
     }
     else{
@@ -98,7 +98,7 @@ public class Hopper extends SubsystemBase {
    * @param setpoint set the left wall to this speed
    */
   public void setLeftWall( double setpoint ) { 
-    if(RobotContainer.isCompetitionRobot()){
+    if(Constants.COMPETITION_ROBOT){
       leftWallTalon.set(ControlMode.PercentOutput, setpoint);
     }
     else{
@@ -111,7 +111,7 @@ public class Hopper extends SubsystemBase {
    * @param setpoint set th right wall to this speed
    */
     public void setRightWall( double setpoint ) {
-      if(RobotContainer.isCompetitionRobot()){
+      if(Constants.COMPETITION_ROBOT){
         rightWallTalon.set(ControlMode.PercentOutput, setpoint);
       }
       else{
