@@ -34,7 +34,7 @@ public class driveOffLine extends CommandBase {
   @Override
   public void execute() {
     // just drive for 2 seconds 
-    m_driveTrain.arcadeDrive(.2, 0, Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED);
+    m_driveTrain.arcadeDrive(.2, 0);
     m_driveTrain.run();
 
   }

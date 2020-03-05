@@ -178,7 +178,15 @@ public class Drivetrain extends SubsystemBase {
     rightDriveInputTurn -= turn;
   }
   
-  public void arcadeDrive( double speed, double turn, double deadband, boolean squaredInputs ) {
+  public void arcadeDrive( double speed, double turn ) {
+    double deadband = 0.0;
+
+    if(Constants.USE_XBOX_CONTROLLER){
+      deadband = Constants.XBOX_JOYSTICK_DEADBAND;
+    }
+    else{
+      deadband = Constants.JOYSTICK_DEADBAND;
+    }
 
     if( Math.abs(speed) < deadband ) {
       speed = 0;
@@ -187,7 +195,7 @@ public class Drivetrain extends SubsystemBase {
       turn = 0;
     }
 
-    if (squaredInputs){
+    if (Constants.DRIVETRAIN_USE_SQUARED){
       addToSpeed(speed*Math.abs(speed));
       addToTurn(turn*Math.abs(turn)); 
     }
@@ -229,7 +237,7 @@ public class Drivetrain extends SubsystemBase {
   public double getSpeed() {
     double speed = 0.0;
     if(Constants.USE_XBOX_CONTROLLER){
-      speed = driverXboxController.getRawAxis(1);
+      speed = Constants.XBOX_SPEED_SCALE_FACTOR*driverXboxController.getRawAxis(1);
     }
     else{
       speed = leftJoystick.getRawAxis(1);
@@ -243,7 +251,7 @@ public class Drivetrain extends SubsystemBase {
   public double getTurn() {
     double turn = 0.0;
     if(Constants.USE_XBOX_CONTROLLER){
-      turn = driverXboxController.getRawAxis(4);
+      turn = Constants.XBOX_TURN_SCALE_FACTOR*driverXboxController.getRawAxis(4);
     }
     else{
       turn = rightJoystick.getRawAxis(0);

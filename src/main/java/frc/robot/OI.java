@@ -112,7 +112,10 @@ public class OI {
       new UnjamTower(m_tower, Constants.REVERSE_PERCENT_TOWER),
       new UnjamHopper(m_hopper, Constants.REVERSE_PERCENT_HOPPER)
     ));
-    leftButton4.toggleWhenPressed(new ToggleDriveSlow(m_driveTrain));
+    leftButton4.whileHeld(new ParallelCommandGroup(
+      new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
+      new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
+    // leftButton4.toggleWhenPressed(new ToggleDriveSlow(m_driveTrain));
     
     rightTrigger.whileHeld(new ParallelCommandGroup(
                             new ShootLayup(m_flywheel, Constants.RPM_LAYUP, false), 
