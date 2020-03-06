@@ -19,12 +19,12 @@ public class Intake extends SubsystemBase {
 
   public Intake() {
 
-    intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
+    /*intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
     intakeMotorTalon= new TalonSRX(9);//intake is a talon on both robots
     intakeMotorTalon.configContinuousCurrentLimit(20,0);
     intakeMotorTalon.configPeakCurrentDuration(100, 0);   
     intakeMotorTalon.enableCurrentLimit(true);
-    intakeMotorTalon.configPeakCurrentLimit(30, 0);
+    intakeMotorTalon.configPeakCurrentLimit(30, 0);*/
   }
 
   public boolean isSolenoidActive(){

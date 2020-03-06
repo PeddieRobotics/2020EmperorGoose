@@ -18,10 +18,10 @@ public class Climber extends SubsystemBase {
 
   public Climber() {
     
-    isUp = false;
+    /*isUp = false;
 
     leftArmSolenoid = new Solenoid(Constants.SOLENOID_CLIMBER_1);
-    rightArmSolenoid = new Solenoid(Constants.SOLENOID_CLIMBER_2);
+    rightArmSolenoid = new Solenoid(Constants.SOLENOID_CLIMBER_2);*/
 
   }
 

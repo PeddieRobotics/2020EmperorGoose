@@ -25,13 +25,13 @@ public class Tower extends SubsystemBase {
   private TowerModeType currentMode;
 
   private NEO topMotor, bottomMotor;
-  private final AnalogInput m_topSensor0, m_topSensor1, m_bottomSensor2, m_bottomSensor3;
+  private AnalogInput m_topSensor0, m_topSensor1, m_bottomSensor2, m_bottomSensor3;
   
   private MovingAverage bottom3Avg, bottom2Avg, top1Avg, top0Avg;
 
   public Tower() {
     
-    currentMode = TowerModeType.DISABLED;
+    /*currentMode = TowerModeType.DISABLED;
 
     topMotor = new NEO( Constants.TOWER_BOTTOM );
     bottomMotor = new NEO( Constants.TOWER_TOP );
@@ -49,7 +49,7 @@ public class Tower extends SubsystemBase {
     m_bottomSensor2 = new AnalogInput(2);
     m_bottomSensor3 = new AnalogInput(3);
     topMotor.setSmartCurrentLimit(15);
-    bottomMotor.setSmartCurrentLimit(15);
+    bottomMotor.setSmartCurrentLimit(15);*/
   }
 
   @Override

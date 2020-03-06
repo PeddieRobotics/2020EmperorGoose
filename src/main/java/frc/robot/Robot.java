@@ -13,14 +13,14 @@ public class Robot extends TimedRobot {
   RobotContainer m_RobotContainer;
   
   public void robotInit() {
-    PortForwarder.add(5801,"10.58.95.11",5801);//web interface
-    PortForwarder.add(5805,"10.58.95.11",5805);//back end data for web interface
-    PortForwarder.add(5800,"10.58.95.11",5800);//stream for web interface 
+    //PortForwarder.add(5801,"10.58.95.11",5801);//web interface
+    //PortForwarder.add(5805,"10.58.95.11",5805);//back end data for web interface
+    //PortForwarder.add(5800,"10.58.95.11",5800);//stream for web interface 
     m_RobotContainer = new RobotContainer();
-    UsbCamera driverCamera = CameraServer.getInstance().startAutomaticCapture(0);
-    driverCamera.setExposureAuto();
-    driverCamera.setFPS(24);
-    SmartDashboard.putNumber("lastState",0);
+    // UsbCamera driverCamera = CameraServer.getInstance().startAutomaticCapture(0);
+    //driverCamera.setExposureAuto();
+    //driverCamera.setFPS(24);
+    //SmartDashboard.putNumber("lastState",0);
   }
 
   public void robotPeriodic() {

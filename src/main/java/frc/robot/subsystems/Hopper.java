@@ -22,16 +22,14 @@ public class Hopper extends SubsystemBase {
 
 
   public Hopper() {
-    currentMode = HopperModeType.DISABLED;
+    /*currentMode = HopperModeType.DISABLED;
     
     floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
     floorTalon.configPeakCurrentLimit(10, 0);
     floorTalon.configContinuousCurrentLimit(10,0);
     floorTalon.configPeakCurrentDuration(100, 0);  
     floorTalon.enableCurrentLimit(true);
-     /**
-     * changes the motors based off if the robot is comp bot or pbot
-     */
+     
     if( Constants.COMPETITION_ROBOT ) { //comp robot has TalonSRX's
 
       //left and right motors for the v-belts
@@ -54,9 +52,9 @@ public class Hopper extends SubsystemBase {
 
       rightWallVictor = new VictorSPX( Constants.HOPPER_RIGHT_WALL );
       leftWallVictor = new VictorSPX( Constants.HOPPER_LEFT_WALL );
-//      floorVictor = new VictorSPX( Constants.HOPPER_FLOOR ); floor always talon
+      // floorVictor = new VictorSPX( Constants.HOPPER_FLOOR ); floor always talon
       
-    }
+    }*/
     
   }
 
