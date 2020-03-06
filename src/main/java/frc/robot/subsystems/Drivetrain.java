@@ -59,7 +59,8 @@ public class Drivetrain extends SubsystemBase {
 
     rightDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF + Constants.DRIVETRAIN_FF_OFFSET, 0 );
     leftDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF, 0 );
-    
+    leftDriveMaster.changeControlFramePeriod(3);
+    rightDriveMaster.changeControlFramePeriod(3);
     // NEOPIDWithSmartDashboard leftDriveMaster = new NEOPIDWithSmartDashboard(1);
     // NEOPIDWithSmartDashboard rightDriveMaster = new NEOPIDWithSmartDashboard(2);
     // NEOPIDWithSmartDashboard leftDriveFollower1 = new NEOPIDWithSmartDashboard(3);
@@ -68,6 +69,10 @@ public class Drivetrain extends SubsystemBase {
   
     //diffDrive = new DifferentialDrive(leftDriveMaster, rightDriveMaster);
     //diffDrive.setDeadband(0.05);
+  }
+  public void resetEncoders(){
+    leftDriveMaster.getEncoder().setPosition(0);
+    rightDriveMaster.getEncoder().setPosition(0);
   }
 
   /**
@@ -93,9 +98,9 @@ public class Drivetrain extends SubsystemBase {
 
   public void setVelocity( double left_velocity, double right_velocity, double heading, double leftAccel, double rightAccel ) {
 
-    leftDriveMaster.setArbFF( -0.05 + ( -leftAccel * Constants.DRIVETRAIN_ACC ) ); //0.05 is the deadband
-    rightDriveMaster.setArbFF( 0.05 + ( rightAccel * Constants.DRIVETRAIN_ACC ) );
-
+    leftDriveMaster.setArbFF( -0.0 + ( -leftAccel * Constants.DRIVETRAIN_ACC ) ); //0.05 is the deadband
+    rightDriveMaster.setArbFF( 0.0 + ( rightAccel * Constants.DRIVETRAIN_ACC ) );
+    
     leftDriveMaster.setSmartVelocity( -left_velocity + heading );
     rightDriveMaster.setSmartVelocity( right_velocity + heading );
 
@@ -245,6 +250,12 @@ public class Drivetrain extends SubsystemBase {
   
   }
   //new arcade drive refractoring
+  public double getAverageDistance() {
+	  return (leftDriveMaster.getEncoder().getPosition()+rightDriveMaster.getEncoder().getPosition())/2.0d;
+  }
+public double getAverageHeading() {
+	return 0;
+}
 
 
 }

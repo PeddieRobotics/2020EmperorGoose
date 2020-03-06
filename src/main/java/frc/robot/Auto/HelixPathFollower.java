@@ -28,7 +28,7 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
   private PIDController headingController = new PIDController(15, 0, 0, 0.01);
   private PIDController distanceController = new PIDController(10, 0, 0, 0.01);
   ArrayList<String[]> points;
-  
+  private double ticksPerFoot = 6.5237d;
   CSVServer serv;
   private double feetPerSecondToRpm = (60.0 * 10.6666) / (Math.PI * (6.25 / 12.0));
   private double RpmToFeetPerSecond = (Math.PI * (6.25 / 12.0)) / (60.0 * 10.6666);
@@ -46,7 +46,7 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
 
   @Override
   public void resetDistance() {
-    // TODO Auto-generated method stub
+    m_drivetrain.resetEncoders();
 
   }
 
@@ -65,12 +65,14 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
   @Override
   public double getCurrentDistance() {
     // TODO Auto-generated method stub
-    return 0;
+    
+    return m_drivetrain.getAverageDistance()/ticksPerFoot;
   }
 
   @Override
   public double getCurrentHeading() {
     // TODO Auto-generated method stub
+    
     return 0;
   }
   @Override
@@ -89,10 +91,15 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
       }
       super.end(interrupted);
     }
+    public void checkEnd(double vel){
+      if((trajectory.getSegmentCount()-currentSegment<60)&&vel<0.01&&m_drivetrain.returnLeftVelocity()*RpmToFeetPerSecond<0.01){
+        end(true);
+      }
+    }
   @Override
   public void useOutputs(double left, double right) {
     String[] currentVels = new String[6];
-
+    checkEnd(left);
     currentVels[0] = "" + right;
     currentVels[1] = "" + -m_drivetrain.returnRightVelocity()*RpmToFeetPerSecond;
     currentVels[2] = "" + -left;
@@ -101,6 +108,7 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
     currentVels[5] = ""+ 0;
     points.add(currentVels);
     //DriverStation.reportError("outputs are being used", false);
-    m_drivetrain.setVelocity(left*feetPerSecondToRpm, right*feetPerSecondToRpm, 0, 0, 0);
+    m_drivetrain.setVelocity(left*feetPerSecondToRpm, right*feetPerSecondToRpm, 0, 0,0);
   }
+
 }

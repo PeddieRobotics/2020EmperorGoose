@@ -25,11 +25,12 @@ public abstract class HelixFollowerNewCommand extends CommandBase {
   
   
   // The trajectories to follow for each side
-  private Path trajectory;
+  public Path trajectory;
+  
   private boolean mirror;
   private boolean reverse;
 
-  private int currentSegment;
+  public int currentSegment;
   private boolean isFinished;
 
   /**
@@ -103,7 +104,7 @@ public abstract class HelixFollowerNewCommand extends CommandBase {
    * @param right the velocity of the left side
    */
   public abstract void useOutputs(double left, double right);
-
+  
   @Override
   public void initialize() {
     resetDistance();
@@ -112,7 +113,7 @@ public abstract class HelixFollowerNewCommand extends CommandBase {
     getHeadingController().reset();
     currentSegment = 0;
     isFinished = false;
-
+    
     // Start running the path
     pathNotifier.startPeriodic(trajectory.getValue(0, SegmentValue.TIME_STAMP));
     pidNotifier.startPeriodic(getDistanceController().getPeriod());
@@ -162,7 +163,7 @@ public abstract class HelixFollowerNewCommand extends CommandBase {
     // Get our expected velocities based on the paths
     double leftVelocity = trajectory.getValue(segment, mirror ^ reverse ? RIGHT_VELOCITY : LEFT_VELOCITY);
     double rightVelocity = trajectory.getValue(segment, mirror ^ reverse ? LEFT_VELOCITY : RIGHT_VELOCITY);
-
+    
     if (reverse) {
       leftVelocity = -leftVelocity;
       rightVelocity = -rightVelocity;
@@ -182,8 +183,8 @@ public abstract class HelixFollowerNewCommand extends CommandBase {
 
     // The final velocity is going to be a combination of our expected velocity corrected by our distance error and our heading error
     // velocity = expected + distanceError +/- headingError
-    double correctedLeftVelocity = leftVelocity;// + getDistanceController().calculate(currentPosition) - getHeadingController().calculate(currentHeading);
-    double correctedRightVelocity = rightVelocity; //+ getDistanceController().calculate(currentPosition) + getHeadingController().calculate(currentHeading);
+    double correctedLeftVelocity = leftVelocity + getDistanceController().calculate(currentPosition); //- getHeadingController().calculate(currentHeading);
+    double correctedRightVelocity = rightVelocity + getDistanceController().calculate(currentPosition);// + getHeadingController().calculate(currentHeading);
  
     useOutputs(correctedLeftVelocity, correctedRightVelocity);
   }
