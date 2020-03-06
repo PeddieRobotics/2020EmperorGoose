@@ -57,6 +57,6 @@ public class ShootCounterWithFlywheel extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return counter >= shotsToFire;
+    return false;//return counter >= shotsToFire;
   }
 }

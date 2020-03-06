@@ -110,7 +110,7 @@ public class RobotContainer {
     chooser = new SendableChooser<String>();
 
     chooser.addOption("BackOffLine","BackOffLine");
-    chooser.addOption("BackupShoot3LL","BackupShoot3LL");
+    chooser.addOption("BackupShoot3","BackupShoot3");
 
     SmartDashboard.putData("Auto routine", chooser);
   }
