@@ -23,8 +23,7 @@ public class ShootCounter extends CommandBase {
     m_tower = tower;
     counter = 0;
     
-  shotsToFire = shotCount;// 2 changes for each shot
-    addRequirements(tower);
+  shotsToFire = shotCount;
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -55,6 +54,6 @@ public class ShootCounter extends CommandBase {
   @Override
   public boolean isFinished() {
     
-    return false;
+    return (counter >= shotsToFire);
   }
 }

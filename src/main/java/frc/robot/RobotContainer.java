@@ -32,6 +32,7 @@ import frc.robot.commands.DriveCommands.Drive;
 import frc.robot.commands.FlywheelCommands.RunFlywheelUntilTowerHasStopped;
 import frc.robot.commands.FlywheelCommands.ShootFromFar;
 import frc.robot.commands.FlywheelCommands.ShootLayup;
+import frc.robot.commands.FlywheelCommands.StartFlywheel;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheelOnOff;
 import frc.robot.commands.FlywheelCommands.ToggleHoodUpDown;
 import frc.robot.commands.HopperCommands.ToggleHopperOnOff;
@@ -110,7 +111,7 @@ public class RobotContainer {
     chooser = new SendableChooser<String>();
 
     chooser.addOption("BackOffLine","BackOffLine");
-    chooser.addOption("BackupShoot3LL","BackupShoot3LL");
+    chooser.addOption("BackupShoot3","BackupShoot3");
 
     SmartDashboard.putData("Auto routine", chooser);
   }
@@ -133,9 +134,10 @@ public class RobotContainer {
     }
     else if(autoRoutineFromChooser == "BackupShoot3"){
       return new SequentialCommandGroup( 
-        new FollowPath(m_driveTrain,"MoveOffLine",true,false,true),
+        new ParallelCommandGroup(new FollowPath(m_driveTrain,"MoveOffLine",true,false,true),
+                                 new StartFlywheel(m_flywheel, 3350)),
         new ParallelRaceGroup(new Centering(m_limelight, m_driveTrain, 0, false),
-                                 new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
+                                 new ShootNTimes(m_tower, m_flywheel, 3350, 3),
                                  new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     }
     return null;

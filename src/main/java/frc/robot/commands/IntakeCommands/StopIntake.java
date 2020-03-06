@@ -19,6 +19,7 @@ public class StopIntake extends CommandBase {
   private Intake m_intake;
   private Hopper m_hopper;
   private double motorTimer;
+  private double initialTime;
 
   public StopIntake(Intake intake, Hopper hopper) {
     m_intake = intake;
@@ -31,6 +32,7 @@ public class StopIntake extends CommandBase {
   public void initialize() {
     m_intake.raiseIntake();
     m_hopper.stopAll();
+    initialTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -48,6 +50,6 @@ public class StopIntake extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (motorTimer > Constants.INTAKE_MOTOR_OFF_DELAY);
+    return ((motorTimer-initialTime) > Constants.INTAKE_MOTOR_OFF_DELAY);
   }
 }
