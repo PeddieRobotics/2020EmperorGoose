@@ -20,6 +20,7 @@ public class ShootCounter extends CommandBase {
   int shotsToFire;
   int counter;
    public ShootCounter(Tower tower, int shotCount) {
+    shotsToFire=shotCount;
     m_tower = tower;
     counter = 0;
     

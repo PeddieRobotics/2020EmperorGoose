@@ -26,7 +26,7 @@ public class ShootNTimes extends SequentialCommandGroup {
 
   public ShootNTimes(Tower tower, Flywheel flywheel, double rpm, int numberOfBalls) {
     
-    super(new ParallelRaceGroup(new ShootFromFar(flywheel, rpm, true), new ShootCounter(tower, numberOfBalls)));
+    super(new ParallelRaceGroup(new ShootFromFar(flywheel, rpm, true), new ShootCounterWithFlywheel(flywheel, numberOfBalls)));
     
   }
 }
