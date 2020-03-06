@@ -48,6 +48,7 @@ public abstract class HelixFollowerNewCommand extends CommandBase {
    * A decorator to flip the left and right direction of the path
    * @return the current PathFollower instance
    */
+
   public HelixFollowerNewCommand mirror() {
     mirror = true;
     return this;
@@ -103,7 +104,7 @@ public abstract class HelixFollowerNewCommand extends CommandBase {
    * @param left the velocity of the left side
    * @param right the velocity of the left side
    */
-  public abstract void useOutputs(double left, double right);
+  public abstract void useOutputs(double left, double right, double unLeft, double unRight);
   
   @Override
   public void initialize() {
@@ -174,7 +175,10 @@ public abstract class HelixFollowerNewCommand extends CommandBase {
     double expectedPosition = trajectory.getValue(segment, CENTER_POSITION);
     getDistanceController().setReference(reverse ? -expectedPosition : expectedPosition);
     double currentPosition = getCurrentDistance();
-
+  //  DriverStation.reportError("currentPos" + currentPosition, false);
+  //  DriverStation.reportError("expecPos" + expectedPosition, false);
+  //  DriverStation.reportError("diffPos" + (expectedPosition-currentPosition), false);
+    
     // Set our expected heading to be the setpoint of our direction controller
     double expectedHeading = trajectory.getValue(segment, HEADING);
     // If the path is flipped, invert the sign of the heading
@@ -183,9 +187,9 @@ public abstract class HelixFollowerNewCommand extends CommandBase {
 
     // The final velocity is going to be a combination of our expected velocity corrected by our distance error and our heading error
     // velocity = expected + distanceError +/- headingError
-    double correctedLeftVelocity = leftVelocity + getDistanceController().calculate(currentPosition); //- getHeadingController().calculate(currentHeading);
-    double correctedRightVelocity = rightVelocity + getDistanceController().calculate(currentPosition);// + getHeadingController().calculate(currentHeading);
+    double correctedLeftVelocity = leftVelocity + getDistanceController().calculate(currentPosition) - getHeadingController().calculate(currentHeading);
+    double correctedRightVelocity = rightVelocity + getDistanceController().calculate(currentPosition) + getHeadingController().calculate(currentHeading);
  
-    useOutputs(correctedLeftVelocity, correctedRightVelocity);
+    useOutputs(correctedLeftVelocity, correctedRightVelocity,leftVelocity,rightVelocity);
   }
 }

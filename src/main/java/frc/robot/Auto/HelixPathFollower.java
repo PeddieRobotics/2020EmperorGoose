@@ -12,7 +12,9 @@ import java.sql.Driver;
 import java.util.ArrayList;
 
 import com.team2363.controller.PIDController;
+import com.team2363.logger.HelixLogger;
 import com.team319.trajectory.Path;
+import com.team319.trajectory.Path.SegmentValue;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -25,8 +27,8 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
    */
   Drivetrain m_drivetrain;
 
-  private PIDController headingController = new PIDController(15, 0, 0, 0.01);
-  private PIDController distanceController = new PIDController(10, 0, 0, 0.01);
+  private PIDController headingController = new PIDController(10, 0, 0, 0.01);
+  private PIDController distanceController = new PIDController(2, 0, 0, 0.01);
   ArrayList<String[]> points;
   private double ticksPerFoot = 6.5237d;
   CSVServer serv;
@@ -65,7 +67,6 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
   @Override
   public double getCurrentDistance() {
     // TODO Auto-generated method stub
-    
     return m_drivetrain.getAverageDistance()/ticksPerFoot;
   }
 
@@ -73,15 +74,20 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
   public double getCurrentHeading() {
     // TODO Auto-generated method stub
     
-    return 0;
+    return Math.toRadians(m_drivetrain.returnAngle());
   }
   @Override
     public void end(boolean interrupted){
+      super.end(interrupted);
       m_drivetrain.arcadeDrive(0, 0, 0, false);
+      m_drivetrain.run();
+      m_drivetrain.setTurn(0);
+      m_drivetrain.setSpeed(0);
       m_drivetrain.run();
       try {
         points.add(m_drivetrain.getPIDVariables());
         DriverStation.reportError("sending data",false);
+        DriverStation.reportError("dist. traveled "+m_drivetrain.getAverageDistance()/ticksPerFoot,false);
         serv.sendDataAccrossNetwork(points);
         DriverStation.reportError("sent data", false);
       } catch (IOException e) {
@@ -89,23 +95,22 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
-      super.end(interrupted);
-    }
-    public void checkEnd(double vel){
-      if((trajectory.getSegmentCount()-currentSegment<60)&&vel<0.01&&m_drivetrain.returnLeftVelocity()*RpmToFeetPerSecond<0.01){
-        end(true);
-      }
     }
   @Override
-  public void useOutputs(double left, double right) {
+  public void useOutputs(double left, double right,double unLeft, double unRight) {
     String[] currentVels = new String[6];
-    checkEnd(left);
-    currentVels[0] = "" + right;
+    currentVels[0] = "" + unRight;//un corrected right
     currentVels[1] = "" + -m_drivetrain.returnRightVelocity()*RpmToFeetPerSecond;
     currentVels[2] = "" + -left;
     currentVels[3] = "" + m_drivetrain.returnLeftVelocity()*RpmToFeetPerSecond;
-    currentVels[4] = "" +0;
-    currentVels[5] = ""+ 0;
+    if(currentSegment<trajectory.getSegmentCount()){
+      currentVels[5] = "" +Math.toDegrees(trajectory.getValue(currentSegment, SegmentValue.HEADING));
+    }else{
+      currentVels[5]=""+0;
+    }
+    HelixLogger.getInstance
+    
+    currentVels[4] = ""+ m_drivetrain.returnAngle();
     points.add(currentVels);
     //DriverStation.reportError("outputs are being used", false);
     m_drivetrain.setVelocity(left*feetPerSecondToRpm, right*feetPerSecondToRpm, 0, 0,0);

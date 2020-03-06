@@ -11,6 +11,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -44,6 +45,7 @@ import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.IntakeCommands.ToggleIntakeOnOff;
 import frc.robot.commands.IntakeCommands.UnjamIntake;
 import frc.robot.commands.LimelightCommands.Centering;
+import frc.robot.commands.LimelightCommands.ResetGyro;
 import frc.robot.commands.LimelightCommands.ToggleLight;
 import frc.robot.commands.MiscCommands.StopAllSubsystems;
 import frc.robot.commands.TowerCommands.IndexPowerCells;
@@ -178,7 +180,7 @@ public class RobotContainer {
     opButton9.toggleWhenPressed(new ToggleTowerOnOff(m_tower));
     opButton10.toggleWhenPressed(new ToggleLight(m_limelight));
     opButton11.whenPressed(new StopAllSubsystems(m_intake, m_tower, m_hopper, m_flywheel));
-
+    opButton12.whenPressed(new ResetGyro(m_driveTrain));
 
   }
 
@@ -272,7 +274,13 @@ public class RobotContainer {
   }
 
 
-
+  public void calibrateGyro(){
+    DriverStation.reportError("calibrating", false);
+    m_driveTrain.calibrateIMU();
+  }
+  public void resetGyro(){
+    m_driveTrain.resetADIS();
+  }
   public void setBrakeMode() {
     m_driveTrain.setBrake();
   }

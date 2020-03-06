@@ -6,9 +6,11 @@
 
 package frc.robot.subsystems;
 
+import com.analog.adis16470.frc.ADIS16470_IMU;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -35,12 +37,13 @@ public class Drivetrain extends SubsystemBase {
 
   // For the gyro
   public int smartMotionSlot = 0;
- // private final ADIS16470_IMU imu;
+  private final ADIS16470_IMU imu;
 
   /* Value between -1.0 and 1.0 (units?) that were last given to left and right master
   CANSparkMax motor controllers during teleop (ArcadeDrive).
   */
-  double startTick = 0;
+  double leftStartTick = 0;
+  double rightStartTick=0;
   private double leftDriveInputSpeed, leftDriveInputTurn, rightDriveInputSpeed, rightDriveInputTurn;
   public Drivetrain(Joystick left, Joystick right) {
     
@@ -48,7 +51,7 @@ public class Drivetrain extends SubsystemBase {
     rightJoystick = right;
 
     // Set up the gyro
-    //imu = new ADIS16470_IMU();
+    imu = new ADIS16470_IMU();
    
     leftDriveMaster = new NEO(1);
     rightDriveMaster = new NEO(3);
@@ -65,14 +68,14 @@ public class Drivetrain extends SubsystemBase {
     // NEOPIDWithSmartDashboard rightDriveMaster = new NEOPIDWithSmartDashboard(2);
     // NEOPIDWithSmartDashboard leftDriveFollower1 = new NEOPIDWithSmartDashboard(3);
     // NEOPIDWithSmartDashboard rightDriveFollower2 = new NEOPIDWithSmartDashboard(4);
-    startTick = leftDriveMaster.getEncoder().getPosition();
+    leftStartTick = leftDriveMaster.getEncoder().getPosition();
   
     //diffDrive = new DifferentialDrive(leftDriveMaster, rightDriveMaster);
     //diffDrive.setDeadband(0.05);
   }
   public void resetEncoders(){
-    leftDriveMaster.getEncoder().setPosition(0);
-    rightDriveMaster.getEncoder().setPosition(0);
+    leftStartTick=leftDriveMaster.getEncoder().getPosition();
+    rightStartTick = rightDriveMaster.getEncoder().getPosition();
   }
 
   /**
@@ -80,9 +83,7 @@ public class Drivetrain extends SubsystemBase {
    * @return The robot's current angle in degrees
    */
   public double returnAngle() {
-
-    //return imu.getAngle();
-    return 0;
+    return imu.getAngle();
   }
 
   /**
@@ -202,16 +203,15 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double tickDiff = leftDriveMaster.getEncoder().getPosition()-startTick;
-    SmartDashboard.putNumber("tick diff", tickDiff);
+    SmartDashboard.putNumber("angle " , returnAngle());
   }
 
   /**
    * Resets yaw to zero
    */
   public void resetADIS() {
-
-    //imu.reset();
+    DriverStation.reportError("resseting",false);
+    imu.reset();
 
   }
   /**
@@ -225,7 +225,7 @@ public class Drivetrain extends SubsystemBase {
    */
   public void calibrateIMU() {
 
-    //imu.calibrate();
+    imu.calibrate();
 
   }
 
@@ -249,9 +249,10 @@ public class Drivetrain extends SubsystemBase {
     setTurn(0);
   
   }
+
   //new arcade drive refractoring
   public double getAverageDistance() {
-	  return (leftDriveMaster.getEncoder().getPosition()+rightDriveMaster.getEncoder().getPosition())/2.0d;
+	  return ((-leftDriveMaster.getEncoder().getPosition()+leftStartTick)+(rightDriveMaster.getEncoder().getPosition()-rightStartTick))/2.0;
   }
 public double getAverageHeading() {
 	return 0;

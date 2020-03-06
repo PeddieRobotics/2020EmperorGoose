@@ -11,18 +11,18 @@ import edu.wpi.first.wpiutil.net.PortForwarder;
 public class Robot extends TimedRobot {
 
   RobotContainer m_RobotContainer;
-  
+
   public void robotInit() {
-    PortForwarder.add(5801,"10.58.95.11",5801);//web interface
-    PortForwarder.add(5805,"10.58.95.11",5805);//back end data for web interface
-    PortForwarder.add(5800,"10.58.95.11",5800);//stream for web interface 
+    PortForwarder.add(5801, "10.58.95.11", 5801);// web interface
+    PortForwarder.add(5805, "10.58.95.11", 5805);// back end data for web interface
+    PortForwarder.add(5800, "10.58.95.11", 5800);// stream for web interface
     m_RobotContainer = new RobotContainer();
     m_RobotContainer.configureButtonBindings();
     UsbCamera driverCamera = CameraServer.getInstance().startAutomaticCapture(0);
     driverCamera.setExposureAuto();
     driverCamera.setFPS(24);
     m_RobotContainer.configureDefaultBehaviors();
-    SmartDashboard.putNumber("lastState",0);
+    SmartDashboard.putNumber("lastState", 0);
   }
 
   public void robotPeriodic() {
@@ -30,18 +30,26 @@ public class Robot extends TimedRobot {
 
   }
 
-  public void disabledInit(){
+  public void disabledInit() {
     m_RobotContainer.configureSmartDashboard();
     m_RobotContainer.setBrakeMode();
     m_RobotContainer.resetWhenDisabled();
   }
- 
+
   public void disabledPeriodic() {
   }
-  
+
   public void autonomousInit() {
     clearCommmandScheduler();
     m_RobotContainer.resetForAuto();
+    m_RobotContainer.calibrateGyro();
+    try {
+		  Thread.sleep(15);   
+	  } catch (InterruptedException e) {
+		  // 
+      e.printStackTrace();
+    }
+  
     if(!(m_RobotContainer.getAutonomousCommand()==null)){
       CommandScheduler.getInstance().schedule(m_RobotContainer.getAutonomousCommand());
     }   
