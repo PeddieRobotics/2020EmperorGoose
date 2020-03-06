@@ -67,6 +67,7 @@ public class Robot extends TimedRobot {
   public void testInit() {
     m_RobotContainer.configureDefaultBehaviors(true);
     m_RobotContainer.setCoastMode();
+    m_RobotContainer.configureSmartDashboardTest();
   }
 
   public void testPeriodic() {

@@ -142,6 +142,31 @@ public class RobotContainer {
 
   }
 
+  public void configureSmartDashboardTest()
+  {
+    SmartDashboard.putNumber("Flywheel", 0.0);
+    SmartDashboard.putNumber("LeftWall", 0.0);
+    SmartDashboard.putNumber("RightWall", 0.0);
+    SmartDashboard.putNumber("Floor", 0.0);
+    SmartDashboard.putNumber("TopTower", 0.0);
+    SmartDashboard.putNumber("BottomTower", 0.0);
+    SmartDashboard.putNumber("Intake Setpoint", 0.0);
+    SmartDashboard.putBoolean("Intake Down", false);
+
+  }
+
+  public void testAllSystems(){
+    double flywheel_rpm = SmartDashboard.getNumber("Flywheel", 0.0);
+    if(flywheel_rpm < 3500 && flywheel_rpm > 300){
+      m_flywheel.setMotors(flywheel_rpm);
+    }
+    m_hopper.runAll(SmartDashboard.getNumber("LeftWall", 0.0),SmartDashboard.getNumber("RightWall", 0.0),SmartDashboard.getNumber("Floor", 0.0));
+    m_tower.runTopMotor(SmartDashboard.getNumber("TopTower", 0.0));
+    m_tower.runBottomMotor(SmartDashboard.getNumber("BottomTower", 0.0));
+    m_intake.setIntakeMotor(SmartDashboard.getNumber("Intake Setpoint", 0.0));
+    m_intake.setSolenoid(SmartDashboard.getBoolean("Intake Down", false));
+  }
+
   public void setBrakeMode(){
     m_driveTrain.setBrake();
   }
