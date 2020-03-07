@@ -264,10 +264,10 @@ public class RobotContainer {
       CommandScheduler.getInstance().schedule(new FollowPath(m_driveTrain,"BackOffLine",true,false,true));
     }
     else if(autoRoutineFromChooser == "BackupShoot3NoLL"){
-      return new HelixPathFollower(new TenFeet(), m_driveTrain);
+      return new HelixPathFollower(new TenFeet(), m_driveTrain).reverse();
     }
     else if(autoRoutineFromChooser == "BackupShoot3LL"){
-      return new HelixPathFollower(new TenFeet(), m_driveTrain);
+      return new HelixPathFollower(new TenFeet(), m_driveTrain).reverse();
     }
     return null;
 

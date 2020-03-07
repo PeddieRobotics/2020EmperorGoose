@@ -108,7 +108,6 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
     }else{
       currentVels[5]=""+0;
     }
-    HelixLogger.getInstance
     
     currentVels[4] = ""+ m_drivetrain.returnAngle();
     points.add(currentVels);
