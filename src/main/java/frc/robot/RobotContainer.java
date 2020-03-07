@@ -22,9 +22,16 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.paths.EightFeet;
+import frc.paths.FourFeet;
+import frc.paths.GetTwoFromTrench;
 import frc.paths.MoveOffLine;
+import frc.paths.SixFeet;
 import frc.paths.TenFeet;
+import frc.paths.TenFeetStraight;
+import frc.paths.TwelveFeet;
 import frc.robot.Auto.HelixPathFollower;
 
 import frc.robot.commands.AutoCommands.FollowPath;
@@ -33,6 +40,7 @@ import frc.robot.commands.ClimberCommands.LowerClimber;
 import frc.robot.commands.ClimberCommands.RaiseClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
 import frc.robot.commands.DriveCommands.Drive;
+import frc.robot.commands.DriveCommands.TurnToTarget;
 import frc.robot.commands.FlywheelCommands.RunFlywheelUntilTowerHasStopped;
 import frc.robot.commands.FlywheelCommands.ShootFromFar;
 import frc.robot.commands.FlywheelCommands.ShootLayup;
@@ -47,6 +55,7 @@ import frc.robot.commands.IntakeCommands.UnjamIntake;
 import frc.robot.commands.LimelightCommands.Centering;
 import frc.robot.commands.LimelightCommands.ResetGyro;
 import frc.robot.commands.LimelightCommands.ToggleLight;
+import frc.robot.commands.LimelightCommands.TurnUntilSeesTarget;
 import frc.robot.commands.MiscCommands.StopAllSubsystems;
 import frc.robot.commands.TowerCommands.IndexPowerCells;
 import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
@@ -131,6 +140,12 @@ public class RobotContainer {
     chooser.addOption("BackOffLine","BackOffLine");
     chooser.addOption("BackupShoot3NoLL","BackupShoot3NoLL");
     chooser.addOption("BackupShoot3LL","BackupShoot3LL");
+    chooser.addOption("Get2TrenchShoot5", "Get2TrenchShoot5");
+    chooser.addOption("4FeetTest", "4FeetTest");
+    chooser.addOption("6FeetTest", "6FeetTest");
+    chooser.addOption("8FeetTest", "8FeetTest");
+    chooser.addOption("10FeetTest", "10FeetTest");
+    chooser.addOption("12FeetTest", "12FeetTest");
 
     SmartDashboard.putData("Auto routine", chooser);
   }
@@ -268,6 +283,38 @@ public class RobotContainer {
     }
     else if(autoRoutineFromChooser == "BackupShoot3LL"){
       return new HelixPathFollower(new TenFeet(), m_driveTrain).reverse();
+    }
+    else if(autoRoutineFromChooser == "Get2TrenchShoot5"){
+      //return new HelixPathFollower(new GetTwoFromTrench(), m_driveTrain);
+      return new SequentialCommandGroup(
+        new ParallelRaceGroup(
+          new StartIntake(m_intake, m_hopper, m_tower), 
+          new HelixPathFollower(new GetTwoFromTrench(), m_driveTrain),
+          new WaitCommand(6)
+        ),
+        new TurnUntilSeesTarget(m_driveTrain, m_limelight)
+      );
+        
+    }
+
+    else if(autoRoutineFromChooser == "4FeetTest"){
+      return new HelixPathFollower(new FourFeet(), m_driveTrain);
+    }
+
+    else if(autoRoutineFromChooser == "6FeetTest"){
+      return new HelixPathFollower(new SixFeet(), m_driveTrain);
+    }
+
+    else if(autoRoutineFromChooser == "8FeetTest"){
+      return new HelixPathFollower(new EightFeet(), m_driveTrain);
+    }
+
+    else if(autoRoutineFromChooser == "10FeetTest"){
+      return new HelixPathFollower(new TenFeetStraight(), m_driveTrain);
+    }
+
+    else if(autoRoutineFromChooser == "12FeetTest"){
+      return new HelixPathFollower(new TwelveFeet(), m_driveTrain);
     }
     return null;
 

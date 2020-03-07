@@ -27,8 +27,10 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
    */
   Drivetrain m_drivetrain;
 
-  private PIDController headingController = new PIDController(10, 0, 0, 0.01);
-  private PIDController distanceController = new PIDController(2, 0, 0, 0.01);
+  //private PIDController headingController = new PIDController(10, 0, 0, 0.01);
+  //private PIDController distanceController = new PIDController(2, 0, 0, 0.01);
+  private PIDController headingController = new PIDController(10, 0, 0, 0.001);
+  private PIDController distanceController = new PIDController(0, 0, 0, 0.001);
   ArrayList<String[]> points;
   private double ticksPerFoot = 6.5237d;
   CSVServer serv;
@@ -79,12 +81,14 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
   @Override
     public void end(boolean interrupted){
       super.end(interrupted);
+      DriverStation.reportError("END OF HELIX FOLLOWER", false);
+      m_drivetrain.setBrake();
       m_drivetrain.arcadeDrive(0, 0, 0, false);
       m_drivetrain.run();
       m_drivetrain.setTurn(0);
       m_drivetrain.setSpeed(0);
       m_drivetrain.run();
-      try {
+      /*try {
         points.add(m_drivetrain.getPIDVariables());
         DriverStation.reportError("sending data",false);
         DriverStation.reportError("dist. traveled "+m_drivetrain.getAverageDistance()/ticksPerFoot,false);
@@ -94,7 +98,7 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
         DriverStation.reportError("some sort of erro", false);
         // TODO Auto-generated catch block
         e.printStackTrace();
-      }
+      }*/
     }
   @Override
   public void useOutputs(double left, double right,double unLeft, double unRight) {
