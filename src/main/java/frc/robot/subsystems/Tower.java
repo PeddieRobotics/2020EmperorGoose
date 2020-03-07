@@ -42,7 +42,7 @@ public class Tower extends SubsystemBase {
     
     bottom2Avg = new MovingAverage(20);
     top1Avg = new MovingAverage(5);
-    top0Avg = new MovingAverage(5);
+    top0Avg = new MovingAverage(3);
 
     m_topSensor0 = new AnalogInput(0);
     m_topSensor1 = new AnalogInput(1);
@@ -132,6 +132,7 @@ public class Tower extends SubsystemBase {
    */
   public boolean senses_ball_Top0() {
     top0Avg.add(m_topSensor0.getVoltage());
+    SmartDashboard.putNumber("Top0Avg", top0Avg.get());
     if ( top0Avg.get() < 3.0 ) {
       return true;
     } else {
@@ -139,6 +140,7 @@ public class Tower extends SubsystemBase {
     }
 
   }
+  
   public boolean senses_ball_Top1() {
     top1Avg.add(m_topSensor1.getVoltage());
     if ( top1Avg.get() < 3.0 ) {
