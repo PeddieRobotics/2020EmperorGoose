@@ -35,8 +35,7 @@ public class Drivetrain extends SubsystemBase {
   public int smartMotionSlot = 0;
  // private final ADIS16470_IMU imu;
 
-  // Should the robot's speed be scaled down?
-  private boolean isSlowMode = false;
+  private double m_speedScale, m_turnScale;
 
   /* Value between -1.0 and 1.0 (units?) that were last given to left and right master
   CANSparkMax motor controllers during teleop (ArcadeDrive).
@@ -60,6 +59,10 @@ public class Drivetrain extends SubsystemBase {
     leftDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF, 0 );
     
     startTick = leftDriveMaster.getEncoder().getPosition();
+
+    // Default to full speed and turn
+    m_speedScale = 1.0;
+    m_turnScale = 1.0;
   
   }
 
@@ -237,13 +240,10 @@ public class Drivetrain extends SubsystemBase {
   public double getSpeed() {
     double speed = 0.0;
     if(Constants.USE_XBOX_CONTROLLER){
-      speed = Constants.XBOX_SPEED_SCALE_FACTOR*driverXboxController.getRawAxis(1);
+      speed = m_speedScale*Constants.XBOX_SPEED_SCALE_FACTOR*driverXboxController.getRawAxis(1);
     }
     else{
-      speed = leftJoystick.getRawAxis(1);
-    }
-    if(isSlowMode){
-      speed *= Constants.SLOW_MODE_SCALE_FACTOR;
+      speed = m_speedScale*Constants.JOYSTICK_TURN_SCALE_FACTOR*leftJoystick.getRawAxis(1);
     }
     return speed;
   }
@@ -251,10 +251,10 @@ public class Drivetrain extends SubsystemBase {
   public double getTurn() {
     double turn = 0.0;
     if(Constants.USE_XBOX_CONTROLLER){
-      turn = Constants.XBOX_TURN_SCALE_FACTOR*driverXboxController.getRawAxis(4);
+      turn = m_turnScale*Constants.XBOX_TURN_SCALE_FACTOR*driverXboxController.getRawAxis(4);
     }
     else{
-      turn = rightJoystick.getRawAxis(0);
+      turn = m_turnScale*Constants.JOYSTICK_TURN_SCALE_FACTOR*rightJoystick.getRawAxis(0);
     }
     return turn;
   }
@@ -272,8 +272,9 @@ public class Drivetrain extends SubsystemBase {
   
   }
 
-  public void setSlowMode(boolean slow){
-    isSlowMode = slow;
+  public void setScale(double speedScale, double turnScale){
+    m_speedScale = speedScale;
+    m_turnScale = turnScale;
   }
 
 }

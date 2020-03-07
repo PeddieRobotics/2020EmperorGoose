@@ -68,15 +68,21 @@ public final class Constants {
 
     public static final boolean USE_XBOX_CONTROLLER = true;
     public static final double XBOX_TRIGGER_DEADZONE = 0.02; // Jiggle room for the xbox triggers
-    public static final double XBOX_TRIGGER_SENSITIVITY = 0.5;  // If the trigger is beyond this limit, say it has been pressed
+    public static final double XBOX_TRIGGER_SENSITIVITY = 0.3;  // If the trigger is beyond this limit, say it has been pressed
     public static final double XBOX_JOYSTICK_DEADBAND = 0.08;
-    public static final double XBOX_SPEED_SCALE_FACTOR = 0.9;
-    public static final double XBOX_TURN_SCALE_FACTOR = 0.9;
-
+    public static final double XBOX_SPEED_SCALE_FACTOR = 0.8;
+    public static final double XBOX_TURN_SCALE_FACTOR = 0.7;
 
     public static final double JOYSTICK_DEADBAND = 0.08;
+    public static final double JOYSTICK_SPEED_SCALE_FACTOR = 1.0;
+    public static final double JOYSTICK_TURN_SCALE_FACTOR = 1.0;
 
     public static final boolean COMPETITION_ROBOT = true;
 
-    public static final double SLOW_MODE_SCALE_FACTOR = 0.5;
+    public static final double SLOW_MODE_SPEED_SCALE = 0.75;
+    public static final double SLOW_MODE_TURN_SCALE = 0.75;
+
+    public static final double CLIMB_MODE_SPEED_SCALE = 0.5;
+    public static final double CLIMB_MODE_TURN_SCALE = 0.5;
+
 }

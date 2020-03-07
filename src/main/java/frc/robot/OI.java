@@ -10,6 +10,7 @@ import frc.robot.commands.ClimberCommands.RaiseClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
 import frc.robot.commands.DriveCommands.DriveFast;
 import frc.robot.commands.DriveCommands.DriveSlow;
+import frc.robot.commands.DriveCommands.SetDriveScale;
 import frc.robot.commands.DriveCommands.ToggleDriveSlow;
 import frc.robot.commands.FlywheelCommands.RunFlywheelUntilTowerHasStopped;
 import frc.robot.commands.FlywheelCommands.ShootFromFar;
@@ -107,13 +108,14 @@ public class OI {
 
   private void configureJoysticks() {
 
+    // Driver joystick binds (dual joystick)
     leftTrigger.whenPressed(new StartIntake(m_intake, m_hopper, m_tower));
     leftButton2.whenPressed(new StopIntake(m_intake, m_hopper));
     leftButton3.whileHeld(new ParallelCommandGroup(
       new UnjamTower(m_tower, Constants.REVERSE_PERCENT_TOWER),
       new UnjamHopper(m_hopper, Constants.REVERSE_PERCENT_HOPPER)
     ));
-    leftButton4.toggleWhenPressed(new ToggleDriveSlow(m_driveTrain));
+    leftButton4.toggleWhenPressed(new ToggleDriveSlow(m_driveTrain, Constants.SLOW_MODE_SPEED_SCALE, Constants.SLOW_MODE_TURN_SCALE));
     
     rightTrigger.whileHeld(new ParallelCommandGroup(
                             new ShootLayup(m_flywheel, Constants.RPM_LAYUP, false), 
@@ -125,8 +127,10 @@ public class OI {
                             new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightButton2.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     rightButton3.whenPressed(new LowerClimber(m_climber));
-    rightButton4.whenPressed(new RaiseClimber(m_climber));
+    rightButton4.whenPressed(new ParallelCommandGroup(new RaiseClimber(m_climber),
+    new SetDriveScale(m_driveTrain, Constants.CLIMB_MODE_SPEED_SCALE, Constants.CLIMB_MODE_TURN_SCALE)));
 
+    // Operator joystick binds
     opTrigger.whileHeld(new ParallelCommandGroup(
       new UnjamTower(m_tower, Constants.REVERSE_PERCENT_TOWER),
       new UnjamHopper(m_hopper, Constants.REVERSE_PERCENT_HOPPER)
@@ -165,6 +169,8 @@ public class OI {
   }
 
   private void configureXboxControllers(){
+
+    // Driver xbox controller binds
     driverLeftTrigger.whenPressed(new StartIntake(m_intake, m_hopper, m_tower));
     driverButtonLeftBumper.whenPressed(new StopIntake(m_intake, m_hopper));
 
@@ -184,10 +190,11 @@ public class OI {
         new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     driverButtonA.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     
-    driverButtonStart.whenPressed(new RaiseClimber(m_climber));
+    driverButtonStart.whenPressed(new ParallelCommandGroup(new RaiseClimber(m_climber),
+                                                          new SetDriveScale(m_driveTrain, Constants.CLIMB_MODE_SPEED_SCALE, Constants.CLIMB_MODE_TURN_SCALE)));
     driverButtonBack.whenPressed(new LowerClimber(m_climber));
     
-    driverButtonLeftStick.toggleWhenPressed(new ToggleDriveSlow(m_driveTrain));
+    driverButtonLeftStick.toggleWhenPressed(new ToggleDriveSlow(m_driveTrain, Constants.SLOW_MODE_SPEED_SCALE, Constants.SLOW_MODE_TURN_SCALE));
 
     driverButtonY.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel, Constants.RPM_LAYUP));
   }
