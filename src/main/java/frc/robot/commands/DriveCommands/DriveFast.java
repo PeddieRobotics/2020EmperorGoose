@@ -7,49 +7,39 @@
 
 package frc.robot.commands.DriveCommands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
-public class driveOffLine extends CommandBase {
-  /**
-   * Creates a new driveOffLine.
-   */
+public class DriveFast extends CommandBase {
+
   Drivetrain m_driveTrain;
-  double startTime =0;
-  public driveOffLine(Drivetrain driveTrain) {
+  
+  public DriveFast(Drivetrain driveTrain) {
     m_driveTrain = driveTrain;
-    addRequirements(driveTrain);  
+    
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startTime = Timer.getFPGATimestamp();
+    m_driveTrain.setSlowMode(false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // just drive for 2 seconds 
-    m_driveTrain.arcadeDrive(.2, 0);
-    m_driveTrain.run();
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_driveTrain.setSpeed(0);
-    m_driveTrain.setTurn(0);
-    m_driveTrain.run();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (Timer.getFPGATimestamp()-startTime>1);
+    return false;
   }
 }

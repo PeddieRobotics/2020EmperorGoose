@@ -194,7 +194,7 @@ public class FollowPath extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(final boolean interrupted) {
-    m_drivetrain.arcadeDrive(0, 0, Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED);
+    m_drivetrain.arcadeDrive(0, 0);
     m_drivetrain.setBrake();
     m_drivetrain.run();
     CommandScheduler.getInstance().cancel(stopping);

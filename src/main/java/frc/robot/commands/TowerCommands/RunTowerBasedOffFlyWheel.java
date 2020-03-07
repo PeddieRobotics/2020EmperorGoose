@@ -49,7 +49,7 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
 
     //Checking whether the speed of flywheel is good enough to shoot
     if(Math.abs(m_flywheel.getAvgVelocity()-setpoint)<shootingThreshold){
-      m_tower.runMotors(.8);
+      m_tower.runMotors(Constants.TOWER_SHOT_SPEED);
       m_hopper.runAll(); 
     }
 

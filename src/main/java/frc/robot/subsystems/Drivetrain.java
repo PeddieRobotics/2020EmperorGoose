@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.OI;
 import frc.robot.Auto.PIDClasses.NEO;
 
 public class Drivetrain extends SubsystemBase {
@@ -24,28 +25,26 @@ public class Drivetrain extends SubsystemBase {
   private static final double kWheelDiameter = 6.0 / 12.0 / 11.11 / Math.PI;
   private static final double kMaxVelocity = 7.5;
   
+  private Joystick driverXboxController, leftJoystick, rightJoystick;
+
   private NEO leftDriveMaster, rightDriveMaster, leftDriveFollower, rightDriveFollower;
 
   private CANPIDController m_pidController, m_pidController2;
   
-  private DifferentialDrive diffDrive;
-
-  // Keep track of the joystick controllers to get their speed and turn during ArcadeDrive.
-  private Joystick leftJoystick, rightJoystick;
-
   // For the gyro
   public int smartMotionSlot = 0;
  // private final ADIS16470_IMU imu;
+
+  // Should the robot's speed be scaled down?
+  private boolean isSlowMode = false;
 
   /* Value between -1.0 and 1.0 (units?) that were last given to left and right master
   CANSparkMax motor controllers during teleop (ArcadeDrive).
   */
   double startTick = 0;
   private double leftDriveInputSpeed, leftDriveInputTurn, rightDriveInputSpeed, rightDriveInputTurn;
-  public Drivetrain(Joystick left, Joystick right) {
-    
-    leftJoystick = left;
-    rightJoystick = right;
+
+  public Drivetrain(){
 
     // Set up the gyro
     //imu = new ADIS16470_IMU();
@@ -60,14 +59,17 @@ public class Drivetrain extends SubsystemBase {
     rightDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF + Constants.DRIVETRAIN_FF_OFFSET, 0 );
     leftDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF, 0 );
     
-    // NEOPIDWithSmartDashboard leftDriveMaster = new NEOPIDWithSmartDashboard(1);
-    // NEOPIDWithSmartDashboard rightDriveMaster = new NEOPIDWithSmartDashboard(2);
-    // NEOPIDWithSmartDashboard leftDriveFollower1 = new NEOPIDWithSmartDashboard(3);
-    // NEOPIDWithSmartDashboard rightDriveFollower2 = new NEOPIDWithSmartDashboard(4);
     startTick = leftDriveMaster.getEncoder().getPosition();
   
-    //diffDrive = new DifferentialDrive(leftDriveMaster, rightDriveMaster);
-    //diffDrive.setDeadband(0.05);
+  }
+
+  public void setJoysticks(Joystick left, Joystick right){
+    leftJoystick = left;
+    rightJoystick = right;
+  }
+
+  public void setDriverXboxController(Joystick xbox){
+    driverXboxController = xbox;
   }
 
   /**
@@ -176,7 +178,15 @@ public class Drivetrain extends SubsystemBase {
     rightDriveInputTurn -= turn;
   }
   
-  public void arcadeDrive( double speed, double turn, double deadband, boolean squaredInputs ) {
+  public void arcadeDrive( double speed, double turn ) {
+    double deadband = 0.0;
+
+    if(Constants.USE_XBOX_CONTROLLER){
+      deadband = Constants.XBOX_JOYSTICK_DEADBAND;
+    }
+    else{
+      deadband = Constants.JOYSTICK_DEADBAND;
+    }
 
     if( Math.abs(speed) < deadband ) {
       speed = 0;
@@ -185,7 +195,7 @@ public class Drivetrain extends SubsystemBase {
       turn = 0;
     }
 
-    if (squaredInputs){
+    if (Constants.DRIVETRAIN_USE_SQUARED){
       addToSpeed(speed*Math.abs(speed));
       addToTurn(turn*Math.abs(turn)); 
     }
@@ -225,11 +235,28 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public double getSpeed() {
-    return leftJoystick.getRawAxis(1);
+    double speed = 0.0;
+    if(Constants.USE_XBOX_CONTROLLER){
+      speed = Constants.XBOX_SPEED_SCALE_FACTOR*driverXboxController.getRawAxis(1);
+    }
+    else{
+      speed = leftJoystick.getRawAxis(1);
+    }
+    if(isSlowMode){
+      speed *= Constants.SLOW_MODE_SCALE_FACTOR;
+    }
+    return speed;
   }
 
   public double getTurn() {
-    return rightJoystick.getRawAxis(0);
+    double turn = 0.0;
+    if(Constants.USE_XBOX_CONTROLLER){
+      turn = Constants.XBOX_TURN_SCALE_FACTOR*driverXboxController.getRawAxis(4);
+    }
+    else{
+      turn = rightJoystick.getRawAxis(0);
+    }
+    return turn;
   }
   /**
    * We set the left and right motors to the inputs, then reset them so that they don't add up too much
@@ -244,7 +271,9 @@ public class Drivetrain extends SubsystemBase {
     setTurn(0);
   
   }
-  //new arcade drive refractoring
 
+  public void setSlowMode(boolean slow){
+    isSlowMode = slow;
+  }
 
 }

@@ -11,6 +11,8 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Framework.LookupTable;
@@ -80,6 +82,12 @@ public class Limelight extends SubsystemBase {
   }
   @Override
   public void periodic() {
+    if(RobotState.isTest()){
+      limes.getEntry("snapshot").setNumber(1);
+    }else{
+      
+      limes.getEntry("snapshot").setNumber(0);
+    }
     // This method will be called once per scheduler run
   }
 }

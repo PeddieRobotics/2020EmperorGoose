@@ -105,7 +105,7 @@ public class Centering extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     SmartDashboard.putBoolean("executing", false);
-    m_driveTrain.arcadeDrive(0,0,Constants.DRIVETRAIN_DEADBAND, Constants.DRIVETRAIN_USE_SQUARED);
+    m_driveTrain.arcadeDrive(0,0);
     m_driveTrain.setSpeed(0);
     m_driveTrain.setTurn(0);
     m_driveTrain.run();
