@@ -25,6 +25,7 @@ public class ShootCounterWithFlywheel extends CommandBase {
   LinearRegression linearRegression;
   int shotsToFire;
   double prevShotTime;
+
   public ShootCounterWithFlywheel(Flywheel f, int shotCount) {
     m_flywheel = f;
     shotsToFire = shotCount;
@@ -33,30 +34,33 @@ public class ShootCounterWithFlywheel extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    prevShotTime=0;
+    counter = 0;
+    prevShotTime = 0.0;
   }
+
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    linearRegression = new LinearRegression(m_flywheel.getFlywheelX(),m_flywheel.getFlywheelSpeeds());
-    slope=linearRegression.slope();
+    //linearRegression = new LinearRegression(m_flywheel.getFlywheelX(),m_flywheel.getFlywheelSpeeds());
+    //slope = linearRegression.slope();
+    slope = (m_flywheel.getFlywheelSpeeds()[2]-m_flywheel.getFlywheelSpeeds()[0])/3.0;
     SmartDashboard.putNumber("Slope", slope);
-    SmartDashboard.putNumber("Velocity", m_flywheel.getFlywheelSpeeds()[4]);
-    double currentTime=Timer.getFPGATimestamp();
-    if(slope<-50 && currentTime-prevShotTime >= 0.5){
-      prevShotTime=Timer.getFPGATimestamp();
+    SmartDashboard.putNumber("Velocity", m_flywheel.getFlywheelSpeeds()[2]);
+    double currentTime = Timer.getFPGATimestamp();
+    if(slope < -2 && currentTime-prevShotTime >= 0.5){
+      prevShotTime = currentTime;
       counter++;
     }
   }
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
+    SmartDashboard.putNumber("ShotCount", counter);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;//return counter >= shotsToFire;
+    return counter >= shotsToFire;
   }
 }

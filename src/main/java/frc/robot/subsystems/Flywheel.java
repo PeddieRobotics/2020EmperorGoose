@@ -30,8 +30,8 @@ public class Flywheel extends SubsystemBase {
     currentMode = FlywheelModeType.DISABLED;
 
     m_setpoint = 0.0;
-    flywheelSpeeds = new double[5];
-    flywheelX= new double[]{1,2,3,4,5};
+    flywheelSpeeds = new double[3];
+    flywheelX= new double[]{1,2,3};
     hSolenoid=new Solenoid(Constants.SOLENOID_HOOD);
 
     avgOfFlyWheelSpeeds = new MovingAverage(10);
@@ -151,10 +151,10 @@ public class Flywheel extends SubsystemBase {
   
   public void runMotors() {
     flyWheelForward.setVelocity(m_setpoint);
-    for(int i=4;i>0;i--){
+    for(int i=2;i>0;i--){
       flywheelSpeeds[i-1]=flywheelSpeeds[i];
     }
-    flywheelSpeeds[4]=flyWheelForward.getVelocity();
+    flywheelSpeeds[2]=flyWheelForward.getVelocity();
     avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
 
   }

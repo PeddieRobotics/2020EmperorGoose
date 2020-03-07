@@ -29,7 +29,7 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
     m_flywheel = flywheel;
     m_tower = tower;
     m_hopper = hopper;
-  
+    addRequirements(tower);
   }
   
 @Override
