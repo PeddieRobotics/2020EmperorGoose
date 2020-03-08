@@ -17,14 +17,14 @@ public class TurnUntilSeesTarget extends CommandBase {
   /**
    * Creates a new TurnUntilSeesTarget.
    */
-  Limelight m_limelight; 
-  Drivetrain m_drivetrain;
-  double count = 5;
+  private Limelight m_limelight; 
+  private Drivetrain m_drivetrain;
+  private double count = 5;
+
   public TurnUntilSeesTarget(Drivetrain drivetrain, Limelight limelight) {
     m_limelight = limelight;
     m_drivetrain = drivetrain;
     addRequirements(drivetrain);
-    DriverStation.reportError("Constructing turn to target cmd", false);
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -32,7 +32,6 @@ public class TurnUntilSeesTarget extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    DriverStation.reportError("initializing turn to target cmd", false);
 
     m_drivetrain.setCoast();
     count = 5;
@@ -44,15 +43,14 @@ public class TurnUntilSeesTarget extends CommandBase {
     if(m_limelight.hasTarget()){
       count--;
     }
-    DriverStation.reportError("Executing turn to target cmd", false);
-    m_drivetrain.setTurn(.2);
+
+    m_drivetrain.setTurn(.4);
     m_drivetrain.run();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    DriverStation.reportError("Ending turn to target cmd", false);
     m_drivetrain.setSpeed(0);
     m_drivetrain.setTurn(0);
     m_drivetrain.run();

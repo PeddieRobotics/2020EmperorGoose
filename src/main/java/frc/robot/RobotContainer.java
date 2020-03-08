@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.paths.EightFeet;
 import frc.paths.FourFeet;
+import frc.paths.GetThreeFromTrench;
 import frc.paths.GetTwoFromTrench;
 import frc.paths.MoveOffLine;
 import frc.paths.SixFeet;
@@ -55,6 +56,7 @@ import frc.robot.commands.IntakeCommands.UnjamIntake;
 import frc.robot.commands.LimelightCommands.Centering;
 import frc.robot.commands.LimelightCommands.ResetGyro;
 import frc.robot.commands.LimelightCommands.ToggleLight;
+import frc.robot.commands.DriveCommands.TurnToAngle;
 import frc.robot.commands.LimelightCommands.TurnUntilSeesTarget;
 import frc.robot.commands.MiscCommands.StopAllSubsystems;
 import frc.robot.commands.TowerCommands.IndexPowerCells;
@@ -141,6 +143,7 @@ public class RobotContainer {
     chooser.addOption("BackupShoot3NoLL","BackupShoot3NoLL");
     chooser.addOption("BackupShoot3LL","BackupShoot3LL");
     chooser.addOption("Get2TrenchShoot5", "Get2TrenchShoot5");
+    chooser.addOption("Shoot3Get3TrenchShoot3", "Shoot3Get3TrenchShoot3");
     chooser.addOption("4FeetTest", "4FeetTest");
     chooser.addOption("6FeetTest", "6FeetTest");
     chooser.addOption("8FeetTest", "8FeetTest");
@@ -285,18 +288,38 @@ public class RobotContainer {
       return new HelixPathFollower(new TenFeet(), m_driveTrain).reverse();
     }
     else if(autoRoutineFromChooser == "Get2TrenchShoot5"){
-      //return new HelixPathFollower(new GetTwoFromTrench(), m_driveTrain);
       return new SequentialCommandGroup(
         new ParallelRaceGroup(
           new StartIntake(m_intake, m_hopper, m_tower), 
           new HelixPathFollower(new GetTwoFromTrench(), m_driveTrain),
           new WaitCommand(6)
         ),
-        new TurnUntilSeesTarget(m_driveTrain, m_limelight)
+        new ParallelCommandGroup(new StopIntake(m_intake, m_hopper),
+          new TurnUntilSeesTarget(m_driveTrain, m_limelight)),
+        new Centering(m_limelight, m_driveTrain, 0, false)
       );
         
     }
-
+    else if(autoRoutineFromChooser == "Shoot3Get3TrenchShoot3"){
+      return new SequentialCommandGroup(
+        new ParallelRaceGroup(
+          new Centering(m_limelight, m_driveTrain, 0, false),
+          new WaitCommand(4)
+        ),
+        new ParallelRaceGroup(new StartIntake(m_intake, m_hopper, m_tower), 
+          new TurnToAngle(m_driveTrain, 180-m_driveTrain.returnAngle())),
+        new ParallelRaceGroup(
+          new HelixPathFollower(new GetThreeFromTrench(), m_driveTrain),
+          new WaitCommand(8)
+        ),
+        new ParallelRaceGroup(new StopIntake(m_intake, m_hopper),
+          new HelixPathFollower(new SixFeet(), m_driveTrain).reverse(),
+          new WaitCommand(3)),
+        new TurnUntilSeesTarget(m_driveTrain, m_limelight),
+        new Centering(m_limelight, m_driveTrain, 0, false)
+      );
+        
+    }
     else if(autoRoutineFromChooser == "4FeetTest"){
       return new HelixPathFollower(new FourFeet(), m_driveTrain);
     }
