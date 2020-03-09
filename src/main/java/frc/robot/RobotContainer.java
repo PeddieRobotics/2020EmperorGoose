@@ -11,11 +11,24 @@
 
 package frc.robot;
 
+import java.util.List;
+
+import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.RamseteController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.trajectory.Trajectory;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryConfig;
+import edu.wpi.first.wpilibj.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.paths.EightFeet;
@@ -118,60 +131,57 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    String autoRoutineFromChooser = chooser.getSelected();
-    if(autoRoutineFromChooser == "Get2TrenchShoot5"){
-      return new SequentialCommandGroup(
-        new ParallelRaceGroup(
-          new StartIntake(m_intake, m_hopper, m_tower), 
-          new HelixPathFollower(new GetTwoFromTrench(), m_driveTrain),
-          new WaitCommand(6)
+    // Create a voltage constraint to ensure we don't accelerate too fast
+    var autoVoltageConstraint =
+        new DifferentialDriveVoltageConstraint(
+            new SimpleMotorFeedforward(Constants.K_S,
+                                       Constants.K_V,
+                                       Constants.K_A),
+            Constants.K_DRIVE_KINEMATICS,
+            10);
+
+    // Create config for trajectory
+    TrajectoryConfig config =
+        new TrajectoryConfig(Constants.K_MAX_SPEED,
+                             Constants.K_MAX_ACCEL)
+            // Add kinematics to ensure max speed is actually obeyed
+            .setKinematics(Constants.K_DRIVE_KINEMATICS)
+            // Apply the voltage constraint
+            .addConstraint(autoVoltageConstraint);
+
+    // An example trajectory to follow.  All units in meters.
+    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
+        // Start at the origin facing the +X direction
+        new Pose2d(0, 0, new Rotation2d(0)),
+        // Pass through these two interior waypoints, making an 's' curve path
+        List.of(
+            new Translation2d(1, 1),
+            new Translation2d(2, -1)
         ),
-        new ParallelCommandGroup(new StopIntake(m_intake, m_hopper),
-          new TurnUntilSeesTarget(m_driveTrain, m_limelight)),
-        new Centering(m_limelight, m_driveTrain, 0, false)
-      );
-        
-    }
-    else if(autoRoutineFromChooser == "Shoot3Get3TrenchShoot3"){
-      return new SequentialCommandGroup(
-        new ParallelRaceGroup(
-          new Centering(m_limelight, m_driveTrain, 0, false),
-          new WaitCommand(4)
-        ),
-        new ParallelRaceGroup(new StartIntake(m_intake, m_hopper, m_tower), 
-          new TurnToAngle(m_driveTrain, 180-m_driveTrain.returnAngle())),
-        new ParallelRaceGroup(
-          new HelixPathFollower(new GetThreeFromTrench(), m_driveTrain),
-          new WaitCommand(8)
-        ),
-        new ParallelRaceGroup(new StopIntake(m_intake, m_hopper),
-          new HelixPathFollower(new SixFeet(), m_driveTrain).reverse(),
-          new WaitCommand(3)),
-        new TurnUntilSeesTarget(m_driveTrain, m_limelight),
-        new Centering(m_limelight, m_driveTrain, 0, false)
-      );
-        
-    }
-    else if(autoRoutineFromChooser == "4FeetTest"){
-      return new HelixPathFollower(new FourFeet(), m_driveTrain);
-    }
+        // End 3 meters straight ahead of where we started, facing forward
+        new Pose2d(3, 0, new Rotation2d(0)),
+        // Pass config
+        config
+    );
 
-    else if(autoRoutineFromChooser == "6FeetTest"){
-      return new HelixPathFollower(new SixFeet(), m_driveTrain);
-    }
+    RamseteCommand ramseteCommand = new RamseteCommand(
+        exampleTrajectory,
+        m_driveTrain::getPose,
+        new RamseteController(Constants.K_RAMSETE_B, Constants.K_RAMSETE_ZETA),
+        new SimpleMotorFeedforward(Constants.K_S,
+                                   Constants.K_V,
+                                   Constants.K_A),
+        Constants.K_DRIVE_KINEMATICS,
+        m_driveTrain::getWheelSpeeds,
+        new PIDController(Constants.K_P, 0, 0),
+        new PIDController(Constants.K_P, 0, 0),
+        // RamseteCommand passes volts to the callback
+        m_driveTrain::setDriveVoltage,
+        m_driveTrain
+    );
 
-    else if(autoRoutineFromChooser == "8FeetTest"){
-      return new HelixPathFollower(new EightFeet(), m_driveTrain);
-    }
-
-    else if(autoRoutineFromChooser == "10FeetTest"){
-      return new HelixPathFollower(new TenFeetStraight(), m_driveTrain);
-    }
-
-    else if(autoRoutineFromChooser == "12FeetTest"){
-      return new HelixPathFollower(new TwelveFeet(), m_driveTrain);
-    }
-    return null;
+    // Run path following command, then stop at the end.
+    return ramseteCommand.andThen(() -> m_driveTrain.setDriveVoltage(0, 0));
 
   }
 
@@ -209,7 +219,11 @@ public class RobotContainer {
   }
 
   public void calibrateGyro() {
-    m_driveTrain.calibrateIMU();
+    m_driveTrain.calibrateADIS();
+  }
+
+  public void resetGyro() {
+    m_driveTrain.resetADIS();
   }
     
 }

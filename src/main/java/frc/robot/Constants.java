@@ -11,6 +11,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+
 public final class Constants {
 
     //Motors - organized as drive, then hopper, then flywheel, and intake
@@ -85,4 +87,26 @@ public final class Constants {
     public static final double CLIMB_MODE_SPEED_SCALE = 0.5;
     public static final double CLIMB_MODE_TURN_SCALE = 0.5;
 
+    // Define all constants for trajectory following for autonomous
+    public static final double K_S = 0.814; // volts
+    public static final double K_V = 3.06; // volt seconds / meter
+    public static final double K_A = 0.677; // volt sec^2 / meter
+    public static final double K_P = 43.6; // volt meters / sec
+    public static final double K_D = 20.2;
+
+    public static final double K_TRACKWIDTH = 0.69; // meters
+    public static final DifferentialDriveKinematics K_DRIVE_KINEMATICS =
+    new DifferentialDriveKinematics(K_TRACKWIDTH);
+    public static final double K_MAX_SPEED = 3; // meters/sec
+    public static final double K_MAX_ACCEL = 3; // meters/sec^2
+
+    public static final double K_RAMSETE_B = 2;
+    public static final double K_RAMSETE_ZETA = 0.7;
+
+    public static final boolean K_GYRO_REVERSED = false; // Does gyro measure clockwise?
+    public static final double K_WHEEL_DIAMETER = 4.0; // wheel diameter in inches
+    public static final double K_DRIVE_POS_CONV = 1.0; // Encoder position conversion factor
+    public static final double K_DRIVE_VEL_CONV = 1.0; // Encoder velocity conversion factor
+
+    public static final double CONVERT_INCHES_TO_METERS = 0.0254;
 }

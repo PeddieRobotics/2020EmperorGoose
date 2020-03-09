@@ -7,11 +7,17 @@
 package frc.robot.subsystems;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.geometry.Pose2d;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -29,8 +35,10 @@ public class Drivetrain extends SubsystemBase {
 
   private NEO leftDriveMaster, rightDriveMaster, leftDriveFollower, rightDriveFollower;
 
-  private CANPIDController m_pidController, m_pidController2;
-  
+  private CANEncoder m_leftEncoder, m_rightEncoder;
+
+  private DifferentialDriveOdometry m_odometry;
+
   // For the gyro
   public int smartMotionSlot = 0;
   private final ADIS16470_IMU imu;
@@ -40,8 +48,6 @@ public class Drivetrain extends SubsystemBase {
   /* Value between -1.0 and 1.0 (units?) that were last given to left and right master
   CANSparkMax motor controllers during teleop (ArcadeDrive).
   */
-  double leftStartTick = 0;
-  double rightStartTick=0;
   private double leftDriveInputSpeed, leftDriveInputTurn, rightDriveInputSpeed, rightDriveInputTurn;
 
   public Drivetrain(){
@@ -56,18 +62,19 @@ public class Drivetrain extends SubsystemBase {
     leftDriveFollower.follow(leftDriveMaster);
     rightDriveFollower.follow(rightDriveMaster);
 
-    rightDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF + Constants.DRIVETRAIN_FF_OFFSET, 0 );
-    leftDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF, 0 );
-    
+    m_leftEncoder = leftDriveMaster.getEncoder();
+    m_rightEncoder = rightDriveMaster.getEncoder();
+
+    setConversionFactors();
+
+    resetEncoders();
+
+    m_odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(getHeading()));
+
     // Default to full speed and turn
     m_speedScale = 1.0;
     m_turnScale = 1.0;
     
-    leftDriveMaster.changeControlFramePeriod(3);
-    rightDriveMaster.changeControlFramePeriod(3);
-  
-    leftStartTick = leftDriveMaster.getEncoder().getPosition();
-  
   }
 
   public void setJoysticks(Joystick left, Joystick right){
@@ -78,17 +85,92 @@ public class Drivetrain extends SubsystemBase {
   public void setDriverXboxController(Joystick xbox){
     driverXboxController = xbox;
   }
-  public void resetEncoders(){
-    leftStartTick=leftDriveMaster.getEncoder().getPosition();
-    rightStartTick = rightDriveMaster.getEncoder().getPosition();
+
+  public void setConversionFactors(){
+    m_leftEncoder.setPositionConversionFactor(Constants.K_DRIVE_POS_CONV);
+    m_rightEncoder.setPositionConversionFactor(Constants.K_DRIVE_POS_CONV);
+    m_leftEncoder.setVelocityConversionFactor(Constants.K_DRIVE_VEL_CONV);
+    m_leftEncoder.setVelocityConversionFactor(Constants.K_DRIVE_VEL_CONV);
+
   }
 
   /**
-   * Query the gyro for the robot's heading.
+   * Returns the currently-estimated pose of the robot.
+   *
+   * @return The pose.
+   */
+  public Pose2d getPose() {
+    return m_odometry.getPoseMeters();
+  }
+
+  public void resetEncoders(){
+    m_leftEncoder.setPosition(0.0);
+    m_rightEncoder.setPosition(0.0);
+  }
+
+  public double getLeftEncoderDistance(){
+    return m_leftEncoder.getPosition() * Math.PI * Constants.K_WHEEL_DIAMETER * Constants.CONVERT_INCHES_TO_METERS;
+  }
+
+  public double getRightEncoderDistance(){
+    return m_rightEncoder.getPosition() * Math.PI * Constants.K_WHEEL_DIAMETER * Constants.CONVERT_INCHES_TO_METERS;
+  }
+
+  public double getAverageEncoderDistance(){
+    return (getLeftEncoderDistance()+getRightEncoderDistance())/2.0;
+  }
+
+  /**
+   * Returns the current wheel speeds of the robot.
+   *
+   * @return The current wheel speeds.
+   */
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+    return new DifferentialDriveWheelSpeeds(m_leftEncoder.getVelocity(), m_rightEncoder.getVelocity());
+  }
+
+  /**
+   * Gets the left drive encoder.
+   *
+   * @return the left drive encoder
+   */
+  public CANEncoder getLeftEncoder() {
+    return m_leftEncoder;
+  }
+
+  /**
+   * Gets the right drive encoder.
+   *
+   * @return the right drive encoder
+   */
+  public CANEncoder getRightEncoder() {
+    return m_rightEncoder;
+  }
+
+  /**
+   * Query the gyro for the robot's heading (unconstrained)
    * @return The robot's current angle in degrees
    */
   public double returnAngle() {
     return imu.getAngle();
+  }
+
+   /**
+   * Returns the heading of the robot.
+   *
+   * @return the robot's heading in degrees, from -180 to 180
+   */
+  public double getHeading() {
+    return Math.IEEEremainder(imu.getAngle(), 360) * (Constants.K_GYRO_REVERSED ? -1.0 : 1.0);
+  }
+
+  /**
+   * Returns the turn rate of the robot.
+   *
+   * @return The turn rate of the robot, in degrees per second
+   */
+  public double getTurnRate() {
+    return imu.getRate() * (Constants.K_GYRO_REVERSED  ? -1.0 : 1.0);
   }
 
   /**
@@ -130,6 +212,7 @@ public class Drivetrain extends SubsystemBase {
     return -rightDriveMaster.getVelocity();
 
   }
+
   /**
    * 
    * @return report pid vars as a string that can be added to csv
@@ -216,7 +299,10 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
+    m_odometry.update(Rotation2d.fromDegrees(getHeading()), getLeftEncoderDistance(), getRightEncoderDistance());
     SmartDashboard.putNumber("angle " , returnAngle());
+    SmartDashboard.putNumber("normalized angle " , getHeading());
+
   }
 
   /**
@@ -236,10 +322,21 @@ public class Drivetrain extends SubsystemBase {
    * Calibrates imu, only call if imu hasn't move, movement will show up as drift in so don't calibrate if moved! 
    * If moved then just restart robot code
    */
-  public void calibrateIMU() {
+  public void calibrateADIS() {
 
     imu.calibrate();
 
+  }
+
+ /**
+   * Controls the left and right sides of the drive directly with voltages.
+   *
+   * @param leftVolts  the commanded left output
+   * @param rightVolts the commanded right output
+   */
+  public void setDriveVoltage(double leftVolts, double rightVolts) {
+    leftDriveMaster.setVoltage(leftVolts);
+    rightDriveMaster.setVoltage(-rightVolts);
   }
 
   public double getSpeed() {
@@ -275,15 +372,6 @@ public class Drivetrain extends SubsystemBase {
     setSpeed(0);//reset vars
     setTurn(0);
   
-  }
-
-  //new arcade drive refractoring
-  public double getAverageDistance() {
-	  return ((-leftDriveMaster.getEncoder().getPosition()+leftStartTick)+(rightDriveMaster.getEncoder().getPosition()-rightStartTick))/2.0;
-  }
-  
-  public double getAverageHeading() {
-    return 0;
   }
 
   public void setScale(double speedScale, double turnScale){
