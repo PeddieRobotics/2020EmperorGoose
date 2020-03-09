@@ -24,6 +24,7 @@ import frc.paths.GetThreeFromTrench;
 import frc.paths.GetTwoFromTrench;
 import frc.paths.SixFeet;
 import frc.paths.TenFeetStraight;
+import frc.paths.TurnRad3;
 import frc.paths.TwelveFeet;
 import frc.robot.Auto.HelixPathFollower;
 import frc.robot.commands.DriveCommands.Drive;
@@ -102,7 +103,7 @@ public class RobotContainer {
     chooser.addOption("8FeetTest", "8FeetTest");
     chooser.addOption("10FeetTest", "10FeetTest");
     chooser.addOption("12FeetTest", "12FeetTest");
-
+    chooser.addOption("TurnRad3","TurnRad3");
     SmartDashboard.putData("Auto routine", chooser);
   }
 
@@ -171,6 +172,11 @@ public class RobotContainer {
     else if(autoRoutineFromChooser == "12FeetTest"){
       return new HelixPathFollower(new TwelveFeet(), m_driveTrain);
     }
+    else if(autoRoutineFromChooser=="TurnRad3"){
+    
+      return new HelixPathFollower(new TurnRad3(),m_driveTrain).sendData();
+
+    }
     return null;
 
   }
@@ -187,7 +193,9 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Intake Down", false);
 
   }
-
+  public void resetGyro(){
+    m_driveTrain.resetADIS();
+  }
   public void testAllSystems(){
     double flywheel_rpm = SmartDashboard.getNumber("Flywheel", 0.0);
     if(flywheel_rpm < 3500 && flywheel_rpm > 300){

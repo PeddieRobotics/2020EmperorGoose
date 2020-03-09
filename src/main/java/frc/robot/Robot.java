@@ -21,6 +21,7 @@ public class Robot extends TimedRobot {
     driverCamera.setExposureAuto();
     driverCamera.setFPS(24);
     SmartDashboard.putNumber("lastState", 0);
+    m_RobotContainer.setCoastMode();
   }
 
   public void robotPeriodic() {
@@ -37,14 +38,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     clearCommmandScheduler();
     m_RobotContainer.configureDefaultBehaviors(false);
-    m_RobotContainer.calibrateGyro();
-    try {
-		  Thread.sleep(15);   
-	  } catch (InterruptedException e) {
-		  // 
-      e.printStackTrace();
-    }
-  
+    m_RobotContainer.resetGyro();
     if(!(m_RobotContainer.getAutonomousCommand()==null)){
       CommandScheduler.getInstance().schedule(m_RobotContainer.getAutonomousCommand());
     }   

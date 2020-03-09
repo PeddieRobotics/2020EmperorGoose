@@ -12,7 +12,7 @@ import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
 
-  private Solenoid leftArmSolenoid, rightArmSolenoid;
+  //private Solenoid leftArmSolenoid, rightArmSolenoid;
   
   private boolean isUp;
 
@@ -20,8 +20,8 @@ public class Climber extends SubsystemBase {
     
     isUp = false;
 
-    leftArmSolenoid = new Solenoid(Constants.SOLENOID_CLIMBER_1);
-    rightArmSolenoid = new Solenoid(Constants.SOLENOID_CLIMBER_2);
+   // leftArmSolenoid = new Solenoid(Constants.SOLENOID_CLIMBER_1);
+   // rightArmSolenoid = new Solenoid(Constants.SOLENOID_CLIMBER_2);
 
   }
 
@@ -30,15 +30,15 @@ public class Climber extends SubsystemBase {
   }
 
   public void raiseClimber(){
-    leftArmSolenoid.set(true);
-    rightArmSolenoid.set(true);
+   // leftArmSolenoid.set(true);
+   // rightArmSolenoid.set(true);
 
     isUp = true;
   }
 
   public void lowerClimber(){
-    leftArmSolenoid.set(false);
-    rightArmSolenoid.set(false);
+    //leftArmSolenoid.set(false);
+    //rightArmSolenoid.set(false);
 
     isUp = false;
   }

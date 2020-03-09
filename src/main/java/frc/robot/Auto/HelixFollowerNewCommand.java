@@ -32,7 +32,7 @@ public abstract class HelixFollowerNewCommand extends CommandBase {
 
   public int currentSegment;
   private boolean isFinished;
-
+  public boolean shouldSendDataAcrossNetwork = false;
   /**
    * This will import the path class based on the name of the path provided
    * 
@@ -42,6 +42,10 @@ public abstract class HelixFollowerNewCommand extends CommandBase {
     trajectory = path;
     // Use addRequirements() here to declare subsystem dependencies.
     
+  }
+  public HelixFollowerNewCommand sendData(){
+    shouldSendDataAcrossNetwork=true;
+    return this;
   }
 
   /**
