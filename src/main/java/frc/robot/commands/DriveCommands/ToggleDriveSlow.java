@@ -14,9 +14,12 @@ import frc.robot.subsystems.Drivetrain;
 public class ToggleDriveSlow extends CommandBase {
 
   Drivetrain m_driveTrain;
+  double m_speedScale, m_turnScale;
   
-  public ToggleDriveSlow(Drivetrain driveTrain) {
+  public ToggleDriveSlow(Drivetrain driveTrain, double speedScale, double turnScale) {
     m_driveTrain = driveTrain;
+    m_speedScale = speedScale;
+    m_turnScale = turnScale;
     
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -24,7 +27,7 @@ public class ToggleDriveSlow extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_driveTrain.setSlowMode(true);
+    m_driveTrain.setScale(m_speedScale, m_turnScale);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,7 +38,7 @@ public class ToggleDriveSlow extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_driveTrain.setSlowMode(false);
+    m_driveTrain.setScale(1.0, 1.0);
   }
 
   // Returns true when the command should end.

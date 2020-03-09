@@ -36,13 +36,13 @@ public final class Constants {
     public static final int SOLENOID_CLIMBER_1 = 4;
     public static final int SOLENOID_CLIMBER_2 = 5;
 
-    public static final double DRIVETRAIN_P = 0.000; 
-    public static final double DRIVETRAIN_I = 0.0000;
+    public static final double DRIVETRAIN_P = 0.0003; 
+    public static final double DRIVETRAIN_I = 0.0000007;
     public static final double DRIVETRAIN_D = 0.000; 
     public static final double DRIVETRAIN_FF = 0.00018 ;
-    public static final double DRIVETRAIN_FF_OFFSET = 0.00000;
+    public static final double DRIVETRAIN_FF_OFFSET = 0.000008;
     
-    public static final double DRIVETRAIN_ACC = 0.23;
+    public static final double DRIVETRAIN_ACC = 0.0;
     public static final double DRIVETRAIN_ACC_OFFSET = 0.00;
 
     public static final boolean DRIVETRAIN_USE_SQUARED = true;
@@ -64,17 +64,25 @@ public final class Constants {
 
     public static final double TOWER_SHOT_SPEED = 0.8;
 
+    public static final double INTAKE_MOTOR_OFF_DELAY = 1.0;
+
     public static final boolean USE_XBOX_CONTROLLER = true;
     public static final double XBOX_TRIGGER_DEADZONE = 0.02; // Jiggle room for the xbox triggers
-    public static final double XBOX_TRIGGER_SENSITIVITY = 0.5;  // If the trigger is beyond this limit, say it has been pressed
+    public static final double XBOX_TRIGGER_SENSITIVITY = 0.3;  // If the trigger is beyond this limit, say it has been pressed
     public static final double XBOX_JOYSTICK_DEADBAND = 0.08;
-    public static final double XBOX_SPEED_SCALE_FACTOR = 0.9;
-    public static final double XBOX_TURN_SCALE_FACTOR = 0.9;
-
+    public static final double XBOX_SPEED_SCALE_FACTOR = 0.8;
+    public static final double XBOX_TURN_SCALE_FACTOR = 0.7;
 
     public static final double JOYSTICK_DEADBAND = 0.08;
+    public static final double JOYSTICK_SPEED_SCALE_FACTOR = 1.0;
+    public static final double JOYSTICK_TURN_SCALE_FACTOR = 1.0;
 
     public static final boolean COMPETITION_ROBOT = true;
 
-    public static final double SLOW_MODE_SCALE_FACTOR = 0.5;
+    public static final double SLOW_MODE_SPEED_SCALE = 0.75;
+    public static final double SLOW_MODE_TURN_SCALE = 0.75;
+
+    public static final double CLIMB_MODE_SPEED_SCALE = 0.5;
+    public static final double CLIMB_MODE_TURN_SCALE = 0.5;
+
 }

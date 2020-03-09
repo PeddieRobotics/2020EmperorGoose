@@ -33,7 +33,7 @@ public class ToggleIntakeOnOff extends CommandBase {
   @Override
   public void initialize() {
    // m_tower.runMotors(0);
-    m_hopper.runAll();  
+    m_hopper.runAll(-0.5, 0.5, 0.5);  
     m_intake.startIntake();
   }
 

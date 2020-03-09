@@ -6,15 +6,15 @@
 
 package frc.robot.subsystems;
 
+import com.analog.adis16470.frc.ADIS16470_IMU;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.OI;
 import frc.robot.Auto.PIDClasses.NEO;
 
 public class Drivetrain extends SubsystemBase {
@@ -33,21 +33,21 @@ public class Drivetrain extends SubsystemBase {
   
   // For the gyro
   public int smartMotionSlot = 0;
- // private final ADIS16470_IMU imu;
+  private final ADIS16470_IMU imu;
 
-  // Should the robot's speed be scaled down?
-  private boolean isSlowMode = false;
+  private double m_speedScale, m_turnScale;
 
   /* Value between -1.0 and 1.0 (units?) that were last given to left and right master
   CANSparkMax motor controllers during teleop (ArcadeDrive).
   */
-  double startTick = 0;
+  double leftStartTick = 0;
+  double rightStartTick=0;
   private double leftDriveInputSpeed, leftDriveInputTurn, rightDriveInputSpeed, rightDriveInputTurn;
 
   public Drivetrain(){
 
     // Set up the gyro
-    //imu = new ADIS16470_IMU();
+    imu = new ADIS16470_IMU();
    
     leftDriveMaster = new NEO(1);
     rightDriveMaster = new NEO(3);
@@ -59,7 +59,14 @@ public class Drivetrain extends SubsystemBase {
     rightDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF + Constants.DRIVETRAIN_FF_OFFSET, 0 );
     leftDriveMaster.addPIDController( Constants.DRIVETRAIN_P, Constants.FLYWHEEL_D, Constants.DRIVETRAIN_I, Constants.DRIVETRAIN_FF, 0 );
     
-    startTick = leftDriveMaster.getEncoder().getPosition();
+    // Default to full speed and turn
+    m_speedScale = 1.0;
+    m_turnScale = 1.0;
+    
+    leftDriveMaster.changeControlFramePeriod(3);
+    rightDriveMaster.changeControlFramePeriod(3);
+  
+    leftStartTick = leftDriveMaster.getEncoder().getPosition();
   
   }
 
@@ -71,15 +78,17 @@ public class Drivetrain extends SubsystemBase {
   public void setDriverXboxController(Joystick xbox){
     driverXboxController = xbox;
   }
+  public void resetEncoders(){
+    leftStartTick=leftDriveMaster.getEncoder().getPosition();
+    rightStartTick = rightDriveMaster.getEncoder().getPosition();
+  }
 
   /**
    * Query the gyro for the robot's heading.
    * @return The robot's current angle in degrees
    */
   public double returnAngle() {
-
-    //return imu.getAngle();
-    return 0;
+    return imu.getAngle();
   }
 
   /**
@@ -95,9 +104,9 @@ public class Drivetrain extends SubsystemBase {
 
   public void setVelocity( double left_velocity, double right_velocity, double heading, double leftAccel, double rightAccel ) {
 
-    leftDriveMaster.setArbFF( -0.05 + ( -leftAccel * Constants.DRIVETRAIN_ACC ) ); //0.05 is the deadband
-    rightDriveMaster.setArbFF( 0.05 + ( rightAccel * Constants.DRIVETRAIN_ACC ) );
-
+    leftDriveMaster.setArbFF( -0.0 + ( -leftAccel * Constants.DRIVETRAIN_ACC ) ); //0.05 is the deadband
+    rightDriveMaster.setArbFF( 0.0 + ( rightAccel * Constants.DRIVETRAIN_ACC ) );
+    
     leftDriveMaster.setSmartVelocity( -left_velocity + heading );
     rightDriveMaster.setSmartVelocity( right_velocity + heading );
 
@@ -207,16 +216,15 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    double tickDiff = leftDriveMaster.getEncoder().getPosition()-startTick;
-    SmartDashboard.putNumber("tick diff", tickDiff);
+    SmartDashboard.putNumber("angle " , returnAngle());
   }
 
   /**
    * Resets yaw to zero
    */
   public void resetADIS() {
-
-    //imu.reset();
+    DriverStation.reportError("resseting",false);
+    imu.reset();
 
   }
   /**
@@ -230,20 +238,17 @@ public class Drivetrain extends SubsystemBase {
    */
   public void calibrateIMU() {
 
-    //imu.calibrate();
+    imu.calibrate();
 
   }
 
   public double getSpeed() {
     double speed = 0.0;
     if(Constants.USE_XBOX_CONTROLLER){
-      speed = Constants.XBOX_SPEED_SCALE_FACTOR*driverXboxController.getRawAxis(1);
+      speed = m_speedScale*Constants.XBOX_SPEED_SCALE_FACTOR*driverXboxController.getRawAxis(1);
     }
     else{
-      speed = leftJoystick.getRawAxis(1);
-    }
-    if(isSlowMode){
-      speed *= Constants.SLOW_MODE_SCALE_FACTOR;
+      speed = m_speedScale*Constants.JOYSTICK_TURN_SCALE_FACTOR*leftJoystick.getRawAxis(1);
     }
     return speed;
   }
@@ -251,10 +256,10 @@ public class Drivetrain extends SubsystemBase {
   public double getTurn() {
     double turn = 0.0;
     if(Constants.USE_XBOX_CONTROLLER){
-      turn = Constants.XBOX_TURN_SCALE_FACTOR*driverXboxController.getRawAxis(4);
+      turn = m_turnScale*Constants.XBOX_TURN_SCALE_FACTOR*driverXboxController.getRawAxis(4);
     }
     else{
-      turn = rightJoystick.getRawAxis(0);
+      turn = m_turnScale*Constants.JOYSTICK_TURN_SCALE_FACTOR*rightJoystick.getRawAxis(0);
     }
     return turn;
   }
@@ -272,8 +277,18 @@ public class Drivetrain extends SubsystemBase {
   
   }
 
-  public void setSlowMode(boolean slow){
-    isSlowMode = slow;
+  //new arcade drive refractoring
+  public double getAverageDistance() {
+	  return ((-leftDriveMaster.getEncoder().getPosition()+leftStartTick)+(rightDriveMaster.getEncoder().getPosition()-rightStartTick))/2.0;
+  }
+  
+  public double getAverageHeading() {
+    return 0;
+  }
+
+  public void setScale(double speedScale, double turnScale){
+    m_speedScale = speedScale;
+    m_turnScale = turnScale;
   }
 
 }

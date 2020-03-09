@@ -65,7 +65,7 @@ public class IndexPowerCells extends CommandBase {
         m_hopper.stopAll();
       }
       else{
-        m_hopper.runAll();
+        m_hopper.runAll(-0.5, 0.5, 0.5);
       }
     }
     else{

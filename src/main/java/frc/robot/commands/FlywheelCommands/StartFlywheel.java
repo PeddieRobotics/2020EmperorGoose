@@ -17,45 +17,38 @@ import frc.robot.subsystems.Flywheel;
 public class StartFlywheel extends CommandBase {
   
   private Flywheel m_flywheel;
-  private MovingAverage avgOfSpeed;
+  private double setpoint;
 
-  public StartFlywheel(Flywheel flywheel) {
+  public StartFlywheel(Flywheel flywheel, double rpm) {
     m_flywheel = flywheel;
+    setpoint = rpm;
     addRequirements(flywheel);
-    avgOfSpeed = new MovingAverage(10);
-    SmartDashboard.putNumber("setpoint",0.0);
+    
     // Use addRequirements() here to declare subsystem dependencies.
   }
   
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_flywheel.updateSetpoint(2000);
-    avgOfSpeed.clearInitialize();
+    m_flywheel.updateSetpoint(setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     m_flywheel.runMotors();
-    avgOfSpeed.add(m_flywheel.getSpeed());
-    SmartDashboard.putNumber("avg of speed", avgOfSpeed.get());
-    SmartDashboard.putNumber("avg value",avgOfSpeed.get());
-    CommandScheduler.getInstance().schedule();
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-///    DriverStation.reportError("done here", false);
-    m_flywheel.disable();
-  
+  public void end(boolean interrupted) {  
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ((Math.abs(avgOfSpeed.get()-3350)<100)&&avgOfSpeed.isFull());  
+    return false;
   }
 
 }

@@ -29,11 +29,14 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
     m_flywheel = flywheel;
     m_tower = tower;
     m_hopper = hopper;
-  
+    addRequirements(hopper);
+    addRequirements(tower);
+    
   }
   
 @Override
   public void initialize() {
+    m_hopper.runAll(-0.5, 0.5, 0.5); 
   }
 
   @Override
@@ -50,13 +53,10 @@ public class RunTowerBasedOffFlyWheel extends CommandBase {
     //Checking whether the speed of flywheel is good enough to shoot
     if(Math.abs(m_flywheel.getAvgVelocity()-setpoint)<shootingThreshold){
       m_tower.runMotors(Constants.TOWER_SHOT_SPEED);
-      m_hopper.runAll(); 
+      m_hopper.runAll(-0.2, 0.8, 0.5); 
     }
-
-
     else {
-      m_tower.stopAll();
-      m_hopper.stopAll();
+      m_tower.runTopMotor(0.0);
     }
 
   }

@@ -13,16 +13,18 @@ import frc.robot.subsystems.Flywheel;
 public class ToggleFlywheelOnOff extends CommandBase {
 
   private Flywheel m_flywheel;
+  private double setpoint;
 
-  public ToggleFlywheelOnOff(Flywheel flywheel) {
+  public ToggleFlywheelOnOff(Flywheel flywheel, double rpm) {
     m_flywheel = flywheel;
+    setpoint = rpm;
     addRequirements(flywheel);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_flywheel.updateSetpoint(1500);
+    m_flywheel.updateSetpoint(setpoint);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

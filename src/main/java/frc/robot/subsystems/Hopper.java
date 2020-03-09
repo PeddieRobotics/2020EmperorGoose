@@ -127,13 +127,11 @@ public class Hopper extends SubsystemBase {
  * @param rightSetpoint set the right wall to this speed
  */
 
-  public void runAll() {
+  public void runAll(double leftWallSpeed, double rightWallSpeed, double floorSpeed) {
     
-    setRightWall( -0.5 ); //Taking in
-    setLeftWall( -0.5 ); //Going out
-    setFloor( -0.5 ); //Taking in
-
-    currentMode = HopperModeType.INTAKING;
+    setRightWall(-rightWallSpeed); //Taking in
+    setLeftWall(leftWallSpeed); //Going out
+    setFloor(-floorSpeed); //Taking in
 
   }
   public void stopAll(){

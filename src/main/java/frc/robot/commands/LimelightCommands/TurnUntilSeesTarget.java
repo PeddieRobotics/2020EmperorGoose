@@ -7,6 +7,8 @@
 
 package frc.robot.commands.LimelightCommands;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Limelight;
@@ -15,19 +17,23 @@ public class TurnUntilSeesTarget extends CommandBase {
   /**
    * Creates a new TurnUntilSeesTarget.
    */
-  Limelight m_limelight; 
-  Drivetrain m_drivetrain;
-  double count = 5;
+  private Limelight m_limelight; 
+  private Drivetrain m_drivetrain;
+  private double count = 5;
+
   public TurnUntilSeesTarget(Drivetrain drivetrain, Limelight limelight) {
     m_limelight = limelight;
     m_drivetrain = drivetrain;
     addRequirements(drivetrain);
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+
+    m_drivetrain.setCoast();
     count = 5;
   }
 
@@ -37,7 +43,8 @@ public class TurnUntilSeesTarget extends CommandBase {
     if(m_limelight.hasTarget()){
       count--;
     }
-    m_drivetrain.setTurn(.2);
+
+    m_drivetrain.setTurn(.4);
     m_drivetrain.run();
   }
 
@@ -47,6 +54,7 @@ public class TurnUntilSeesTarget extends CommandBase {
     m_drivetrain.setSpeed(0);
     m_drivetrain.setTurn(0);
     m_drivetrain.run();
+    m_drivetrain.setBrake();
   }
 
   // Returns true when the command should end.

@@ -58,6 +58,7 @@ dependencies {
     nativeZip wpi.deps.wpilibJni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.wpilibJni(wpi.platforms.desktop)
      compile 'com.github.Team319:BobTrajectory:v2.1.0'
+     compile 'com.github.TripleHelixProgramming:HelixUtilities:2020-SNAPSHOT'
     implementation wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)

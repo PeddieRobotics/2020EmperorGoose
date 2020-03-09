@@ -11,12 +11,15 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 
-public class DriveSlow extends CommandBase {
+public class SetDriveScale extends CommandBase {
 
   Drivetrain m_driveTrain;
+  double m_speedScale, m_turnScale;
   
-  public DriveSlow(Drivetrain driveTrain) {
+  public SetDriveScale(Drivetrain driveTrain, double speedScale, double turnScale) {
     m_driveTrain = driveTrain;
+    m_speedScale = speedScale;
+    m_turnScale = turnScale;
     
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -24,7 +27,7 @@ public class DriveSlow extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_driveTrain.setSlowMode(true);
+    m_driveTrain.setScale(m_speedScale, m_turnScale);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

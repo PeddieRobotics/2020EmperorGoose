@@ -27,6 +27,14 @@ public class Intake extends SubsystemBase {
     intakeMotorTalon.configPeakCurrentLimit(30, 0);
   }
 
+  public void raiseIntake(){
+    intakeSolenoid.set(false);
+  }
+
+  public void lowerIntake(){
+    intakeSolenoid.set(true);
+  }
+
   public boolean isSolenoidActive(){
     return intakeSolenoid.get();
   }
@@ -74,5 +82,8 @@ public class Intake extends SubsystemBase {
     setIntakeMotor( -setpoint );
 
   }
+
+public void setSolenoid(boolean boolean1) {
+}
 
 }

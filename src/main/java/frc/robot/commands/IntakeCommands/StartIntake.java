@@ -34,7 +34,7 @@ public class StartIntake extends CommandBase {
 
     if(m_tower.getCurrentMode() == TowerModeType.INDEXING){
 
-      m_hopper.runAll();
+      m_hopper.runAll(-0.5, 0.5, 0.5);
 
     }
 
