@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
   }
 
   public void disabledInit(){
+    clearCommmandScheduler();
   }
  
   public void disabledPeriodic() {

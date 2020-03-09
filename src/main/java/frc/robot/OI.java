@@ -1,15 +1,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ClimberCommands.LowerClimber;
 import frc.robot.commands.ClimberCommands.RaiseClimber;
 import frc.robot.commands.ClimberCommands.ToggleClimberUpDown;
-import frc.robot.commands.DriveCommands.DriveFast;
-import frc.robot.commands.DriveCommands.DriveSlow;
 import frc.robot.commands.DriveCommands.SetDriveScale;
 import frc.robot.commands.DriveCommands.ToggleDriveSlow;
 import frc.robot.commands.FlywheelCommands.RunFlywheelUntilTowerHasStopped;
