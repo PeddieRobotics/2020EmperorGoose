@@ -27,7 +27,8 @@ public class Tower extends SubsystemBase {
 
   private NEO topMotor, bottomMotor;
   private AnalogInput m_topSensor0, m_topSensor1, m_bottomSensor2, m_bottomSensor3;
-  private DigitalInput testTop0, testTop1, testBottom2, testBottom3;
+  private DigitalInput testTop0Digital, testTop1, testBottom2, testBottom3;
+  private AnalogInput testTop0Analog;
 
   private MovingAverage bottom3Avg, bottom2Avg, top1Avg, top0Avg;
 
@@ -53,18 +54,15 @@ public class Tower extends SubsystemBase {
     topMotor.setSmartCurrentLimit(15);
     bottomMotor.setSmartCurrentLimit(15);*/
 
-    testTop0 = new DigitalInput(0);
-    testTop1 = new DigitalInput(1);
-    testBottom2 = new DigitalInput(2);
-    testBottom3 = new DigitalInput(3);
+    //testTop0Analog = new AnalogInput(0);
+    testTop0Digital = new DigitalInput(0);
+    //testTop1 = new DigitalInput(1);
+    //testBottom2 = new DigitalInput(2);
+    //testBottom3 = new DigitalInput(3);
   }
 
   @Override
   public void periodic() {
-    SmartDashboard.putBoolean("Top Sensor 0", testTop0.get());
-    SmartDashboard.putBoolean("Top Sensor 1", testTop1.get());
-    SmartDashboard.putBoolean("Top Sensor 2", testBottom2.get());
-    SmartDashboard.putBoolean("Top Sensor 3", testBottom3.get());
   }
 
   public void reverse(double percent){
