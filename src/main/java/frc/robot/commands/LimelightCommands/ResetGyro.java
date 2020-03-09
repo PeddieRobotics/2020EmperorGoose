@@ -7,6 +7,7 @@
 
 package frc.robot.commands.LimelightCommands;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Drivetrain;
@@ -20,20 +21,26 @@ public class ResetGyro extends CommandBase {
    */
   public ResetGyro(Drivetrain drivetrain) {
     train = drivetrain;
+    
     // Use addRequirements() here to declare subsystem dependencies.
   }
-
+  @Override 
+  public boolean runsWhenDisabled() {
+    return true;
+  }
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     finish = false;
     waitTime = Timer.getFPGATimestamp();
+    
+    train.resetADIS();
+    DriverStation.reportError("resseting",false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    train.resetADIS();
     //callibration takes .15 seconds
     if(Timer.getFPGATimestamp()-waitTime>.15){
       finish = true;

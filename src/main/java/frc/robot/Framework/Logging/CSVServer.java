@@ -43,7 +43,7 @@ public class CSVServer {
      */
     public void sendDataAccrossNetwork(ArrayList<String[]> dArrayList)  throws IOException {
          
-        try (ServerSocket listener = new ServerSocket(5800)) {
+        try (ServerSocket listener = new ServerSocket(5802)) {
             
                 try (Socket realServer = listener.accept()) {
                     PrintWriter o = new PrintWriter(realServer.getOutputStream(), true);
