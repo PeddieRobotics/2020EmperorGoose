@@ -88,7 +88,8 @@ public class Drivetrain extends SubsystemBase {
    * @return The robot's current angle in degrees
    */
   public double returnAngle() {
-    return imu.getAngle();
+    //return imu.getAngle();
+    return Math.IEEEremainder(imu.getAngle(), 360);
   }
 
   /**

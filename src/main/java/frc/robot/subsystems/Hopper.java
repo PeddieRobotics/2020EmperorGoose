@@ -17,44 +17,43 @@ public class Hopper extends SubsystemBase {
 
   private HopperModeType currentMode;
   
-//  private TalonSRX leftWallTalon, rightWallTalon, floorTalon;
- // private VictorSPX leftWallVictor, rightWallVictor, floorVictor;
+  private TalonSRX leftWallTalon, rightWallTalon, floorTalon;
+  private VictorSPX leftWallVictor, rightWallVictor, floorVictor;
 
 
   public Hopper() {
     currentMode = HopperModeType.DISABLED;
     
-   // floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
-   // floorTalon.configPeakCurrentLimit(10, 0);
-    //floorTalon.configContinuousCurrentLimit(10,0);
-    //floorTalon.configPeakCurrentDuration(100, 0);  
-    //floorTalon.enableCurrentLimit(true);
+    floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
+    floorTalon.configPeakCurrentLimit(10, 0);
+    floorTalon.configContinuousCurrentLimit(10,0);
+    floorTalon.configPeakCurrentDuration(100, 0);  
+    floorTalon.enableCurrentLimit(true);
      /**
      * changes the motors based off if the robot is comp bot or pbot
      */
     if( Constants.COMPETITION_ROBOT ) { //comp robot has TalonSRX's
 
       //left and right motors for the v-belts
-     // leftWallTalon = new TalonSRX( Constants.HOPPER_LEFT_WALL );
-     // rightWallTalon = new TalonSRX( Constants.HOPPER_RIGHT_WALL );
+      leftWallTalon = new TalonSRX( Constants.HOPPER_LEFT_WALL );
+      rightWallTalon = new TalonSRX( Constants.HOPPER_RIGHT_WALL );
 
-//      rightWallTalon.configContinuousCurrentLimit(10,0);
-    //  rightWallTalon.configPeakCurrentDuration(100, 0);   
-  //    rightWallTalon.enableCurrentLimit(true);
-      //rightWallTalon.configPeakCurrentLimit(10, 0);
-      //leftWallTalon.configContinuousCurrentLimit(10,0);
-      //leftWallTalon.configPeakCurrentDuration(100, 0); 
-      //leftWallTalon.configPeakCurrentLimit(10, 0); 
-      //leftWallTalon.enableCurrentLimit(true);
+      rightWallTalon.configContinuousCurrentLimit(10,0);
+      rightWallTalon.configPeakCurrentDuration(100, 0);   
+      rightWallTalon.enableCurrentLimit(true);
+      rightWallTalon.configPeakCurrentLimit(10, 0);
+      leftWallTalon.configContinuousCurrentLimit(10,0);
+      leftWallTalon.configPeakCurrentDuration(100, 0); 
+      leftWallTalon.configPeakCurrentLimit(10, 0); 
+      leftWallTalon.enableCurrentLimit(true);
     
- //     floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
-//
+      floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
    
     } else {  //pbot has VictorSPX's
 
-  //    rightWallVictor = new VictorSPX( Constants.HOPPER_RIGHT_WALL );
-    //  leftWallVictor = new VictorSPX( Constants.HOPPER_LEFT_WALL );
-//      floorVictor = new VictorSPX( Constants.HOPPER_FLOOR ); floor always talon
+      rightWallVictor = new VictorSPX( Constants.HOPPER_RIGHT_WALL );
+      leftWallVictor = new VictorSPX( Constants.HOPPER_LEFT_WALL );
+      floorVictor = new VictorSPX( Constants.HOPPER_FLOOR ); //floor always talon
       
     }
     
@@ -74,9 +73,9 @@ public class Hopper extends SubsystemBase {
   public void setMotors( TalonSRX talonMotor, VictorSPX victorMotor, double setpoint ) {
 
     if( Constants.COMPETITION_ROBOT ) {
-     // talonMotor.set( ControlMode.PercentOutput, setpoint );
+      talonMotor.set( ControlMode.PercentOutput, setpoint );
     } else {
-     // victorMotor.set( ControlMode.PercentOutput, setpoint );
+      victorMotor.set( ControlMode.PercentOutput, setpoint );
     }
 
   }
@@ -86,10 +85,10 @@ public class Hopper extends SubsystemBase {
    */
   public void setFloor( double setpoint ) {
     if(Constants.COMPETITION_ROBOT){
-     // floorTalon.set(ControlMode.PercentOutput, setpoint);
+      floorTalon.set(ControlMode.PercentOutput, setpoint);
     }
     else{
-      //floorVictor.set(ControlMode.PercentOutput, setpoint);
+      floorVictor.set(ControlMode.PercentOutput, setpoint);
     }
 
   }
@@ -99,10 +98,10 @@ public class Hopper extends SubsystemBase {
    */
   public void setLeftWall( double setpoint ) { 
     if(Constants.COMPETITION_ROBOT){
-   //   leftWallTalon.set(ControlMode.PercentOutput, setpoint);
+      leftWallTalon.set(ControlMode.PercentOutput, setpoint);
     }
     else{
-     // leftWallVictor.set(ControlMode.PercentOutput, setpoint);
+      leftWallVictor.set(ControlMode.PercentOutput, setpoint);
     }
 
   }
@@ -112,10 +111,10 @@ public class Hopper extends SubsystemBase {
    */
     public void setRightWall( double setpoint ) {
       if(Constants.COMPETITION_ROBOT){
-       // rightWallTalon.set(ControlMode.PercentOutput, setpoint);
+        rightWallTalon.set(ControlMode.PercentOutput, setpoint);
       }
       else{
-       // rightWallVictor.set(ControlMode.PercentOutput, setpoint);
+        rightWallVictor.set(ControlMode.PercentOutput, setpoint);
       }
     }
 

@@ -35,7 +35,7 @@ public class TurnToAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.setTurn(-.4);
+    m_drivetrain.setTurn(-.3);
     m_drivetrain.run();
   }
 
@@ -46,12 +46,11 @@ public class TurnToAngle extends CommandBase {
     m_drivetrain.setSpeed(0);
     m_drivetrain.setTurn(0);
     m_drivetrain.run();
-    m_drivetrain.resetADIS();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(goalAngle-m_drivetrain.returnAngle()) < 2.0;
+    return Math.abs(goalAngle-m_drivetrain.returnAngle()) < 2;
   }
 }

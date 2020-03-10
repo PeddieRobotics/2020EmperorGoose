@@ -54,9 +54,9 @@ public final class Constants {
     //PID for Flywheel
 
     public static final double RPM_LAYUP = 2100;
-    public static final double RPM_FAR = 3500;
+    public static final double RPM_FAR = 2900;
     public static final int THRESHOLD_LAYUP = 500;
-    public static final int THRESHOLD_FAR = 100;
+    public static final int THRESHOLD_FAR = 50;
 
     public static final double REVERSE_PERCENT_INTAKE = 0.8;
     public static final double REVERSE_PERCENT_HOPPER = 0.8;
@@ -64,7 +64,7 @@ public final class Constants {
 
     public static final double TOWER_SHOT_SPEED = 0.8;
 
-    public static final double INTAKE_MOTOR_OFF_DELAY = 1.0;
+    public static final double INTAKE_MOTOR_OFF_DELAY = 2.0;
 
     public static final boolean USE_XBOX_CONTROLLER = true;
     public static final double XBOX_TRIGGER_DEADZONE = 0.02; // Jiggle room for the xbox triggers

@@ -11,7 +11,7 @@ import frc.robot.Constants;
 
 public class Intake extends SubsystemBase {
 
- // private Solenoid intakeSolenoid;
+  private Solenoid intakeSolenoid;
   
   private TalonSRX intakeMotorTalon;
   
@@ -19,7 +19,7 @@ public class Intake extends SubsystemBase {
 
   public Intake() {
 
-   // intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
+    intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
     intakeMotorTalon= new TalonSRX(9);//intake is a talon on both robots
     intakeMotorTalon.configContinuousCurrentLimit(20,0);
     intakeMotorTalon.configPeakCurrentDuration(100, 0);   
@@ -28,16 +28,15 @@ public class Intake extends SubsystemBase {
   }
 
   public void raiseIntake(){
-  //  intakeSolenoid.set(false);
+    intakeSolenoid.set(false);
   }
 
   public void lowerIntake(){
-   // intakeSolenoid.set(true);
+   intakeSolenoid.set(true);
   }
 
   public boolean isSolenoidActive(){
-    return false;
-    //return intakeSolenoid.get();
+    return intakeSolenoid.get();
   }
 
   public void setIntakeMotor(double setpoint){
@@ -63,7 +62,7 @@ public class Intake extends SubsystemBase {
    * start intake
    */
   public void startIntake() {
-    //intakeSolenoid.set(true);
+    intakeSolenoid.set(true);
 
     setIntakeMotor( 1 ); 
   }
@@ -72,7 +71,7 @@ public class Intake extends SubsystemBase {
    * stop intake
    */
   public void stopIntake() {
-    //intakeSolenoid.set(false);
+    intakeSolenoid.set(false);
     setIntakeMotor( 0 );
   }
 
@@ -84,7 +83,8 @@ public class Intake extends SubsystemBase {
 
   }
 
-public void setSolenoid(boolean boolean1) {
+public void setSolenoid(boolean value) {
+  intakeSolenoid.set(value);
 }
 
 }

@@ -20,6 +20,7 @@ public class TurnUntilSeesTarget extends CommandBase {
   private Limelight m_limelight; 
   private Drivetrain m_drivetrain;
   private double count = 5;
+  private int direction = 1; // pos means turn robot right
 
   public TurnUntilSeesTarget(Drivetrain drivetrain, Limelight limelight) {
     m_limelight = limelight;
@@ -31,8 +32,13 @@ public class TurnUntilSeesTarget extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-
+  public void initialize() {    
+    if(m_drivetrain.returnAngle() < 0){
+      direction = -1;
+    }
+    else{
+      direction = 1;
+    }
     m_drivetrain.setCoast();
     count = 5;
   }
@@ -43,8 +49,7 @@ public class TurnUntilSeesTarget extends CommandBase {
     if(m_limelight.hasTarget()){
       count--;
     }
-
-    m_drivetrain.setTurn(.4);
+    m_drivetrain.setTurn(direction*.4);
     m_drivetrain.run();
   }
 

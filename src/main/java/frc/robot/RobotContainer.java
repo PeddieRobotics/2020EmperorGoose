@@ -18,22 +18,38 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.paths.BumpMidTest;
+import frc.paths.BumpMidTest2;
+import frc.paths.BumpMidTest3;
+import frc.paths.BumpMidTest4;
+import frc.paths.BumpMidTest5;
+import frc.paths.BumpMidTest6;
+import frc.paths.BumpMidTest7;
 import frc.paths.EightFeet;
 import frc.paths.FourFeet;
 import frc.paths.GetThreeFromTrench;
 import frc.paths.GetTwoFromTrench;
+import frc.paths.LeftHandTurn;
+import frc.paths.RightHandTurn;
 import frc.paths.SixFeet;
+import frc.paths.SixFeetOtherWay;
 import frc.paths.TenFeetStraight;
+import frc.paths.Trench8Ball;
+import frc.paths.Trench8BallReverse;
 import frc.paths.TurnRad3;
 import frc.paths.TwelveFeet;
 import frc.robot.Auto.HelixPathFollower;
+import frc.robot.commands.AutoCommands.ShootNTimes;
 import frc.robot.commands.DriveCommands.Drive;
 import frc.robot.commands.DriveCommands.TurnToAngle;
+import frc.robot.commands.FlywheelCommands.ShootFromFar;
+import frc.robot.commands.FlywheelCommands.StartFlywheel;
 import frc.robot.commands.IntakeCommands.StartIntake;
 import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.LimelightCommands.Centering;
 import frc.robot.commands.LimelightCommands.TurnUntilSeesTarget;
 import frc.robot.commands.TowerCommands.IndexPowerCells;
+import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
@@ -100,10 +116,16 @@ public class RobotContainer {
     chooser.addOption("Shoot3Get3TrenchShoot3", "Shoot3Get3TrenchShoot3");
     chooser.addOption("4FeetTest", "4FeetTest");
     chooser.addOption("6FeetTest", "6FeetTest");
+    chooser.addOption("6feetotherway", "6feetotherway");
+    chooser.addOption("lefthandturn", "lefthandturn");
+    chooser.addOption("righthandturn", "righthandturn");
+
     chooser.addOption("8FeetTest", "8FeetTest");
     chooser.addOption("10FeetTest", "10FeetTest");
     chooser.addOption("12FeetTest", "12FeetTest");
     chooser.addOption("TurnRad3","TurnRad3");
+    chooser.addOption("Trench8Ball","Trench8Ball");
+    chooser.addOption("BumpMidTest","BumpMidTest");
     SmartDashboard.putData("Auto routine", chooser);
   }
 
@@ -177,6 +199,78 @@ public class RobotContainer {
       return new HelixPathFollower(new TurnRad3(),m_driveTrain).sendData();
 
     }
+    else if(autoRoutineFromChooser=="Trench8Ball"){
+      //return new HelixPathFollower(new Trench8Ball(), m_driveTrain);
+        return new SequentialCommandGroup(
+        /*new ParallelRaceGroup(
+                            new Centering(m_limelight, m_driveTrain, 0, false),
+                            new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
+                            new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),*/
+        new ParallelRaceGroup(new StartIntake(m_intake, m_hopper, m_tower), 
+          new TurnToAngle(m_driveTrain, 180-m_driveTrain.returnAngle())),
+        new WaitCommand(1),
+        new HelixPathFollower(new Trench8Ball(), m_driveTrain),
+        new ParallelRaceGroup(new StopIntake(m_intake, m_hopper),
+          //new StartFlywheel(m_flywheel, Constants.RPM_FAR),
+          new HelixPathFollower(new Trench8BallReverse(), m_driveTrain).reverse()),
+          new WaitCommand(1),
+        new TurnUntilSeesTarget(m_driveTrain, m_limelight)
+        /*new ParallelRaceGroup(
+                            new Centering(m_limelight, m_driveTrain, 0, false),
+                            new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 5),
+                            new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel))*/
+      );
+    }
+    /*else if(autoRoutineFromChooser=="BumpMidTest"){
+      return new SequentialCommandGroup(
+        new ParallelRaceGroup(
+                            new Centering(m_limelight, m_driveTrain, 0, false),
+                            new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 3),
+                            new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)),
+        new HelixPathFollower(new BumpMidTest4(), m_driveTrain).reverse(),
+        new ParallelRaceGroup(
+          new StartIntake(m_intake, m_hopper, m_tower),
+          new HelixPathFollower(new BumpMidTest5(), m_driveTrain)),
+        new HelixPathFollower(new BumpMidTest5(), m_driveTrain).reverse(),
+        new ParallelRaceGroup(
+          new StopIntake(m_intake, m_hopper),
+          new StartFlywheel(m_flywheel, Constants.RPM_FAR),
+          new HelixPathFollower(new BumpMidTest6(), m_driveTrain)),
+        new ParallelRaceGroup(
+          new Centering(m_limelight, m_driveTrain, 0, false),
+          new ShootNTimes(m_tower, m_flywheel, Constants.RPM_FAR, 2),
+          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
+    }*/
+    /*else if(autoRoutineFromChooser=="BumpMidTest"){
+      return new SequentialCommandGroup(
+        new HelixPathFollower(new BumpMidTest4(), m_driveTrain).reverse(),
+        new ParallelRaceGroup(
+          new StartIntake(m_intake, m_hopper, m_tower),
+          new HelixPathFollower(new BumpMidTest5(), m_driveTrain)),
+        new HelixPathFollower(new BumpMidTest5(), m_driveTrain).reverse(),
+        new ParallelRaceGroup(
+          new StopIntake(m_intake, m_hopper),
+          new HelixPathFollower(new BumpMidTest6(), m_driveTrain)));
+    }*/
+    else if(autoRoutineFromChooser=="BumpMidTest"){
+      return new SequentialCommandGroup(
+        new HelixPathFollower(new BumpMidTest4(), m_driveTrain),
+        new TurnToAngle(m_driveTrain, 90),
+        new HelixPathFollower(new BumpMidTest5(), m_driveTrain),
+        new HelixPathFollower(new BumpMidTest5(), m_driveTrain).reverse(),
+        new TurnUntilSeesTarget(m_driveTrain, m_limelight));
+    }
+    else if(autoRoutineFromChooser=="6feetotherway"){
+      return new HelixPathFollower(new SixFeetOtherWay(), m_driveTrain);
+    }
+    else if(autoRoutineFromChooser=="righthandturn"){
+      return new HelixPathFollower(new RightHandTurn(), m_driveTrain);
+
+    }
+    else if(autoRoutineFromChooser=="lefthandturn"){
+      return new HelixPathFollower(new LeftHandTurn(), m_driveTrain);
+
+    } 
     return null;
 
   }
