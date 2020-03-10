@@ -97,9 +97,9 @@ public class RobotContainer {
     m_driveTrain.setDefaultCommand(new Drive(m_driveTrain, true));
 
     // Don't index the tower by default in test mode
-    //if(!isTestMode){
-    //  m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper, m_intake));
-    //}
+    if(!isTestMode){
+      m_tower.setDefaultCommand(new IndexPowerCells(m_tower, m_hopper, m_intake));
+    }
    
   }
 

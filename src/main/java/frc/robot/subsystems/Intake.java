@@ -19,12 +19,17 @@ public class Intake extends SubsystemBase {
 
   public Intake() {
 
-    /*intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
-    intakeMotorTalon= new TalonSRX(9);//intake is a talon on both robots
-    intakeMotorTalon.configContinuousCurrentLimit(20,0);
-    intakeMotorTalon.configPeakCurrentDuration(100, 0);   
-    intakeMotorTalon.enableCurrentLimit(true);
-    intakeMotorTalon.configPeakCurrentLimit(30, 0);*/
+    intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
+    if(Constants.COMPETITION_ROBOT){
+      intakeMotorTalon= new TalonSRX(9);//intake is a talon on both robots
+      intakeMotorTalon.configContinuousCurrentLimit(20,0);
+      intakeMotorTalon.configPeakCurrentDuration(100, 0);   
+      intakeMotorTalon.enableCurrentLimit(true);
+      intakeMotorTalon.configPeakCurrentLimit(30, 0);
+    }
+    else{
+      intakeMotorVictor = new VictorSPX(9);
+    }
   }
 
   public boolean isSolenoidActive(){
@@ -33,8 +38,12 @@ public class Intake extends SubsystemBase {
 
   public void setIntakeMotor(double setpoint){
     
-    intakeMotorTalon.set(ControlMode.PercentOutput,setpoint);
-    
+    if(Constants.COMPETITION_ROBOT){
+      intakeMotorTalon.set(ControlMode.PercentOutput,setpoint);
+    }
+    else{
+      intakeMotorVictor.set(ControlMode.PercentOutput,setpoint);
+    }
 
   }
   
@@ -43,7 +52,12 @@ public class Intake extends SubsystemBase {
    */
   public boolean isIntaking() {
 
-    return (intakeMotorTalon.getMotorOutputPercent() > 0.0);
+    if(Constants.COMPETITION_ROBOT){
+      return (intakeMotorTalon.getMotorOutputPercent() > 0.0);
+    }
+    else{
+      return (intakeMotorVictor.getMotorOutputPercent() > 0.0);
+    }
   }
 
   @Override

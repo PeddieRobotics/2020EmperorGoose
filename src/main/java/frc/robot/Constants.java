@@ -74,7 +74,7 @@ public final class Constants {
 
     public static final double JOYSTICK_DEADBAND = 0.08;
 
-    public static final boolean COMPETITION_ROBOT = true;
+    public static final boolean COMPETITION_ROBOT = false;
 
     public static final double SLOW_MODE_SCALE_FACTOR = 0.5;
 }

@@ -27,21 +27,31 @@ public class Tower extends SubsystemBase {
 
   private NEO topMotor, bottomMotor;
   private AnalogInput m_topSensor0, m_topSensor1, m_bottomSensor2, m_bottomSensor3;
-  private DigitalInput testTop0Digital, testTop1, testBottom2, testBottom3;
-  private AnalogInput testTop0Analog;
+  private DigitalInput m_topDigital9, m_middleDigital8, m_bottomDigital7;
 
   private MovingAverage bottom3Avg, bottom2Avg, top1Avg, top0Avg;
 
+  private double bottomCounter, middleCounter, topCounter;
+
+  private boolean didSenseBottom, didSenseMiddle, didSenseTop;
+
   public Tower() {
     
-    /*currentMode = TowerModeType.DISABLED;
+    bottomCounter = 0.0;
+    middleCounter = 0.0;
+    topCounter = 0.0;
+    SmartDashboard.putNumber("bottom counter:", bottomCounter);
+    SmartDashboard.putNumber("middle counter:", middleCounter);
+    SmartDashboard.putNumber("top counter:", topCounter);
+
+    currentMode = TowerModeType.DISABLED;
 
     topMotor = new NEO( Constants.TOWER_BOTTOM );
     bottomMotor = new NEO( Constants.TOWER_TOP );
     topMotor.setBrake();
     bottomMotor.setBrake();
     
-    bottom3Avg = new MovingAverage(5);
+    /*bottom3Avg = new MovingAverage(5);
     
     bottom2Avg = new MovingAverage(20);
     top1Avg = new MovingAverage(5);
@@ -50,19 +60,38 @@ public class Tower extends SubsystemBase {
     m_topSensor0 = new AnalogInput(0);
     m_topSensor1 = new AnalogInput(1);
     m_bottomSensor2 = new AnalogInput(2);
-    m_bottomSensor3 = new AnalogInput(3);
+    m_bottomSensor3 = new AnalogInput(3);*/
     topMotor.setSmartCurrentLimit(15);
-    bottomMotor.setSmartCurrentLimit(15);*/
+    bottomMotor.setSmartCurrentLimit(15);
 
-    //testTop0Analog = new AnalogInput(0);
-    testTop0Digital = new DigitalInput(0);
-    //testTop1 = new DigitalInput(1);
-    //testBottom2 = new DigitalInput(2);
-    //testBottom3 = new DigitalInput(3);
+    m_topDigital9 = new DigitalInput(9);
+    m_middleDigital8 = new DigitalInput(8);
+    m_bottomDigital7 = new DigitalInput(7);
   }
 
   @Override
   public void periodic() {
+    
+    if(!senses_ball_Bottom() && didSenseBottom){
+      bottomCounter++;
+    }
+    didSenseBottom = senses_ball_Bottom();
+
+    if(!senses_ball_Top1() && didSenseMiddle){
+      middleCounter++;
+    }
+    didSenseMiddle = senses_ball_Top1();
+
+    if(!senses_ball_Top0() && didSenseTop){
+      topCounter++;
+    }
+    didSenseTop = senses_ball_Top0();
+
+
+    SmartDashboard.putNumber("bottom counter:", bottomCounter);
+    SmartDashboard.putNumber("middle counter:", middleCounter);
+    SmartDashboard.putNumber("top counter:", topCounter);
+ 
   }
 
   public void reverse(double percent){
@@ -125,13 +154,14 @@ public class Tower extends SubsystemBase {
    * @return boolean of whether there is a ball at the base of the tower or not
    */
   public boolean senses_ball_Bottom() {
-    bottom2Avg.add(m_bottomSensor2.getVoltage()+m_bottomSensor3.getVoltage());
+    /*bottom2Avg.add(m_bottomSensor2.getVoltage()+m_bottomSensor3.getVoltage());
 
     if ( bottom2Avg.get()< 7) {
       return true;
     } else {
       return false;
-    }
+    }*/
+    return !m_bottomDigital7.get();
   }
 
   /**
@@ -139,21 +169,22 @@ public class Tower extends SubsystemBase {
    * @return boolean of whether there is a ball at the top of the tower or not
    */
   public boolean senses_ball_Top0() {
-    top0Avg.add(m_topSensor0.getVoltage());
+    /*top0Avg.add(m_topSensor0.getVoltage());
     if ( top0Avg.get() < 3.0 ) {
       return true;
     } else {
       return false;
-    }
-
+    }*/
+    return !m_topDigital9.get();
   }
   public boolean senses_ball_Top1() {
-    top1Avg.add(m_topSensor1.getVoltage());
+    /*top1Avg.add(m_topSensor1.getVoltage());
     if ( top1Avg.get() < 3.0 ) {
       return true;
     } else {
       return false;
-    }
+    }*/
+    return !m_middleDigital8.get();
   }
 
   public void stopAll(){

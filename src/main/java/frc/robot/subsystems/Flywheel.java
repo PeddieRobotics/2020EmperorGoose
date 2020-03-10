@@ -25,7 +25,7 @@ public class Flywheel extends SubsystemBase {
   Solenoid hSolenoid;
 
   public Flywheel() {
-    /*currentMode = FlywheelModeType.DISABLED;
+    currentMode = FlywheelModeType.DISABLED;
 
     m_setpoint = 0.0;
 
@@ -47,7 +47,7 @@ public class Flywheel extends SubsystemBase {
     flyWheelForward.getPIDController().setSmartMotionMaxVelocity(4000, 0);
     flyWheelForward.changeControlFramePeriod(3);
 
-    SmartDashboard.putNumber("velocity of flywheel",flyWheelForward.getVelocity());*/
+    SmartDashboard.putNumber("velocity of flywheel",flyWheelForward.getVelocity());
   
   } 
 

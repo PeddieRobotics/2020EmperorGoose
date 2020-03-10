@@ -33,7 +33,7 @@ public class IndexPowerCells extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      if(m_intake.isIntaking()){
+      if(!m_intake.isIntaking()){
         // Control the bottom roller
         if(!m_tower.senses_ball_Bottom()){ // If there is no ball at the bottom of the tower
           m_tower.runBottomMotor(0.35);
