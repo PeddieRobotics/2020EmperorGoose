@@ -23,4 +23,9 @@ public class LookupTable{
         double upperWeight = 1 -(keys[up_i]-input)/(keys[up_i]-keys[low_i]);
         return lowerWeight*values[low_i] + upperWeight*values[up_i];
     }
+    public void update(double add){
+     for(int i=0; i<values.length;i++){
+        values[i]+=add;
+        }
+    }
 }

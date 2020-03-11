@@ -58,6 +58,10 @@ public final class Constants {
     public static final int THRESHOLD_LAYUP = 500;
     public static final int THRESHOLD_FAR = 30;
 
+    public static final double[] THOR_VALS= {1.0};
+    public static final double[] FLYWHEEL_RPMS = {1.0};
+
+
     public static final double REVERSE_PERCENT_INTAKE = 0.8;
     public static final double REVERSE_PERCENT_HOPPER = 0.8;
     public static final double REVERSE_PERCENT_TOWER = 0.8;
