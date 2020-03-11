@@ -34,6 +34,7 @@ import frc.robot.commands.DriveCommands.TurnToAngle;
 import frc.robot.commands.IntakeCommands.StartIntake;
 import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.LimelightCommands.Centering;
+import frc.robot.commands.LimelightCommands.ResetGyro;
 import frc.robot.commands.LimelightCommands.TurnUntilSeesTarget;
 import frc.robot.commands.TowerCommands.IndexPowerCells;
 import frc.robot.subsystems.Climber;
@@ -152,14 +153,18 @@ public class RobotContainer {
     }
     else if(autoRoutineFromChooser == "Shoot3Get3TrenchShoot3"){
       return new SequentialCommandGroup(
-      new TurnToAngle(m_driveTrain, 180),  
-      new HelixPathFollower(new FourFeet(),m_driveTrain),
+      new TurnToAngle(m_driveTrain, 180), 
+      new ResetGyro(m_driveTrain), 
+      new HelixPathFollower(new TenFeetStraight(),m_driveTrain),
+      new ResetGyro(m_driveTrain),
       new TurnToAngle(m_driveTrain, 180),
-      new HelixPathFollower(new FourFeet(), m_driveTrain)
+      new ResetGyro(m_driveTrain),
+      new HelixPathFollower(new TenFeetStraight(), m_driveTrain).sendData()
         
       );
         
     }
+
     else if(autoRoutineFromChooser == "4FeetTest"){
       return new HelixPathFollower(new FourFeet(), m_driveTrain).sendData();
     }
