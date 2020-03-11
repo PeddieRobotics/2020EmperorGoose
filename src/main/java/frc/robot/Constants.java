@@ -54,7 +54,7 @@ public final class Constants {
     //PID for Flywheel
 
     public static final double RPM_LAYUP = 2100;
-    public static final double RPM_FAR = 2900;
+    public static final double RPM_FAR = 2725;
     public static final int THRESHOLD_LAYUP = 500;
     public static final int THRESHOLD_FAR = 50;
 

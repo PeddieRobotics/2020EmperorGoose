@@ -19,7 +19,7 @@ public class TurnToAngle extends CommandBase {
   private double goalAngle;
   private double realGoalAngle;
   private double startAngle; 
-  private double velocityConst = 35;
+  private double velocityConst = 39;
   private double maxVel = 2700;
   public TurnToAngle(Drivetrain drivetrain, double angle) {
     goalAngle = angle;
