@@ -127,7 +127,7 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
     currentVels[4] = "" + m_drivetrain.returnLeftVelocity()*RpmToFeetPerSecond;
     currentVels[5] = "" + (-left);
     if(currentSegment<trajectory.getSegmentCount()){
-      currentVels[7] = "" +Math.toDegrees(trajectory.getValue(currentSegment, SegmentValue.HEADING));
+      currentVels[7] = "" +trajectory.getValue(currentSegment, SegmentValue.HEADING);
     }else{
       currentVels[7]=""+0;
     }
