@@ -56,9 +56,9 @@ public final class Constants {
     public static final double RPM_LAYUP = 2100;
     public static final double RPM_FAR = 3500;
     public static final int THRESHOLD_LAYUP = 500;
-    public static final int THRESHOLD_FAR = 10;
+    public static final int THRESHOLD_FAR = 50;
 
-    public static final double[] THOR_VALS= {41,67};
+    public static final double[] TVERT_VALS= {21,30};
     public static final double[] FLYWHEEL_RPMS = {2925,2700};
 
 

@@ -11,10 +11,10 @@ public class LookupTable{
     }
     public double get(double input){
        if(input<keys[0]){
-       return 2700;
+       return values[0];
        }
        else if(input>keys[keys.length-1]){
-        return 2925;
+        return values[keys.length-1];
        }
        else{
         int low_i = 0; 

@@ -32,7 +32,7 @@ public class ShootwithLookup extends CommandBase {
     useLookup = withLookup;
 
     try {
-      lookupTable = new LookupTable(Constants.THOR_VALS, Constants.FLYWHEEL_RPMS);
+      lookupTable = new LookupTable(Constants.TVERT_VALS, Constants.FLYWHEEL_RPMS);
     } catch (Exception e) {
       // TODO Auto-generated catch block
       e.printStackTrace();
@@ -44,7 +44,7 @@ public class ShootwithLookup extends CommandBase {
   public void initialize() {
     if(useLookup){
       lookupTable.update(SmartDashboard.getNumber("RPM Update", 0));
-      speed=lookupTable.get(m_limelight.getThor());
+      speed=lookupTable.get(m_limelight.getTvert());
       m_flywheel.updateSetpoint(speed);
     }
     else{
