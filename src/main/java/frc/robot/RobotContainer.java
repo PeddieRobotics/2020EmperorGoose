@@ -24,6 +24,7 @@ import frc.paths.EightFeet;
 import frc.paths.FourFeet;
 import frc.paths.GetThreeFromTrench;
 import frc.paths.GetTwoFromTrench;
+import frc.paths.MiddleTwoThenShoot;
 import frc.paths.SixFeet;
 import frc.paths.TenFeetStraight;
 import frc.paths.TwelveFeet;
@@ -115,6 +116,7 @@ public class RobotContainer {
     chooser.addOption("TurnRad3","TurnRad3");
     chooser.addOption("Trench8Ball","Trench8Ball");
     chooser.addOption("BumpMidTest","BumpMidTest");
+    chooser.addOption("TwoMiddleBall", "TwoMiddleBall");
     SmartDashboard.putData("Auto routine", chooser);
   }
 
@@ -159,7 +161,7 @@ public class RobotContainer {
         
     }
     else if(autoRoutineFromChooser == "4FeetTest"){
-      return new HelixPathFollower(new FourFeet(), m_driveTrain);
+      return new HelixPathFollower(new FourFeet(), m_driveTrain).sendData();
     }
 
     else if(autoRoutineFromChooser == "6FeetTest"){
@@ -176,6 +178,9 @@ public class RobotContainer {
 
     else if(autoRoutineFromChooser == "12FeetTest"){
       return new HelixPathFollower(new TwelveFeet(), m_driveTrain);
+    }
+    else if(autoRoutineFromChooser == "TwoMiddleBall"){
+      return new HelixPathFollower(new MiddleTwoThenShoot(), m_driveTrain);
     }
 
     return null;
