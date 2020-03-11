@@ -180,9 +180,15 @@ public class RobotContainer {
       return new HelixPathFollower(new TwelveFeet(), m_driveTrain);
     }
     else if(autoRoutineFromChooser == "TwoMiddleBall"){
-      return new HelixPathFollower(new MiddleTwoThenShoot(), m_driveTrain);
+      return new SequentialCommandGroup(
+        new ParallelCommandGroup(
+      
+          new HelixPathFollower(new MiddleTwoThenShoot(), m_driveTrain)
+        )
+        
+      );
     }
-
+    
     return null;
 
   }
