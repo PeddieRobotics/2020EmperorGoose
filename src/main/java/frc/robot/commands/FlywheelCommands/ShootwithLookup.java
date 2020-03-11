@@ -47,12 +47,12 @@ public class ShootwithLookup extends CommandBase {
       speed=lookupTable.get(m_limelight.getThor());
       m_flywheel.updateSetpoint(speed);
     }
-    else m_flywheel.updateSetpoint(Constants.RPM_FAR);
-
-    if(SmartDashboard.getNumber("ShootFar Setpoint", speed)!=0){
-      m_flywheel.updateSetpoint(SmartDashboard.getNumber("ShootFar Setpoint", speed));
-    }
-    
+    else{
+      m_flywheel.updateSetpoint(Constants.RPM_FAR);
+      if(SmartDashboard.getNumber("ShootFar Setpoint", speed)!=0){
+        m_flywheel.updateSetpoint(SmartDashboard.getNumber("ShootFar Setpoint", speed));
+      }
+    }    
     m_flywheel.setHood(true);
   }
   // Called every time the scheduler runs while the command is scheduled.

@@ -67,6 +67,7 @@ public class Robot extends TimedRobot {
     clearCommmandScheduler();
     m_RobotContainer.configureDefaultBehaviors(false);
     m_RobotContainer.setCoastMode();
+    m_RobotContainer.configureSmartDashboard();
   }
 
   public void teleopPeriodic() {
