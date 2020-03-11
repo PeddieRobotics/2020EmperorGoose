@@ -182,7 +182,7 @@ public class OI {
       
     driverButtonA.whileHeld(new ParallelCommandGroup(
         new Centering(m_limelight, m_driveTrain, 0, false),
-        new ShootwithLookup(m_flywheel, m_limelight, false, false),
+        new ShootwithLookup(m_flywheel, m_limelight, false, true),
         new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     driverButtonA.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     

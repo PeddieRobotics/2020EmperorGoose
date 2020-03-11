@@ -76,6 +76,7 @@ public class RobotContainer {
     configureSmartDashboard();
     
   }
+
     
   // Set default behaviors for subsystems which should start active
   public void configureDefaultBehaviors(boolean isTestMode) {
@@ -110,7 +111,7 @@ public class RobotContainer {
   {
     SmartDashboard.putNumber("ShootLayup Setpoint", Constants.RPM_LAYUP);
     SmartDashboard.putNumber("ShootFar Setpoint", Constants.RPM_FAR);
-    SmartDashboard.putNumber("RPM Update",0);
+    SmartDashboard.putNumber("RPM Update", 0);
   }
 
   /**
