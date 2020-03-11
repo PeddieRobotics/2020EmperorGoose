@@ -10,6 +10,13 @@ public class LookupTable{
         
     }
     public double get(double input){
+       if(input<keys[0]){
+       return 2700;
+       }
+       else if(input>keys[keys.length-1]){
+        return 2925;
+       }
+       else{
         int low_i = 0; 
         int up_i = 0; 
         for(int i =0; i < keys.length; i++){
@@ -23,6 +30,7 @@ public class LookupTable{
         double upperWeight = 1 -(keys[up_i]-input)/(keys[up_i]-keys[low_i]);
         return lowerWeight*values[low_i] + upperWeight*values[up_i];
     }
+}
     public void update(double add){
      for(int i=0; i<values.length;i++){
         values[i]+=add;

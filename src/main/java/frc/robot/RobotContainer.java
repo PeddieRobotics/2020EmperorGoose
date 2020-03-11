@@ -110,6 +110,7 @@ public class RobotContainer {
   {
     SmartDashboard.putNumber("ShootLayup Setpoint", Constants.RPM_LAYUP);
     SmartDashboard.putNumber("ShootFar Setpoint", Constants.RPM_FAR);
+    SmartDashboard.putNumber("RPM Update",0);
   }
 
   /**
