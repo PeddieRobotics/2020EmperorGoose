@@ -11,6 +11,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,38 +19,22 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.paths.BumpMidTest;
-import frc.paths.BumpMidTest2;
-import frc.paths.BumpMidTest3;
-import frc.paths.BumpMidTest4;
-import frc.paths.BumpMidTest5;
-import frc.paths.BumpMidTest6;
-import frc.paths.BumpMidTest7;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.paths.EightFeet;
 import frc.paths.FourFeet;
 import frc.paths.GetThreeFromTrench;
 import frc.paths.GetTwoFromTrench;
-import frc.paths.LeftHandTurn;
-import frc.paths.RightHandTurn;
 import frc.paths.SixFeet;
-import frc.paths.SixFeetOtherWay;
 import frc.paths.TenFeetStraight;
-import frc.paths.Trench8Ball;
-import frc.paths.Trench8BallReverse;
-import frc.paths.TurnRad3;
 import frc.paths.TwelveFeet;
 import frc.robot.Auto.HelixPathFollower;
-import frc.robot.commands.AutoCommands.ShootNTimes;
 import frc.robot.commands.DriveCommands.Drive;
 import frc.robot.commands.DriveCommands.TurnToAngle;
-import frc.robot.commands.FlywheelCommands.ShootFromFar;
-import frc.robot.commands.FlywheelCommands.StartFlywheel;
 import frc.robot.commands.IntakeCommands.StartIntake;
 import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.LimelightCommands.Centering;
 import frc.robot.commands.LimelightCommands.TurnUntilSeesTarget;
 import frc.robot.commands.TowerCommands.IndexPowerCells;
-import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
@@ -58,36 +43,40 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Tower;
 
+
+
 public class RobotContainer {
 
   // The robot's subsystems are defined here...
   private final Drivetrain m_driveTrain;
-  private final Tower m_tower;
-  private final Hopper m_hopper;
-  private final Flywheel m_flywheel;
-  private final Intake m_intake;
-  private final Climber m_climber;
-  private final Limelight m_limelight;
+  private Tower m_tower;
+  private Hopper m_hopper;
+  private Flywheel m_flywheel;
+  private Intake m_intake;
+  private  Climber m_climber;
+  private Limelight m_limelight;
 
   private SendableChooser<String> chooser;
 
   // Operator interface (controls for driver and operator)
   private OI oi;
-
+  Joystick leftJoystick;
+  JoystickButton button1;
   public RobotContainer() {
     // Set up the command looper to manage command scheduling
-
-    // Initialize all subsystems except drivetrain
+    leftJoystick = new Joystick(0);
+    button1 = new JoystickButton(leftJoystick,1);
+      // Initialize all subsystems except drivetrain
     m_driveTrain = new Drivetrain();
-    m_tower = new Tower();
-    m_hopper = new Hopper();
-    m_flywheel = new Flywheel();
-    m_intake = new Intake();
-    m_climber = new Climber();
-    m_limelight = new Limelight();
+  //  m_tower = new Tower();
+  //  m_hopper = new Hopper();
+ //   m_flywheel = new Flywheel();
+ //   m_intake = new Intake();
+ //   m_climber = new Climber();
+ //   m_limelight = new Limelight();
     
     // Set up driver and operator joysticks, along with all of their buttons
-    oi = new OI(m_driveTrain, m_tower, m_hopper, m_flywheel, m_intake, m_climber, m_limelight);
+    //oi = new OI(m_driveTrain, m_tower, m_hopper, m_flywheel, m_intake, m_climber, m_limelight);
     
     configureAutoRoutines();
     configureSmartDashboard();
@@ -130,9 +119,13 @@ public class RobotContainer {
   }
 
   public void configureSmartDashboard()
-  {
+  {    
+    SmartDashboard.putNumber("velocity const",20); 
+    SmartDashboard.putNumber("max vel",3000);
     SmartDashboard.putNumber("ShootLayup Setpoint", Constants.RPM_LAYUP);
     SmartDashboard.putNumber("ShootFar Setpoint", Constants.RPM_FAR);
+    SmartDashboard.putNumber("angle goal",20);
+    button1.whenPressed(new TurnToAngle(m_driveTrain, 45));
   }
 
   /**
@@ -157,21 +150,11 @@ public class RobotContainer {
     }
     else if(autoRoutineFromChooser == "Shoot3Get3TrenchShoot3"){
       return new SequentialCommandGroup(
-        new ParallelRaceGroup(
-          new Centering(m_limelight, m_driveTrain, 0, false),
-          new WaitCommand(4)
-        ),
-        new ParallelRaceGroup(new StartIntake(m_intake, m_hopper, m_tower), 
-          new TurnToAngle(m_driveTrain, 180-m_driveTrain.returnAngle())),
-        new ParallelRaceGroup(
-          new HelixPathFollower(new GetThreeFromTrench(), m_driveTrain),
-          new WaitCommand(8)
-        ),
-        new ParallelRaceGroup(new StopIntake(m_intake, m_hopper),
-          new HelixPathFollower(new SixFeet(), m_driveTrain).reverse(),
-          new WaitCommand(3)),
-        new TurnUntilSeesTarget(m_driveTrain, m_limelight),
-        new Centering(m_limelight, m_driveTrain, 0, false)
+      new TurnToAngle(m_driveTrain, 180),  
+      new HelixPathFollower(new FourFeet(),m_driveTrain),
+      new TurnToAngle(m_driveTrain, 180),
+      new HelixPathFollower(new FourFeet(), m_driveTrain)
+        
       );
         
     }

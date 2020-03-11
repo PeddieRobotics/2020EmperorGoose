@@ -18,14 +18,15 @@ public class Intake extends SubsystemBase {
 
   public Intake() {
 
-    intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
-
+   
     if(Constants.COMPETITION_ROBOT){
       intakeMotorTalon= new TalonSRX(9);//intake is a talon on both robots
       intakeMotorTalon.configContinuousCurrentLimit(20,0);
       intakeMotorTalon.configPeakCurrentDuration(100, 0);   
       intakeMotorTalon.enableCurrentLimit(true);
       intakeMotorTalon.configPeakCurrentLimit(30, 0);
+      intakeSolenoid = new Solenoid(Constants.SOLENOID_INTAKE);
+
     }
     else{
       intakeMotorVictor = new VictorSPX(9);
@@ -33,6 +34,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void raiseIntake(){
+    if(Constants.COMPETITION_ROBOT)
     intakeSolenoid.set(false);
   }
 

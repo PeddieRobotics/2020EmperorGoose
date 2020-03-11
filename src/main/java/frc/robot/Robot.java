@@ -17,9 +17,9 @@ public class Robot extends TimedRobot {
     PortForwarder.add(5805, "10.58.95.11", 5805);// back end data for web interface
     PortForwarder.add(5800, "10.58.95.11", 5800);// stream for web interface
     m_RobotContainer = new RobotContainer();
-    UsbCamera driverCamera = CameraServer.getInstance().startAutomaticCapture(0);
-    driverCamera.setExposureAuto();
-    driverCamera.setFPS(24);
+//    UsbCamera driverCamera = CameraServer.getInstance().startAutomaticCapture(0);
+ //   driverCamera.setExposureAuto();
+ //   driverCamera.setFPS(24);
     SmartDashboard.putNumber("lastState", 0);
     m_RobotContainer.setCoastMode();
   }
@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
 
   public void autonomousInit() {
     clearCommmandScheduler();
-    m_RobotContainer.configureDefaultBehaviors(false);
+   // m_RobotContainer.configureDefaultBehaviors(false);
     m_RobotContainer.resetGyro();
     if(!(m_RobotContainer.getAutonomousCommand()==null)){
       CommandScheduler.getInstance().schedule(m_RobotContainer.getAutonomousCommand());
@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
   
   public void teleopInit() {
     clearCommmandScheduler();
-    m_RobotContainer.configureDefaultBehaviors(false);
+    //m_RobotContainer.configureDefaultBehaviors(false);
     m_RobotContainer.setCoastMode();
   }
 

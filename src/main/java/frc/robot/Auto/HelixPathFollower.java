@@ -37,15 +37,24 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
   private double RpmToFeetPerSecond = (Math.PI * (6.25 / 12.0)) / (60.0 * 10.6666);
   
   public HelixPathFollower(Path path, Drivetrain drivetrain) {
+    
     super(path);
+    
     m_drivetrain = drivetrain;
+    
     serv = new CSVServer();// generate a server
+    
     points= new ArrayList<String[]>();
+    
     String[] header = { "right vel", "real right vel", " corrected righ vel", "left vel", " real left vel", "corrected left vel", 
     "real heading", "path heading" };
+    
     points.add(header);
+    
     addRequirements(drivetrain);
+
     // Use addRequirements() here to declare subsystem dependencies.
+  
   }
 
   @Override
@@ -78,25 +87,34 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
   }
   @Override
     public void end(boolean interrupted){
-      super.end(interrupted);
+      
+      super.end(interrupted);//stop the notifiers
+      
       m_drivetrain.setBrake();
       m_drivetrain.arcadeDrive(0, 0);
       m_drivetrain.run();
       m_drivetrain.setTurn(0);
       m_drivetrain.setSpeed(0);
       m_drivetrain.run();
+      
       if(shouldSendDataAcrossNetwork == true) {
+      
         try {
+          
           points.add(m_drivetrain.getPIDVariables());
           DriverStation.reportError("sending data",false);
           DriverStation.reportError("dist. traveled "+m_drivetrain.getAverageDistance()/ticksPerFoot,false);
           serv.sendDataAccrossNetwork(points);
           DriverStation.reportError("sent data", false);
+
         } catch (IOException e) {
+          
           DriverStation.reportError("some sort of erro", false);
           // TODO Auto-generated catch block
           e.printStackTrace();
+        
         }
+      
       }
     }
   @Override

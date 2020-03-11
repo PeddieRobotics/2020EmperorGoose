@@ -17,10 +17,17 @@ public class TurnToAngle extends CommandBase {
 
   private Drivetrain m_drivetrain;
   private double goalAngle;
-
+  private double realGoalAngle;
+  private double startAngle; 
+  private double velocityConst = 45;
+  private double maxVel = 2700;
   public TurnToAngle(Drivetrain drivetrain, double angle) {
     goalAngle = angle;
+    realGoalAngle = angle;
     m_drivetrain = drivetrain;
+    SmartDashboard.putNumber("vel we're giving it",0);
+    SmartDashboard.putNumber("ang diff",0);
+     
     addRequirements(drivetrain);
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -29,14 +36,20 @@ public class TurnToAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    startAngle = m_drivetrain.unBoundedAngle();
+    goalAngle= startAngle+realGoalAngle;
+
     m_drivetrain.setCoast();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drivetrain.setTurn(-.3);
-    m_drivetrain.run();
+
+    
+    double velocity = Math.min(maxVel,(goalAngle-m_drivetrain.unBoundedAngle())*velocityConst); 
+    SmartDashboard.putNumber("vel we're giving it",velocity);
+    m_drivetrain.setVelocity(-velocity, velocity, 0, 0, 0);
   }
 
   // Called once the command ends or is interrupted.
@@ -51,6 +64,8 @@ public class TurnToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(goalAngle-m_drivetrain.returnAngle()) < 2;
+    SmartDashboard.putNumber("ang diff",goalAngle-m_drivetrain.unBoundedAngle());
+    
+    return Math.abs(goalAngle-m_drivetrain.unBoundedAngle()) < 1;
   }
 }
