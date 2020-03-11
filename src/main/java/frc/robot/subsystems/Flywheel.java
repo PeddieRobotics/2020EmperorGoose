@@ -73,6 +73,11 @@ public class Flywheel extends SubsystemBase {
 
   }
 
+  public void fullSpeed(){
+    currentMode = FlywheelModeType.SHOOTING;
+    flyWheelForward.setPercent(1);
+  }
+  
   public void setHood(boolean isUp){
    
     hSolenoid.set(isUp);
