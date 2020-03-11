@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
 
   public void autonomousInit() {
     clearCommmandScheduler();
-    //m_RobotContainer.configureDefaultBehaviors(false);
+    m_RobotContainer.configureDefaultBehaviors(false);
     m_RobotContainer.resetGyro();
     if(!(m_RobotContainer.getAutonomousCommand()==null)){
       CommandScheduler.getInstance().schedule(m_RobotContainer.getAutonomousCommand());
@@ -61,7 +61,7 @@ public class Robot extends TimedRobot {
   
   public void teleopInit() {
     clearCommmandScheduler();
-   // m_RobotContainer.configureDefaultBehaviors(false);
+    m_RobotContainer.configureDefaultBehaviors(false);
     m_RobotContainer.setCoastMode();
   }
 

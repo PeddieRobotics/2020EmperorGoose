@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.paths.EightFeet;
 import frc.paths.FourFeet;
+import frc.paths.GetMiddleBalls;
 import frc.paths.GetThreeFromTrench;
 import frc.paths.GetTwoFromTrench;
 import frc.paths.MiddleTwoThenShoot;
@@ -76,12 +77,12 @@ public class RobotContainer {
     button1 = new JoystickButton(leftJoystick,1);
       // Initialize all subsystems except drivetrain
     m_driveTrain = new Drivetrain();
-    //m_tower = new Tower();
-    //m_hopper = new Hopper();
-   // m_flywheel = new Flywheel();
-    //m_intake = new Intake();
-    //m_climber = new Climber();
-    //m_limelight = new Limelight();
+    m_tower = new Tower();
+    m_hopper = new Hopper();
+    m_flywheel = new Flywheel();
+    m_intake = new Intake();
+    m_climber = new Climber();
+    m_limelight = new Limelight();
     
     // Set up driver and operator joysticks, along with all of their buttons
     oi = new OI(m_driveTrain, m_tower, m_hopper, m_flywheel, m_intake, m_climber, m_limelight);
@@ -124,6 +125,7 @@ public class RobotContainer {
     chooser.addOption("Trench8Ball","Trench8Ball");
     chooser.addOption("BumpMidTest","BumpMidTest");
     chooser.addOption("TwoMiddleBall", "TwoMiddleBall");
+    chooser.addOption("CollectTheMiddle", "CollectTheMiddle");
     SmartDashboard.putData("Auto routine", chooser);
   }
 
@@ -173,7 +175,7 @@ public class RobotContainer {
         new AutoStopIntake(m_intake),
         new TurnToAngle(m_driveTrain, 180),
         new ResetGyro(m_driveTrain),
-        new HelixPathFollower(new TenFeetStraight(), m_driveTrain).sendData(),
+        new HelixPathFollower(new TenFeetStraight(), m_driveTrain),
         new ParallelRaceGroup(
           //new ShootCounter(m_tower, 2),
           new Centering(m_limelight, m_driveTrain, 0, false),
@@ -207,10 +209,35 @@ public class RobotContainer {
     }
     else if(autoRoutineFromChooser == "TwoMiddleBall"){
       return new SequentialCommandGroup(
+        //new TurnToAngle(m_driveTrain, 180),
+        //new ResetGyro(m_driveTrain),
+        new AutoStartIntake(m_intake),
+        new HelixPathFollower(new MiddleTwoThenShoot(), m_driveTrain),
+        new AutoStopIntake(m_intake)
+      );
+    }
+    else if(autoRoutineFromChooser == "CollectTheMiddle"){
+      return new SequentialCommandGroup(
         new ParallelRaceGroup(
-          new StartIntake(m_intake, m_hopper, m_tower),
-          new HelixPathFollower(new MiddleTwoThenShoot(), m_driveTrain)
-        
+          new ShootCounter(m_tower, 3),
+          new Centering(m_limelight, m_driveTrain, 0, false),
+          new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
+          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
+        ),
+        new TurnToAngle(m_driveTrain, 110-Math.abs(m_limelight.getTx())), 
+        new ResetGyro(m_driveTrain), 
+        new AutoStartIntake(m_intake),
+        new HelixPathFollower(new GetMiddleBalls(), m_driveTrain),
+        new AutoStopIntake(m_intake),
+        new TurnUntilSeesTarget(m_driveTrain, m_limelight),
+        new ResetGyro(m_driveTrain),
+        new HelixPathFollower(new EightFeet(), m_driveTrain),
+        new TurnUntilSeesTarget(m_driveTrain, m_limelight),
+        new ParallelRaceGroup(
+          new ShootCounter(m_tower, 3),
+          new Centering(m_limelight, m_driveTrain, 0, false),
+          new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
+          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
         )
         
       );
