@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -25,8 +26,9 @@ public class Tower extends SubsystemBase {
   private TowerModeType currentMode;
 
   private NEO topMotor, bottomMotor;
-  private final AnalogInput m_topSensor0, m_topSensor1, m_bottomSensor2, m_bottomSensor3;
-  
+  private AnalogInput m_topSensor0, m_topSensor1, m_bottomSensor2, m_bottomSensor3;
+  private DigitalInput m_bottomSensor7, m_middleSensor8, m_topSensor9; 
+
   private MovingAverage bottom3Avg, bottom2Avg, top1Avg, top0Avg;
 
   public Tower() {
@@ -35,11 +37,13 @@ public class Tower extends SubsystemBase {
 
     topMotor = new NEO( Constants.TOWER_BOTTOM );
     bottomMotor = new NEO( Constants.TOWER_TOP );
+    
     topMotor.setBrake();
     bottomMotor.setBrake();
-    
+    topMotor.setSmartCurrentLimit(15);
+    bottomMotor.setSmartCurrentLimit(15);
+
     bottom3Avg = new MovingAverage(5);
-    
     bottom2Avg = new MovingAverage(20);
     top1Avg = new MovingAverage(5);
     top0Avg = new MovingAverage(3);
@@ -48,8 +52,7 @@ public class Tower extends SubsystemBase {
     m_topSensor1 = new AnalogInput(1);
     m_bottomSensor2 = new AnalogInput(2);
     m_bottomSensor3 = new AnalogInput(3);
-    topMotor.setSmartCurrentLimit(15);
-    bottomMotor.setSmartCurrentLimit(15);
+    
   }
 
   @Override
@@ -117,12 +120,17 @@ public class Tower extends SubsystemBase {
    * @return boolean of whether there is a ball at the base of the tower or not
    */
   public boolean senses_ball_Bottom() {
-    bottom2Avg.add(m_bottomSensor2.getVoltage()+m_bottomSensor3.getVoltage());
+    if(Constants.COMPETITION_ROBOT){
+      bottom2Avg.add(m_bottomSensor2.getVoltage()+m_bottomSensor3.getVoltage());
 
-    if ( bottom2Avg.get()< 7) {
-      return true;
-    } else {
-      return false;
+      if ( bottom2Avg.get()< 7) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    else{
+      return !m_bottomSensor7.get();
     }
   }
 
@@ -131,28 +139,39 @@ public class Tower extends SubsystemBase {
    * @return boolean of whether there is a ball at the top of the tower or not
    */
   public boolean senses_ball_Top0() {
-    top0Avg.add(m_topSensor0.getVoltage());
-    SmartDashboard.putNumber("Top0Avg", top0Avg.get());
-    if ( top0Avg.get() < 3.0 ) {
-      return true;
-    } else {
-      return false;
+    if(Constants.COMPETITION_ROBOT){
+      top0Avg.add(m_topSensor0.getVoltage());
+      SmartDashboard.putNumber("Top0Avg", top0Avg.get());
+      if ( top0Avg.get() < 3.0 ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    else{
+      return !m_topSensor9.get();
     }
 
   }
   
   public boolean senses_ball_Top1() {
-    top1Avg.add(m_topSensor1.getVoltage());
-    if ( top1Avg.get() < 3.0 ) {
-      return true;
-    } else {
-      return false;
+    if(Constants.COMPETITION_ROBOT){
+      top1Avg.add(m_topSensor1.getVoltage());
+      if ( top1Avg.get() < 3.0 ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    else{
+      return !m_middleSensor8.get();
     }
   }
 
   public void stopAll(){
     runMotors(0.0);
   }
+
   public double topMotorSpeed(){
     return topMotor.getEncoder().getVelocity();
   }

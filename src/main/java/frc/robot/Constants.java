@@ -77,7 +77,7 @@ public final class Constants {
     public static final double JOYSTICK_SPEED_SCALE_FACTOR = 1.0;
     public static final double JOYSTICK_TURN_SCALE_FACTOR = 1.0;
 
-    public static final boolean COMPETITION_ROBOT = true;
+    public static final boolean COMPETITION_ROBOT = false;
 
     public static final double SLOW_MODE_SPEED_SCALE = 0.75;
     public static final double SLOW_MODE_TURN_SCALE = 0.75;

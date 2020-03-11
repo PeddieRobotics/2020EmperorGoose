@@ -198,16 +198,7 @@ public class OI {
     
     driverButtonLeftStick.toggleWhenPressed(new ToggleDriveSlow(m_driveTrain, Constants.SLOW_MODE_SPEED_SCALE, Constants.SLOW_MODE_TURN_SCALE));
 
-    //driverButtonY.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel, Constants.RPM_LAYUP));
-  
-    driverButtonX.whenPressed(new ResetGyro(m_driveTrain));
-    driverButtonY.whenPressed(new TurnToAngle(m_driveTrain, 0));
-    driverButtonB.whenPressed(
-      new SequentialCommandGroup(
-        new TurnUntilSeesTarget(m_driveTrain, m_limelight),
-        new ParallelRaceGroup(
-          new Centering(m_limelight, m_driveTrain, 0, false),
-          new WaitCommand(4))));
+    driverButtonY.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel, Constants.RPM_LAYUP));
 
   }
 

@@ -8,43 +8,29 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 
 public class Climber extends SubsystemBase {
 
-  //private Solenoid leftArmSolenoid, rightArmSolenoid;
-  
-  private boolean isUp;
+  private Solenoid leftArmSolenoid, rightArmSolenoid;
 
   public Climber() {
-    
-    isUp = false;
-
    // leftArmSolenoid = new Solenoid(Constants.SOLENOID_CLIMBER_1);
    // rightArmSolenoid = new Solenoid(Constants.SOLENOID_CLIMBER_2);
 
   }
 
   public boolean isClimberUp(){
-    return isUp;
+    return (leftArmSolenoid.get() && rightArmSolenoid.get());
   }
 
   public void raiseClimber(){
-   // leftArmSolenoid.set(true);
-   // rightArmSolenoid.set(true);
-
-    isUp = true;
+   leftArmSolenoid.set(true);
+   rightArmSolenoid.set(true);
   }
 
   public void lowerClimber(){
-    //leftArmSolenoid.set(false);
-    //rightArmSolenoid.set(false);
-
-    isUp = false;
+    leftArmSolenoid.set(false);
+    rightArmSolenoid.set(false);
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run
-  }
 }
