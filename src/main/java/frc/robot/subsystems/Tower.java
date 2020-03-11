@@ -43,15 +43,24 @@ public class Tower extends SubsystemBase {
     topMotor.setSmartCurrentLimit(15);
     bottomMotor.setSmartCurrentLimit(15);
 
-    bottom3Avg = new MovingAverage(5);
-    bottom2Avg = new MovingAverage(20);
-    top1Avg = new MovingAverage(5);
-    top0Avg = new MovingAverage(3);
+    if(Constants.COMPETITION_ROBOT){
+      
+      bottom3Avg = new MovingAverage(5);
+      bottom2Avg = new MovingAverage(20);
+      top1Avg = new MovingAverage(5);
+      top0Avg = new MovingAverage(3);
 
-    m_topSensor0 = new AnalogInput(0);
-    m_topSensor1 = new AnalogInput(1);
-    m_bottomSensor2 = new AnalogInput(2);
-    m_bottomSensor3 = new AnalogInput(3);
+      m_topSensor0 = new AnalogInput(0);
+      m_topSensor1 = new AnalogInput(1);
+      m_bottomSensor2 = new AnalogInput(2);
+      m_bottomSensor3 = new AnalogInput(3);
+    }
+    else{
+      m_bottomSensor7 = new DigitalInput(7);
+      m_middleSensor8 = new DigitalInput(8);
+      m_topSensor9 = new DigitalInput(9);
+    }
+    
     
   }
 
