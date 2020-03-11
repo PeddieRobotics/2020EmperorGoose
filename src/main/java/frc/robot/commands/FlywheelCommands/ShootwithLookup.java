@@ -23,11 +23,14 @@ public class ShootwithLookup extends CommandBase {
   private boolean stopFlywheelPostShot;
   private LookupTable lookupTable;
   private double speed;
+  private boolean useLookup;
 
-  public ShootwithLookup(Flywheel f, Limelight l, boolean s) {
-    m_flywheel = f;
-    m_limelight = l;
-    stopFlywheelPostShot = s;
+  public ShootwithLookup(Flywheel flywheel, Limelight lime, boolean stop, boolean withLookup ) {
+    m_flywheel = flywheel;
+    m_limelight = lime;
+    stopFlywheelPostShot = stop;
+    useLookup = withLookup;
+
     try {
       lookupTable = new LookupTable(Constants.THOR_VALS, Constants.FLYWHEEL_RPMS);
     } catch (Exception e) {
@@ -39,14 +42,17 @@ public class ShootwithLookup extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(SmartDashboard.getNumber("ShootFar Setpoint", speed)>=2000){
-      m_flywheel.updateSetpoint(SmartDashboard.getNumber("ShootFar Setpoint", speed));
-    }
-    else{
-      lookupTable.update(SmartDashboard.getNumber("ShootFar Setpoint", speed));
+    if(useLookup){
+      lookupTable.update(SmartDashboard.getNumber("RPM Update", 0));
       speed=lookupTable.get(m_limelight.getThor());
       m_flywheel.updateSetpoint(speed);
     }
+    else m_flywheel.updateSetpoint(Constants.RPM_FAR);
+
+    if(SmartDashboard.getNumber("ShootFar Setpoint", speed)!=0){
+      m_flywheel.updateSetpoint(SmartDashboard.getNumber("ShootFar Setpoint", speed));
+    }
+    
     m_flywheel.setHood(true);
   }
   // Called every time the scheduler runs while the command is scheduled.

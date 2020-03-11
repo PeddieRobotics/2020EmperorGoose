@@ -7,7 +7,6 @@ import frc.robot.Constants;
 import frc.robot.Auto.PIDClasses.NEO;
 import frc.robot.Auto.PIDClasses.NEOPIDWithSmartDashboard;
 import frc.robot.Framework.MovingAverage;
-import frc.robot.Framework.LookupTable;
 import frc.robot.Framework.Logging.CSVLogger;
 
 public class Flywheel extends SubsystemBase {
