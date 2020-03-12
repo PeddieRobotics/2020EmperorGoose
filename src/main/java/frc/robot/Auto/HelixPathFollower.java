@@ -17,6 +17,7 @@ import com.team319.trajectory.Path;
 import com.team319.trajectory.Path.SegmentValue;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Framework.Logging.CSVServer;
 import frc.robot.subsystems.Drivetrain;
@@ -27,25 +28,33 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
    */
   Drivetrain m_drivetrain;
 
-  //private PIDController headingController = new PIDController(10, 0, 0, 0.01);
-  //private PIDController distanceController = new PIDController(2, 0, 0, 0.01);
-  private PIDController headingController = new PIDController(10, 0, 0, 0.001);
-  private PIDController distanceController = new PIDController(0, 0, 0, 0.001);
+  private PIDController headingController = new PIDController(5, 0, 0, 0.01);
+  private PIDController distanceController = new PIDController(0.1, 0, 0, 0.01);
   ArrayList<String[]> points;
   private double ticksPerFoot = 6.5237d;
   CSVServer serv;
   private double feetPerSecondToRpm = (60.0 * 10.6666) / (Math.PI * (6.25 / 12.0));
   private double RpmToFeetPerSecond = (Math.PI * (6.25 / 12.0)) / (60.0 * 10.6666);
+  
   public HelixPathFollower(Path path, Drivetrain drivetrain) {
+    
     super(path);
+    
     m_drivetrain = drivetrain;
     
     serv = new CSVServer();// generate a server
+    
     points= new ArrayList<String[]>();
-    String[] header = { "right vel", "real right vel", " left vel", " real left vel", "real heading", "path heading" };
+    
+    String[] header = { "right vel", "real right vel", " corrected righ vel", "left vel", " real left vel", "corrected left vel", 
+    "real heading", "path heading" };
+    
     points.add(header);
+    
     addRequirements(drivetrain);
+
     // Use addRequirements() here to declare subsystem dependencies.
+  
   }
 
   @Override
@@ -74,46 +83,56 @@ public class HelixPathFollower extends HelixFollowerNewCommand {
 
   @Override
   public double getCurrentHeading() {
-    // TODO Auto-generated method stub
-    
-    return Math.toRadians(m_drivetrain.returnAngle());
+    return trajectory.getValue(0, SegmentValue.HEADING) + Math.toRadians(m_drivetrain.returnAngle());
   }
   @Override
     public void end(boolean interrupted){
-      super.end(interrupted);
-      DriverStation.reportError("END OF HELIX FOLLOWER", false);
+      
+      super.end(interrupted);//stop the notifiers
+      
       m_drivetrain.setBrake();
       m_drivetrain.arcadeDrive(0, 0);
       m_drivetrain.run();
       m_drivetrain.setTurn(0);
       m_drivetrain.setSpeed(0);
       m_drivetrain.run();
-      try {
-        points.add(m_drivetrain.getPIDVariables());
-        DriverStation.reportError("sending data",false);
-        DriverStation.reportError("dist. traveled "+m_drivetrain.getAverageDistance()/ticksPerFoot,false);
-        serv.sendDataAccrossNetwork(points);
-        DriverStation.reportError("sent data", false);
-      } catch (IOException e) {
-        DriverStation.reportError("some sort of erro", false);
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+      
+      if(shouldSendDataAcrossNetwork == true) {
+      
+        try {
+          
+          points.add(m_drivetrain.getPIDVariables());
+          DriverStation.reportError("sending data",false);
+          DriverStation.reportError("dist. traveled "+m_drivetrain.getAverageDistance()/ticksPerFoot,false);
+          serv.sendDataAccrossNetwork(points);
+          DriverStation.reportError("sent data", false);
+
+        } catch (IOException e) {
+          
+          DriverStation.reportError("some sort of erro", false);
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        
+        }
+      
       }
     }
   @Override
   public void useOutputs(double left, double right,double unLeft, double unRight) {
-    String[] currentVels = new String[6];
+    String[] currentVels = new String[8];
     currentVels[0] = "" + unRight;//un corrected right
     currentVels[1] = "" + -m_drivetrain.returnRightVelocity()*RpmToFeetPerSecond;
-    currentVels[2] = "" + -left;
-    currentVels[3] = "" + m_drivetrain.returnLeftVelocity()*RpmToFeetPerSecond;
+    currentVels[2] = "" + right;
+    currentVels[3] = "" + (-unLeft);
+    currentVels[4] = "" + m_drivetrain.returnLeftVelocity()*RpmToFeetPerSecond;
+    currentVels[5] = "" + (-left);
     if(currentSegment<trajectory.getSegmentCount()){
-      currentVels[5] = "" +Math.toDegrees(trajectory.getValue(currentSegment, SegmentValue.HEADING));
+      currentVels[7] = "" +trajectory.getValue(currentSegment, SegmentValue.HEADING);
     }else{
-      currentVels[5]=""+0;
+      currentVels[7]=""+0;
     }
     
-    currentVels[4] = ""+ m_drivetrain.returnAngle();
+    currentVels[6] = ""+ m_drivetrain.returnAngle();
     points.add(currentVels);
     //DriverStation.reportError("outputs are being used", false);
     m_drivetrain.setVelocity(left*feetPerSecondToRpm, right*feetPerSecondToRpm, 0, 0,0);

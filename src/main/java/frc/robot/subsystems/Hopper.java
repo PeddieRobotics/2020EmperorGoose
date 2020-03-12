@@ -24,15 +24,15 @@ public class Hopper extends SubsystemBase {
   public Hopper() {
     currentMode = HopperModeType.DISABLED;
     
-    floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
-    floorTalon.configPeakCurrentLimit(10, 0);
-    floorTalon.configContinuousCurrentLimit(10,0);
-    floorTalon.configPeakCurrentDuration(100, 0);  
-    floorTalon.enableCurrentLimit(true);
      /**
      * changes the motors based off if the robot is comp bot or pbot
      */
     if( Constants.COMPETITION_ROBOT ) { //comp robot has TalonSRX's
+      floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
+      floorTalon.configPeakCurrentLimit(10, 0);
+      floorTalon.configContinuousCurrentLimit(10,0);
+      floorTalon.configPeakCurrentDuration(100, 0);  
+      floorTalon.enableCurrentLimit(true);
 
       //left and right motors for the v-belts
       leftWallTalon = new TalonSRX( Constants.HOPPER_LEFT_WALL );
@@ -47,38 +47,14 @@ public class Hopper extends SubsystemBase {
       leftWallTalon.configPeakCurrentLimit(10, 0); 
       leftWallTalon.enableCurrentLimit(true);
     
-      floorTalon = new TalonSRX( Constants.HOPPER_FLOOR );
-
-   
     } else {  //pbot has VictorSPX's
 
       rightWallVictor = new VictorSPX( Constants.HOPPER_RIGHT_WALL );
       leftWallVictor = new VictorSPX( Constants.HOPPER_LEFT_WALL );
-//      floorVictor = new VictorSPX( Constants.HOPPER_FLOOR ); floor always talon
+      floorVictor = new VictorSPX( Constants.HOPPER_FLOOR );
       
     }
     
-  }
-
-  /**
-   * sets motors
-   * @param talonMotor the TalonSRX motor
-   * @param victorMotor the VictorSPX motor
-   * @param setpoint the value to set the motors to
-   * 
-   * NOTE: needs to be set with a Talon AND a Victor whether or not both are used.
-   * One of the motors is just a filler for the method to be called while the method
-   * is still like this and the comp bot & pbot not yet have the same motor types.
-   * Just include both. It's weird, but do it. Only one will be used.
-   */
-  public void setMotors( TalonSRX talonMotor, VictorSPX victorMotor, double setpoint ) {
-
-    if( Constants.COMPETITION_ROBOT ) {
-      talonMotor.set( ControlMode.PercentOutput, setpoint );
-    } else {
-      victorMotor.set( ControlMode.PercentOutput, setpoint );
-    }
-
   }
 
   /**

@@ -100,11 +100,11 @@ public class CSVClient{
      *  velocity for path following)
      */
     public static String staticDirectoryName(){
-        return "D:\\MyProfile\\Documents\\NetBeansProjects\\GraphsForCSV\\";
+        return "D:\\MyProfile\\Desktop\\2019 2020\\Robotics\\Graphs";
     }
     public String directoryName(){
-        System.out.println("D:\\MyProfile\\Documents\\NetBeansProjects\\GraphsForCSV\\"+filename);
-        return "D:\\MyProfile\\Documents\\NetBeansProjects\\GraphsForCSV\\"+filename;
+        System.out.println("D:\\MyProfile\\Desktop\\2019 2020\\Robotics\\Graphs"+filename);
+        return "D:\\MyProfile\\Desktop\\2019 2020\\Robotics\\Graphs";
     }
     /**
      * Writes across the network for whatever you wanna call it 

@@ -11,6 +11,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -18,21 +19,31 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.paths.EightFeet;
 import frc.paths.FourFeet;
+import frc.paths.GetMiddleBalls;
 import frc.paths.GetThreeFromTrench;
 import frc.paths.GetTwoFromTrench;
+import frc.paths.MiddleTwoThenShoot;
 import frc.paths.SixFeet;
 import frc.paths.TenFeetStraight;
 import frc.paths.TwelveFeet;
 import frc.robot.Auto.HelixPathFollower;
 import frc.robot.commands.DriveCommands.Drive;
 import frc.robot.commands.DriveCommands.TurnToAngle;
+import frc.robot.commands.FlywheelCommands.ShootLayup;
+import frc.robot.commands.FlywheelCommands.ShootwithLookup;
+import frc.robot.commands.IntakeCommands.AutoStartIntake;
+import frc.robot.commands.IntakeCommands.AutoStopIntake;
 import frc.robot.commands.IntakeCommands.StartIntake;
 import frc.robot.commands.IntakeCommands.StopIntake;
 import frc.robot.commands.LimelightCommands.Centering;
+import frc.robot.commands.LimelightCommands.ResetGyro;
 import frc.robot.commands.LimelightCommands.TurnUntilSeesTarget;
 import frc.robot.commands.TowerCommands.IndexPowerCells;
+import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
+import frc.robot.commands.TowerCommands.ShootCounter;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
@@ -41,26 +52,30 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Tower;
 
+
+
 public class RobotContainer {
 
   // The robot's subsystems are defined here...
   private final Drivetrain m_driveTrain;
-  private final Tower m_tower;
-  private final Hopper m_hopper;
-  private final Flywheel m_flywheel;
-  private final Intake m_intake;
-  private final Climber m_climber;
-  private final Limelight m_limelight;
+  private Tower m_tower;
+  private Hopper m_hopper;
+  private Flywheel m_flywheel;
+  private Intake m_intake;
+  private  Climber m_climber;
+  private Limelight m_limelight;
 
   private SendableChooser<String> chooser;
 
   // Operator interface (controls for driver and operator)
   private OI oi;
-
+  Joystick leftJoystick;
+  JoystickButton button1;
   public RobotContainer() {
     // Set up the command looper to manage command scheduling
-
-    // Initialize all subsystems except drivetrain
+    leftJoystick = new Joystick(0);
+    button1 = new JoystickButton(leftJoystick,1);
+      // Initialize all subsystems except drivetrain
     m_driveTrain = new Drivetrain();
     m_tower = new Tower();
     m_hopper = new Hopper();
@@ -98,17 +113,12 @@ public class RobotContainer {
 
     chooser.addOption("Get2TrenchShoot5", "Get2TrenchShoot5");
     chooser.addOption("Shoot3Get3TrenchShoot3", "Shoot3Get3TrenchShoot3");
-    chooser.addOption("4FeetTest", "4FeetTest");
-    chooser.addOption("6FeetTest", "6FeetTest");
-    chooser.addOption("8FeetTest", "8FeetTest");
-    chooser.addOption("10FeetTest", "10FeetTest");
-    chooser.addOption("12FeetTest", "12FeetTest");
-
+    chooser.addOption("CollectTheMiddle", "CollectTheMiddle");
     SmartDashboard.putData("Auto routine", chooser);
   }
 
   public void configureSmartDashboard()
-  {
+  {    
     SmartDashboard.putNumber("ShootLayup Setpoint", Constants.RPM_LAYUP);
     SmartDashboard.putNumber("ShootFar Setpoint", Constants.RPM_FAR);
     SmartDashboard.putNumber("RPM Update", 0);
@@ -137,42 +147,55 @@ public class RobotContainer {
     else if(autoRoutineFromChooser == "Shoot3Get3TrenchShoot3"){
       return new SequentialCommandGroup(
         new ParallelRaceGroup(
+          new ShootCounter(m_tower, 3),
           new Centering(m_limelight, m_driveTrain, 0, false),
-          new WaitCommand(4)
+          new ShootwithLookup(m_flywheel, m_limelight, false, true),
+          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
         ),
-        new ParallelRaceGroup(new StartIntake(m_intake, m_hopper, m_tower), 
-          new TurnToAngle(m_driveTrain, 180-m_driveTrain.returnAngle())),
+        new AutoStartIntake(m_intake),
+        new TurnToAngle(m_driveTrain, 180-Math.abs(m_limelight.getTx())), 
+        new ResetGyro(m_driveTrain), 
+        new HelixPathFollower(new TenFeetStraight(),m_driveTrain),
+        new ResetGyro(m_driveTrain),
+        new AutoStopIntake(m_intake),
+        new TurnToAngle(m_driveTrain, 180),
+        new ResetGyro(m_driveTrain),
+        new HelixPathFollower(new TenFeetStraight(), m_driveTrain),
         new ParallelRaceGroup(
-          new HelixPathFollower(new GetThreeFromTrench(), m_driveTrain),
-          new WaitCommand(8)
-        ),
-        new ParallelRaceGroup(new StopIntake(m_intake, m_hopper),
-          new HelixPathFollower(new SixFeet(), m_driveTrain).reverse(),
-          new WaitCommand(3)),
-        new TurnUntilSeesTarget(m_driveTrain, m_limelight),
-        new Centering(m_limelight, m_driveTrain, 0, false)
+          //new ShootCounter(m_tower, 2),
+          new Centering(m_limelight, m_driveTrain, 0, false),
+          new ShootwithLookup(m_flywheel, m_limelight, false, true),          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
+        )
+      
+        
       );
         
     }
-    else if(autoRoutineFromChooser == "4FeetTest"){
-      return new HelixPathFollower(new FourFeet(), m_driveTrain);
+    else if(autoRoutineFromChooser == "CollectTheMiddle"){
+      return new SequentialCommandGroup(
+        new ParallelRaceGroup(
+          new ShootCounter(m_tower, 3),
+          new Centering(m_limelight, m_driveTrain, 0, false),
+          new ShootwithLookup(m_flywheel, m_limelight, false, true),          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
+        ),
+        new TurnToAngle(m_driveTrain, 110-Math.abs(m_limelight.getTx())), 
+        new ResetGyro(m_driveTrain), 
+        new AutoStartIntake(m_intake),
+        new HelixPathFollower(new GetMiddleBalls(), m_driveTrain),
+        new AutoStopIntake(m_intake),
+        new TurnUntilSeesTarget(m_driveTrain, m_limelight),
+        new ResetGyro(m_driveTrain),
+        new HelixPathFollower(new EightFeet(), m_driveTrain),
+        new TurnUntilSeesTarget(m_driveTrain, m_limelight),
+        new ParallelRaceGroup(
+          new ShootCounter(m_tower, 3),
+          new Centering(m_limelight, m_driveTrain, 0, false),
+          new ShootwithLookup(m_flywheel, m_limelight, false, true),          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
+        )
+        
+      );
     }
-
-    else if(autoRoutineFromChooser == "6FeetTest"){
-      return new HelixPathFollower(new SixFeet(), m_driveTrain);
-    }
-
-    else if(autoRoutineFromChooser == "8FeetTest"){
-      return new HelixPathFollower(new EightFeet(), m_driveTrain);
-    }
-
-    else if(autoRoutineFromChooser == "10FeetTest"){
-      return new HelixPathFollower(new TenFeetStraight(), m_driveTrain);
-    }
-
-    else if(autoRoutineFromChooser == "12FeetTest"){
-      return new HelixPathFollower(new TwelveFeet(), m_driveTrain);
-    }
+    
     return null;
 
   }
@@ -189,7 +212,9 @@ public class RobotContainer {
     SmartDashboard.putBoolean("Intake Down", false);
 
   }
-
+  public void resetGyro(){
+    m_driveTrain.resetADIS();
+  }
   public void testAllSystems(){
     double flywheel_rpm = SmartDashboard.getNumber("Flywheel", 0.0);
     if(flywheel_rpm < 3500 && flywheel_rpm > 300){

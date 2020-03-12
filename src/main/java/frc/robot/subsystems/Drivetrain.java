@@ -67,7 +67,7 @@ public class Drivetrain extends SubsystemBase {
     rightDriveMaster.changeControlFramePeriod(3);
   
     leftStartTick = leftDriveMaster.getEncoder().getPosition();
-  
+    rightStartTick = rightDriveMaster.getEncoder().getPosition();
   }
 
   public void setJoysticks(Joystick left, Joystick right){
@@ -85,12 +85,16 @@ public class Drivetrain extends SubsystemBase {
 
   /**
    * Query the gyro for the robot's heading.
+   * Normalized to -180 to 180 range.
+   * From a zeroed gyro, positive angles are counterclockwise, negative angles are clockwise.
    * @return The robot's current angle in degrees
    */
   public double returnAngle() {
+    return Math.IEEEremainder(imu.getAngle(), 360);
+  }
+  public double unBoundedAngle(){
     return imu.getAngle();
   }
-
   /**
    * Set the left and right wheel velocity (in RPM) using the
    * acceleration and heading information to inform
