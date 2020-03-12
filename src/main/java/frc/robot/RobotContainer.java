@@ -28,6 +28,7 @@ import frc.paths.GetTwoFromTrench;
 import frc.paths.MiddleTwoThenShoot;
 import frc.paths.SixFeet;
 import frc.paths.TenFeetStraight;
+import frc.paths.Trench8Ball;
 import frc.paths.TwelveFeet;
 import frc.robot.Auto.HelixPathFollower;
 import frc.robot.commands.DriveCommands.Drive;
@@ -114,6 +115,7 @@ public class RobotContainer {
     chooser.addOption("Get2TrenchShoot5", "Get2TrenchShoot5");
     chooser.addOption("Shoot3Get3TrenchShoot3", "Shoot3Get3TrenchShoot3");
     chooser.addOption("CollectTheMiddle", "CollectTheMiddle");
+    chooser.addOption("Shoot3Get5Trench","Shoot3Get5Trench");
     SmartDashboard.putData("Auto routine", chooser);
   }
 
@@ -173,6 +175,35 @@ public class RobotContainer {
         
       );
         
+    }
+    else if(autoRoutineFromChooser == "Shoot3Get5Trench"){
+      /*return new SequentialCommandGroup(
+        new TurnToAngle(m_driveTrain, 180),
+        new ResetGyro(m_driveTrain), 
+        new HelixPathFollower(new Trench8Ball(),m_driveTrain));*/
+
+      return new SequentialCommandGroup(
+        new ParallelRaceGroup(
+          new ShootCounter(m_tower, 3),
+          new Centering(m_limelight, m_driveTrain, 0, false),
+          new ShootwithLookup(m_flywheel, m_limelight, false, true),
+          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
+        ),
+        new AutoStartIntake(m_intake),
+        new TurnToAngle(m_driveTrain, 180), 
+        new ResetGyro(m_driveTrain), 
+        new HelixPathFollower(new Trench8Ball(),m_driveTrain),
+        new ResetGyro(m_driveTrain),
+        new AutoStopIntake(m_intake),
+        new HelixPathFollower(new Trench8Ball(), m_driveTrain).reverse(),
+        new TurnUntilSeesTarget(m_driveTrain, m_limelight),
+        new ParallelRaceGroup(
+          new ShootCounter(m_tower, 5),
+          new Centering(m_limelight, m_driveTrain, 0, false),
+          new ShootwithLookup(m_flywheel, m_limelight, false, true),          
+          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
+        )
+      );
     }
     else if(autoRoutineFromChooser == "CollectTheMiddle"){
       return new SequentialCommandGroup(

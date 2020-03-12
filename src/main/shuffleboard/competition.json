@@ -51,17 +51,6 @@
               "_title": "/SmartDashboard/Auto routine"
             }
           },
-          "0,2": {
-            "size": [
-              1,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/velocity of flywheel",
-              "_title": "/SmartDashboard/velocity of flywheel"
-            }
-          },
           "1,2": {
             "size": [
               1,
@@ -145,6 +134,50 @@
               "_type": "Text View",
               "_source0": "network_table:///limelight/ty",
               "_title": "/limelight/ty"
+            }
+          },
+          "8,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/ang diff",
+              "_title": "SmartDashboard/ang diff"
+            }
+          },
+          "7,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/angle ",
+              "_title": "SmartDashboard/angle "
+            }
+          },
+          "5,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///limelight/tx",
+              "_title": "limelight/tx"
+            }
+          },
+          "6,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/unbounded angle ",
+              "_title": "SmartDashboard/unbounded angle "
             }
           }
         }

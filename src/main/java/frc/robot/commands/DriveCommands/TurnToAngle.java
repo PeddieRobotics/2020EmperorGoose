@@ -17,13 +17,10 @@ public class TurnToAngle extends CommandBase {
 
   private Drivetrain m_drivetrain;
   private double goalAngle;
-  private double realGoalAngle;
-  private double startAngle; 
-  private double velocityConst = 39;
+  private double velocityConst = 36;
   private double maxVel = 2700;
   public TurnToAngle(Drivetrain drivetrain, double angle) {
     goalAngle = angle;
-    realGoalAngle = angle;
     m_drivetrain = drivetrain;
     SmartDashboard.putNumber("vel we're giving it",0);
     SmartDashboard.putNumber("ang diff",0);
@@ -36,8 +33,6 @@ public class TurnToAngle extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    startAngle = m_drivetrain.unBoundedAngle();
-    goalAngle= startAngle+realGoalAngle;
 
     m_drivetrain.setCoast();
   }
@@ -46,8 +41,8 @@ public class TurnToAngle extends CommandBase {
   @Override
   public void execute() {
 
-    
-    double velocity = Math.min(maxVel,(goalAngle-m_drivetrain.unBoundedAngle())*velocityConst); 
+    double velocity = Math.min(maxVel,(goalAngle-m_drivetrain.returnAngle())*velocityConst); 
+
     SmartDashboard.putNumber("vel we're giving it",velocity);
     m_drivetrain.setVelocity(-velocity, velocity, 0, 0, 0);
   }
@@ -64,8 +59,10 @@ public class TurnToAngle extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    SmartDashboard.putNumber("ang diff",goalAngle-m_drivetrain.unBoundedAngle());
+    double currentAngle = m_drivetrain.returnAngle();
+    double angleDiff = Math.abs(goalAngle-currentAngle);
+    SmartDashboard.putNumber("ang diff",angleDiff);
     
-    return Math.abs(goalAngle-m_drivetrain.unBoundedAngle()) < 1;
+    return angleDiff < 1;
   }
 }

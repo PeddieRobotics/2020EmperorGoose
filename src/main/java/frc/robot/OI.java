@@ -200,6 +200,9 @@ public class OI {
 
     driverButtonY.toggleWhenPressed(new ToggleFlywheelOnOff(m_flywheel, Constants.RPM_LAYUP));
 
+    driverButtonB.whenPressed(new ResetGyro(m_driveTrain));
+
+    driverButtonX.whenPressed(new TurnToAngle(m_driveTrain, 180));
   }
 
    /**
