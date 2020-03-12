@@ -32,8 +32,8 @@ import frc.paths.TwelveFeet;
 import frc.robot.Auto.HelixPathFollower;
 import frc.robot.commands.DriveCommands.Drive;
 import frc.robot.commands.DriveCommands.TurnToAngle;
-import frc.robot.commands.FlywheelCommands.ShootFromFar;
 import frc.robot.commands.FlywheelCommands.ShootLayup;
+import frc.robot.commands.FlywheelCommands.ShootwithLookup;
 import frc.robot.commands.IntakeCommands.AutoStartIntake;
 import frc.robot.commands.IntakeCommands.AutoStopIntake;
 import frc.robot.commands.IntakeCommands.StartIntake;
@@ -91,6 +91,7 @@ public class RobotContainer {
     configureSmartDashboard();
     
   }
+
     
   // Set default behaviors for subsystems which should start active
   public void configureDefaultBehaviors(boolean isTestMode) {
@@ -112,31 +113,15 @@ public class RobotContainer {
 
     chooser.addOption("Get2TrenchShoot5", "Get2TrenchShoot5");
     chooser.addOption("Shoot3Get3TrenchShoot3", "Shoot3Get3TrenchShoot3");
-    chooser.addOption("4FeetTest", "4FeetTest");
-    chooser.addOption("6FeetTest", "6FeetTest");
-    chooser.addOption("6feetotherway", "6feetotherway");
-    chooser.addOption("lefthandturn", "lefthandturn");
-    chooser.addOption("righthandturn", "righthandturn");
-
-    chooser.addOption("8FeetTest", "8FeetTest");
-    chooser.addOption("10FeetTest", "10FeetTest");
-    chooser.addOption("12FeetTest", "12FeetTest");
-    chooser.addOption("TurnRad3","TurnRad3");
-    chooser.addOption("Trench8Ball","Trench8Ball");
-    chooser.addOption("BumpMidTest","BumpMidTest");
-    chooser.addOption("TwoMiddleBall", "TwoMiddleBall");
     chooser.addOption("CollectTheMiddle", "CollectTheMiddle");
     SmartDashboard.putData("Auto routine", chooser);
   }
 
   public void configureSmartDashboard()
   {    
-    SmartDashboard.putNumber("velocity const",20); 
-    SmartDashboard.putNumber("max vel",3000);
     SmartDashboard.putNumber("ShootLayup Setpoint", Constants.RPM_LAYUP);
     SmartDashboard.putNumber("ShootFar Setpoint", Constants.RPM_FAR);
-    SmartDashboard.putNumber("angle goal",20);
-    button1.whenPressed(new TurnToAngle(m_driveTrain, 45));
+    SmartDashboard.putNumber("RPM Update", 0);
   }
 
   /**
@@ -164,7 +149,7 @@ public class RobotContainer {
         new ParallelRaceGroup(
           new ShootCounter(m_tower, 3),
           new Centering(m_limelight, m_driveTrain, 0, false),
-          new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
+          new ShootwithLookup(m_flywheel, m_limelight, false, true),
           new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
         ),
         new AutoStartIntake(m_intake),
@@ -179,50 +164,19 @@ public class RobotContainer {
         new ParallelRaceGroup(
           //new ShootCounter(m_tower, 2),
           new Centering(m_limelight, m_driveTrain, 0, false),
-          new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
-          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
+          new ShootwithLookup(m_flywheel, m_limelight, false, true),          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
         )
       
         
       );
         
     }
-
-    else if(autoRoutineFromChooser == "4FeetTest"){
-      return new HelixPathFollower(new FourFeet(), m_driveTrain).sendData();
-    }
-
-    else if(autoRoutineFromChooser == "6FeetTest"){
-      return new HelixPathFollower(new SixFeet(), m_driveTrain);
-    }
-
-    else if(autoRoutineFromChooser == "8FeetTest"){
-      return new HelixPathFollower(new EightFeet(), m_driveTrain);
-    }
-
-    else if(autoRoutineFromChooser == "10FeetTest"){
-      return new HelixPathFollower(new TenFeetStraight(), m_driveTrain);
-    }
-
-    else if(autoRoutineFromChooser == "12FeetTest"){
-      return new HelixPathFollower(new TwelveFeet(), m_driveTrain);
-    }
-    else if(autoRoutineFromChooser == "TwoMiddleBall"){
-      return new SequentialCommandGroup(
-        //new TurnToAngle(m_driveTrain, 180),
-        //new ResetGyro(m_driveTrain),
-        new AutoStartIntake(m_intake),
-        new HelixPathFollower(new MiddleTwoThenShoot(), m_driveTrain),
-        new AutoStopIntake(m_intake)
-      );
-    }
     else if(autoRoutineFromChooser == "CollectTheMiddle"){
       return new SequentialCommandGroup(
         new ParallelRaceGroup(
           new ShootCounter(m_tower, 3),
           new Centering(m_limelight, m_driveTrain, 0, false),
-          new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
-          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
+          new ShootwithLookup(m_flywheel, m_limelight, false, true),          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
         ),
         new TurnToAngle(m_driveTrain, 110-Math.abs(m_limelight.getTx())), 
         new ResetGyro(m_driveTrain), 
@@ -236,8 +190,7 @@ public class RobotContainer {
         new ParallelRaceGroup(
           new ShootCounter(m_tower, 3),
           new Centering(m_limelight, m_driveTrain, 0, false),
-          new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
-          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
+          new ShootwithLookup(m_flywheel, m_limelight, false, true),          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
         )
         
       );

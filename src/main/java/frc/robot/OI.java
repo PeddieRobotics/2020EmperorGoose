@@ -13,8 +13,8 @@ import frc.robot.commands.DriveCommands.SetDriveScale;
 import frc.robot.commands.DriveCommands.ToggleDriveSlow;
 import frc.robot.commands.DriveCommands.TurnToAngle;
 import frc.robot.commands.FlywheelCommands.RunFlywheelUntilTowerHasStopped;
-import frc.robot.commands.FlywheelCommands.ShootFromFar;
 import frc.robot.commands.FlywheelCommands.ShootLayup;
+import frc.robot.commands.FlywheelCommands.ShootwithLookup;
 import frc.robot.commands.FlywheelCommands.ToggleFlywheelOnOff;
 import frc.robot.commands.FlywheelCommands.ToggleHoodUpDown;
 import frc.robot.commands.HopperCommands.UnjamHopper;
@@ -125,7 +125,7 @@ public class OI {
     rightTrigger.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     rightButton2.whileHeld(new ParallelCommandGroup(
                             new Centering(m_limelight, m_driveTrain, 0, false),
-                            new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
+                            new ShootwithLookup(m_flywheel,m_limelight,false, true),
                             new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     rightButton2.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     rightButton3.whenPressed(new LowerClimber(m_climber));
@@ -188,7 +188,7 @@ public class OI {
       
     driverButtonA.whileHeld(new ParallelCommandGroup(
         new Centering(m_limelight, m_driveTrain, 0, false),
-        new ShootFromFar(m_flywheel, Constants.RPM_FAR, false),
+        new ShootwithLookup(m_flywheel, m_limelight, false, true),
         new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)));
     driverButtonA.whenReleased(new RunFlywheelUntilTowerHasStopped(m_tower, m_flywheel));
     

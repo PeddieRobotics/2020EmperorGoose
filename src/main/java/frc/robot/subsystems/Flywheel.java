@@ -17,18 +17,14 @@ public class Flywheel extends SubsystemBase {
 
   private FlywheelModeType currentMode;
 
-
   private NEO flyWheelForward, flyWheelBackward;
   private double m_setpoint;
   private MovingAverage avgOfFlyWheelSpeeds;
-
   Solenoid hSolenoid;
 
   public Flywheel() {
     currentMode = FlywheelModeType.DISABLED;
-
     m_setpoint = 0.0;
-
     hSolenoid=new Solenoid(Constants.SOLENOID_HOOD);
 
     avgOfFlyWheelSpeeds = new MovingAverage(10);
@@ -39,15 +35,15 @@ public class Flywheel extends SubsystemBase {
    // NEOPIDWithSmartDashboard flyWheelForwards = new NEOPIDWithSmartDashboard(Constants.FLYWHEEL_1);
    // NEOPIDWithSmartDashboard flyWheelBackwards = new NEOPIDWithSmartDashboard(Constants.FLYWHEEL_2);
     flyWheelForward.addPIDController( Constants.FLYWHEEL_P, Constants.FLYWHEEL_D, Constants.FLYWHEEL_I, Constants.FLYWHEEL_FF, 0 );
-    flyWheelForward.setSmartCurrentLimit(40);
-    flyWheelBackward.setSmartCurrentLimit(40);
+    flyWheelForward.setSmartCurrentLimit(50);
+    flyWheelBackward.setSmartCurrentLimit(50);
     flyWheelForward.getPIDController().setIMaxAccum(0.3, 0);
     flyWheelForward.getPIDController().setIZone(400);
     flyWheelForward.getPIDController().setOutputRange(0, 1, 0);
-    flyWheelForward.getPIDController().setSmartMotionMaxVelocity(4000, 0);
+    flyWheelForward.getPIDController().setSmartMotionMaxVelocity(5000, 0);
     flyWheelForward.changeControlFramePeriod(3);
 
-    SmartDashboard.putNumber("velocity of flywheel",flyWheelForward.getVelocity());
+    SmartDashboard.putNumber("Flywheel velocity",flyWheelForward.getVelocity());
   
   } 
 
@@ -66,6 +62,7 @@ public class Flywheel extends SubsystemBase {
     m_setpoint = setpoint;
 
     flyWheelForward.setVelocity(m_setpoint);
+    SmartDashboard.putNumber("Flywheel current",flyWheelForward.getOutputCurrent());
     SmartDashboard.putNumber("Flywheel velocity", flyWheelForward.getVelocity());
 
     avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
@@ -151,6 +148,8 @@ public class Flywheel extends SubsystemBase {
 
     avgOfFlyWheelSpeeds.add(flyWheelForward.getVelocity());
 
+    SmartDashboard.putNumber("Flywheel current",flyWheelForward.getOutputCurrent());
+    SmartDashboard.putNumber("Flywheel velocity",flyWheelForward.getVelocity());
   }
 
 
