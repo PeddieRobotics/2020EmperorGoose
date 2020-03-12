@@ -122,6 +122,8 @@ public class RobotContainer {
     SmartDashboard.putNumber("ShootLayup Setpoint", Constants.RPM_LAYUP);
     SmartDashboard.putNumber("ShootFar Setpoint", Constants.RPM_FAR);
     SmartDashboard.putNumber("RPM Update", 0);
+    SmartDashboard.putNumber("Distance", m_limelight.getDistance());
+
   }
 
   /**
@@ -164,7 +166,8 @@ public class RobotContainer {
         new ParallelRaceGroup(
           //new ShootCounter(m_tower, 2),
           new Centering(m_limelight, m_driveTrain, 0, false),
-          new ShootwithLookup(m_flywheel, m_limelight, false, true),          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
+          new ShootwithLookup(m_flywheel, m_limelight, false, true),          
+          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
         )
       
         
@@ -176,7 +179,8 @@ public class RobotContainer {
         new ParallelRaceGroup(
           new ShootCounter(m_tower, 3),
           new Centering(m_limelight, m_driveTrain, 0, false),
-          new ShootwithLookup(m_flywheel, m_limelight, false, true),          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
+          new ShootwithLookup(m_flywheel, m_limelight, false, true),          
+          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
         ),
         new TurnToAngle(m_driveTrain, 110-Math.abs(m_limelight.getTx())), 
         new ResetGyro(m_driveTrain), 
@@ -190,7 +194,8 @@ public class RobotContainer {
         new ParallelRaceGroup(
           new ShootCounter(m_tower, 3),
           new Centering(m_limelight, m_driveTrain, 0, false),
-          new ShootwithLookup(m_flywheel, m_limelight, false, true),          new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
+          new ShootwithLookup(m_flywheel, m_limelight, false, true),         
+           new RunTowerBasedOffFlyWheel(m_hopper, m_tower, m_flywheel)
         )
         
       );
@@ -220,7 +225,8 @@ public class RobotContainer {
     if(flywheel_rpm < 3500 && flywheel_rpm > 300){
       m_flywheel.setMotors(flywheel_rpm);
     }
-    m_hopper.runAll(SmartDashboard.getNumber("LeftWall", 0.0),SmartDashboard.getNumber("RightWall", 0.0),SmartDashboard.getNumber("Floor", 0.0));
+    m_hopper.runAll(SmartDashboard.getNumber("LeftWall", 0.0),
+    SmartDashboard.getNumber("RightWall", 0.0),SmartDashboard.getNumber("Floor", 0.0));
     m_tower.runTopMotor(SmartDashboard.getNumber("TopTower", 0.0));
     m_tower.runBottomMotor(SmartDashboard.getNumber("BottomTower", 0.0));
     m_intake.setIntakeMotor(SmartDashboard.getNumber("Intake Setpoint", 0.0));

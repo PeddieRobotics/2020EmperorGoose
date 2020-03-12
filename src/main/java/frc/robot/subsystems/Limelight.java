@@ -12,6 +12,7 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Framework.LookupTable;
@@ -61,6 +62,10 @@ public class Limelight extends SubsystemBase {
   public double getTy(){
     return ty.getDouble(0.0);
   }
+  public double getDistance(){
+    if(ty.getDouble(0.0)==0) return 0;
+    else return (98.25-24)/(Math.tan(Math.toRadians(25+ty.getDouble(0.0))));
+  }
   public boolean hasTarget(){
     if (limes.getEntry("tv").getDouble(0.0)==1){
       return true;
@@ -80,6 +85,7 @@ public class Limelight extends SubsystemBase {
   }
   @Override
   public void periodic() {
+    SmartDashboard.putNumber("Distance", getDistance());
     if(RobotState.isTest()){
       limes.getEntry("snapshot").setNumber(1);
     }else{

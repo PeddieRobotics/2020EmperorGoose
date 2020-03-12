@@ -124,6 +124,28 @@
               "_source0": "network_table:///limelight/tvert",
               "_title": "limelight/tvert"
             }
+          },
+          "3,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Distance",
+              "_title": "/SmartDashboard/Distance"
+            }
+          },
+          "4,4": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///limelight/ty",
+              "_title": "/limelight/ty"
+            }
           }
         }
       }
