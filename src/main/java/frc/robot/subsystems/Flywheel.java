@@ -17,18 +17,14 @@ public class Flywheel extends SubsystemBase {
 
   private FlywheelModeType currentMode;
 
-
   private NEO flyWheelForward, flyWheelBackward;
   private double m_setpoint;
   private MovingAverage avgOfFlyWheelSpeeds;
-
   Solenoid hSolenoid;
 
   public Flywheel() {
     currentMode = FlywheelModeType.DISABLED;
-
     m_setpoint = 0.0;
-
     hSolenoid=new Solenoid(Constants.SOLENOID_HOOD);
 
     avgOfFlyWheelSpeeds = new MovingAverage(10);

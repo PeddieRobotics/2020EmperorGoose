@@ -17,16 +17,18 @@ import frc.robot.commands.JoystickCommands.ShootFlywheel;
 import frc.robot.commands.TowerCommands.RunTowerBasedOffFlyWheel;
 import frc.robot.commands.TowerCommands.ShootCounter;
 import frc.robot.subsystems.Hopper;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Flywheel;
 import frc.robot.subsystems.Tower;
 import frc.robot.commands.FlywheelCommands.*;
 
+
 public class ShootNTimes extends SequentialCommandGroup {
 
-  public ShootNTimes(Tower tower, Flywheel flywheel, double rpm, int numberOfBalls) {
+  public ShootNTimes(Tower tower, Flywheel flywheel, Limelight limelight, double rpm, int numberOfBalls) {
     
-    super(new ParallelRaceGroup(new ShootFromFar(flywheel, rpm, true), new ShootCounter(tower, numberOfBalls)));
+    super(new ParallelRaceGroup(new ShootwithLookup(flywheel, limelight, true, false), new ShootCounter(tower, numberOfBalls)));
     
   }
 }

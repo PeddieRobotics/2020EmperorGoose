@@ -7,40 +7,54 @@
 
 package frc.robot.commands.FlywheelCommands;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
-import frc.robot.Framework.MovingAverage;
 import frc.robot.subsystems.Flywheel;
+import frc.robot.subsystems.Limelight;
+import frc.robot.Framework.LookupTable;
+import frc.robot.Constants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class ShootFromFar extends CommandBase {
-
+public class ShootwithLookup extends CommandBase {
+  /**
+   * Creates a new ShootwithLookup.
+   */
   private Flywheel m_flywheel;
-  private double speed;
+  private Limelight m_limelight;
   private boolean stopFlywheelPostShot;
-  
-  public ShootFromFar(Flywheel flywheel, double rpm, boolean shouldStopFlywheelPostShot) {
-    stopFlywheelPostShot = shouldStopFlywheelPostShot;
+  private LookupTable lookupTable;
+  private double speed;
+  private boolean useLookup;
+
+  public ShootwithLookup(Flywheel flywheel, Limelight lime, boolean stop, boolean withLookup ) {
     m_flywheel = flywheel;
-    speed = rpm;
-    addRequirements(flywheel);
+    m_limelight = lime;
+    stopFlywheelPostShot = stop;
+    useLookup = withLookup;
+
+    try {
+      lookupTable = new LookupTable(Constants.TVERT_VALS, Constants.FLYWHEEL_RPMS);
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     // Use addRequirements() here to declare subsystem dependencies.
   }
-  
-
-// Called when the command is initially scheduled.
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(SmartDashboard.getNumber("ShootFar Setpoint", speed) != 0){
-      m_flywheel.updateSetpoint(SmartDashboard.getNumber("ShootFar Setpoint", speed));
-    }
-    else{
+    if(useLookup){
+      lookupTable.update(SmartDashboard.getNumber("RPM Update", 0));
+      speed=lookupTable.get(m_limelight.getTvert());
       m_flywheel.updateSetpoint(speed);
     }
+    else{
+      m_flywheel.updateSetpoint(Constants.RPM_FAR);
+      if(SmartDashboard.getNumber("ShootFar Setpoint", speed)!=0){
+        m_flywheel.updateSetpoint(SmartDashboard.getNumber("ShootFar Setpoint", speed));
+      }
+    }    
     m_flywheel.setHood(true);
   }
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
@@ -60,11 +74,11 @@ public class ShootFromFar extends CommandBase {
     }
     m_flywheel.setHood(false);
   }
+  
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
   }
-
 }
