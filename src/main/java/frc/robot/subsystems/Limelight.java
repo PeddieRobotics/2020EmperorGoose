@@ -61,6 +61,9 @@ public class Limelight extends SubsystemBase {
   public double getTy(){
     return ty.getDouble(0.0);
   }
+  public double getDistance(){
+    return (89-25.5)/(Math.tan(22.5+ty.getDouble(0.0)));
+  }
   public boolean hasTarget(){
     if (limes.getEntry("tv").getDouble(0.0)==1){
       return true;
